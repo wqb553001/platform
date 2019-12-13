@@ -1,0 +1,49 @@
+spring:
+    mvc:
+        view:
+            prefix: /view/
+            suffix: .jsp
+        static-path-pattern: /static/**
+
+    resources:
+        static-locations: classpath:/static/,classpath:/public,classpath:/resources,classpath:/META-INF/resources,servlet context:/,classpath:/view/
+    #    resources:
+#        static-locations: classpath:/static/
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 1000MB
+
+    #页面热部署
+    thymeleaf:
+        prefix: /
+        suffix: .html
+#        cache: false
+
+    #热部署
+#    devtools:
+#        restart:
+#            enabled: true
+            #设置重启目录
+#            additional-paths: src/main/
+#           exclude: /**
+
+
+server:
+  port: 8081
+  servlet:
+#      context-path: /demo
+      jsp:
+          init-parameters:
+              development: true
+
+#logging:
+#    pattern:
+#        dateformat: "makeJar.log {yyyy/MM/dd-HH:mm} [%thread] %-5level %logger- %msg%n"
+#        rolling-file-name: " %d{yyyy/MM/dd-HH:mm} "
+#    file:
+#        clean-history-on-start: false
+#        total-size-cap: 10MB
+#        path: /logs
+#        name: makeJar.log
+#    level: info
