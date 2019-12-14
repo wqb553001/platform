@@ -14,15 +14,15 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication(
     exclude = {DataSourceAutoConfiguration.class}
 )
-public class FlatFormApplication extends SpringBootServletInitializer {
-    public FlatFormApplication() {
+public class MakeJarApplication extends SpringBootServletInitializer {
+    public MakeJarApplication() {
     }
 
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(new Class[]{FlatFormApplication.class});
+        return application.sources(new Class[]{MakeJarApplication.class});
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(FlatFormApplication.class, args);
+        SpringApplication.run(MakeJarApplication.class, args);
     }
 }

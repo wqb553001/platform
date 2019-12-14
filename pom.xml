@@ -12,10 +12,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.doctor.assistant</groupId>
-	<artifactId>platform</artifactId>
+	<artifactId>PlatFormRoot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>platform</name>
+	<name>PlatFormRoot</name>
 	<description>医助平台</description>
 
 	<properties>
