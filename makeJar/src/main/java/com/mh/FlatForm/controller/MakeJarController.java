@@ -36,12 +36,6 @@ public class MakeJarController {
     private RepositoryService repositoryService;
     private static String USER_PATH = "C:\\Users\\";
 
-//    @RequestMapping({"/"})
-//    public ModelAndView index() {
-//        System.out.println("转到 index");
-//        return new ModelAndView("index");
-//    }
-
     @RequestMapping({"/makeJar"})
     public String makeJar() {
         System.out.println("转到 makeJar.jsp");

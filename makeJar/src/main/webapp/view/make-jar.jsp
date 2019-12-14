@@ -7,7 +7,7 @@
 
     <script type="text/javascript">
         function callService() {
-            $("#checkJar").val('');
+            $("#checkJar").val('正在检查和打包中……');
             $("#makeJarBtn").attr('disabled', 'disabled');
             let fileDirs = $("#fileDirs").val();
             let mavenSrc = $("#mavenSrc").val();
