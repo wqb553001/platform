@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RepositoryService {
-    private static final Logger logger = LogManager.getLogger(RepositoryService.class);
+    private static final Logger logger = LogManager.getLogger("mylog");
 
     public File getAllFileNames(String path) {
         File repositoryFile = null;
@@ -186,7 +186,7 @@ public class RepositoryService {
                 }
 
                 if (line.contains("BUILD SUCCESS")) {
-                    logger.error(">>>{}", writeLog);
+                    logger.info(">>>{}", writeLog);
                     return true;
                 }
             }
