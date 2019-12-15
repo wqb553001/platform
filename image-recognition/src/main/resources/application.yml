@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    include: baidu
+  mvc:
+    view:
+      prefix: /view/
+      suffix: .jsp
+    static-path-pattern: /static/**
+
+
+server:
+  port: 8082
+
+
