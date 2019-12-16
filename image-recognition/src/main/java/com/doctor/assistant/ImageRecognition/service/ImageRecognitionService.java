@@ -1,22 +1,10 @@
 package com.doctor.assistant.ImageRecognition.service;
 
+import com.alibaba.fastjson.JSON;
+import com.doctor.assistant.ImageRecognition.entity.InvoiceEn;
 import com.doctor.assistant.ImageRecognition.utils.HttpPostUtil;
-import org.apache.commons.codec.Charsets;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -26,8 +14,15 @@ public class ImageRecognitionService {
         HttpPostUtil.doGet(url, headerMap, paramMap);
     }
 
-    public void callBaiduImageRecognition(String url, Map<String, String> headerMap, Map<String, String> paramMap){
-        HttpPostUtil.doPost(url, headerMap, paramMap);
+    public String callBaiduImageRecognition(String url, Map<String, String> headerMap, Map<String, String> paramMap){
+        return HttpPostUtil.doPost(url, headerMap, paramMap);
     }
 
+    public String examineImage(InvoiceEn invoiceEn){
+        return HttpPostUtil.doPost("url", null, null);
+    }
+
+    public InvoiceEn explainJsonToEntity(String jsonStr){
+        return JSON.toJavaObject(JSON.parseObject(jsonStr), InvoiceEn.class);
+    }
 }

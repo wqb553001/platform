@@ -1,9 +1,12 @@
 package com.doctor.assistant.ImageRecognition.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.doctor.assistant.ImageRecognition.entity.InvoiceEn;
 import com.doctor.assistant.ImageRecognition.service.ImageRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/image")
+@RequestMapping({"/image"})
 public class ImageRecognitionController {
     @Autowired private ImageRecognitionService imageRecognitionService;
 //    public ImageRecognitionController(){}
@@ -39,6 +43,12 @@ public class ImageRecognitionController {
     private String useIOCRAPIKey;
     @Value("${useIOCR.SecretKey}")
     private String useIOCRSecretKey;
+
+    @RequestMapping({"/index"})
+    public String index(){
+        System.out.println("访问了 /image/index");
+        return "index";
+    }
 
     @RequestMapping("/token")
     @ResponseBody
@@ -61,12 +71,13 @@ public class ImageRecognitionController {
     }
 
     @RequestMapping("/uploadImages")
-    //requestParam要写才知道是前台的那个数组
-    public String filesUpload(@RequestParam("images") MultipartFile[] files,
-                              HttpServletRequest request) {
+    @ResponseBody
+    public InvoiceEn filesUpload(@RequestParam("images") MultipartFile[] files,
+                              HttpServletRequest request, HttpServletResponse response, Model model) {
         System.out.println("访问 /image/uploadImages");
         List<String> list = new ArrayList<String>();
         String encodeFileStr = null;
+        StringBuilder stringBuilder = new StringBuilder();
         if (files != null && files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 MultipartFile file = files[i];
@@ -95,17 +106,31 @@ public class ImageRecognitionController {
                 //- roll：可识别增值税卷票
                 paramMap.put("type","normal");
                 paramMap.put("access_token","24.d967bbf7c5ad6c77cfdd614d3ef352a2.2592000.1578992008.282335-17963898");
-                System.out.println(headerMap.toString());
-                  System.out.println(paramMap.toString());
                 System.out.println("zzsBaiduApiURL:" + zzsBaiduApiURL);
-                this.imageRecognitionService.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap);
+                stringBuilder.append("\r\n");
+                stringBuilder.append(this.imageRecognitionService.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap));
             }
         }
 
+        InvoiceEn invoiceEn = this.imageRecognitionService.explainJsonToEntity(stringBuilder.toString());
+        if(invoiceEn == null){
+            invoiceEn = new InvoiceEn();
+        }
+        request.setAttribute("invoiceEn", invoiceEn);
+        request.setAttribute("abc", "invoiceEn");
+        model.addAttribute("abc", "成功了");
+        JSONObject json = new JSONObject();
+        json.put("result",stringBuilder.toString());
+        return invoiceEn;//跳转的页面
+    }
 
+    @RequestMapping("/examineImage")
+    @ResponseBody
+    public String examineImage(){
+        System.out.println("访问 /image/examineImage");
 
-
-        return "index";//跳转的页面
+        this.imageRecognitionService.getAccessToken(tokenUrl, null, null);
+        return "SUCCESS !!!";
     }
 
     private List<String> saveFile(HttpServletRequest request,

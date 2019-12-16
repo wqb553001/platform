@@ -1,14 +1,30 @@
 spring:
-  profiles:
-    include: baidu
-  mvc:
-    view:
-      prefix: /view/
-      suffix: .jsp
-    static-path-pattern: /static/**
+    profiles:
+        include: baidu
+    mvc:
+        view:
+            prefix: /view/
+            suffix: .jsp
+        static-path-pattern: /static/**
 
+    resources:
+        static-locations: classpath:/static/,classpath:/public,classpath:/resources,classpath:/META-INF/resources,servlet context:/,classpath:/view/
+
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 1000MB
+
+    #页面热部署
+    thymeleaf:
+        prefix: /
+        suffix: .html
 
 server:
-  port: 8082
+    port: 8082
+    servlet:
+        jsp:
+            init-parameters:
+                development: true
 
 

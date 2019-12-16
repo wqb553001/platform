@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class HttpPostUtil {
 
-    public static HttpEntity doGet(String url, Map<String, String> headerMap, Map<String, String> paramMap){
+    public static String doGet(String url, Map<String, String> headerMap, Map<String, String> paramMap){
         /**
          // 1. 创建 HttpClient 请求
          // 2. 组装 Form 表单 附 请求参数
@@ -35,7 +35,7 @@ public class HttpPostUtil {
             url +="?";
             for (Map.Entry<String, String> paramEntry : paramMap.entrySet()) {
                 NameValuePair param = new BasicNameValuePair(paramEntry.getKey(), paramEntry.getValue());
-                System.out.println("paramEntry = " + paramEntry);
+//                System.out.println("paramEntry = " + paramEntry);
                 url  += paramEntry.getKey()+"="+paramEntry.getValue() + "&";
             }
             url = url.substring(0, url.length() - 1);
@@ -53,7 +53,7 @@ public class HttpPostUtil {
         return call(httpClient, httpGet);
     }
 
-    public static HttpEntity doPost(String url, Map<String, String> headerMap, Map<String, String> paramMap){
+    public static String doPost(String url, Map<String, String> headerMap, Map<String, String> paramMap){
         /**
          // 1. 创建 HttpClient 请求
          // 2. 组装 Form 表单 附 请求参数
@@ -78,7 +78,7 @@ public class HttpPostUtil {
         if(paramMap != null && !paramMap.isEmpty()){
             for (Map.Entry<String, String> paramEntry : paramMap.entrySet()) {
                 NameValuePair param = new BasicNameValuePair(paramEntry.getKey(), paramEntry.getValue());
-                System.out.println("paramEntry = " + paramEntry);
+//                System.out.println("paramEntry = " + paramEntry);
                 paramList.add(param);
             }
         }
@@ -87,10 +87,10 @@ public class HttpPostUtil {
         return call(httpClient, httpPost);
     }
 
-    private static HttpEntity call(CloseableHttpClient httpClient, HttpRequestBase http){
-
+    private static String call(CloseableHttpClient httpClient, HttpRequestBase http){
+        String resData = "";
         RequestConfig requestConfig = RequestConfig.custom()
-                .setCookieSpec("aip.baidubce.com").build();
+            .setCookieSpec("aip.baidubce.com").build();
         http.setConfig(requestConfig);
 
         // 3. 发起请求
@@ -104,11 +104,9 @@ public class HttpPostUtil {
                 responseEntity = httpResponse.getEntity();
                 String content = responseEntity.toString();
                 System.out.println("responseContent : " + content);
-                String resData = EntityUtils.toString(responseEntity);
+                resData = EntityUtils.toString(responseEntity);
                 System.out.println("返回信息："+resData);
             }
-            String responseStr = httpResponse.toString();
-            System.out.println("httpResponse : " + responseStr);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -126,6 +124,6 @@ public class HttpPostUtil {
             }
         }
 
-        return responseEntity;
+        return resData;
     }
 }
