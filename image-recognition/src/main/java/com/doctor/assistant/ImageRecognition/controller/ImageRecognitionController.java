@@ -1,8 +1,9 @@
 package com.doctor.assistant.ImageRecognition.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.doctor.assistant.ImageRecognition.entity.InvoiceEn;
+import com.doctor.assistant.ImageRecognition.entity.InvoiceMain;
 import com.doctor.assistant.ImageRecognition.service.ImageRecognitionService;
+import com.doctor.assistant.ImageRecognition.utils.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -72,8 +73,8 @@ public class ImageRecognitionController {
 
     @RequestMapping("/uploadImages")
     @ResponseBody
-    public InvoiceEn filesUpload(@RequestParam("images") MultipartFile[] files,
-                              HttpServletRequest request, HttpServletResponse response, Model model) {
+    public InvoiceMain filesUpload(@RequestParam("images") MultipartFile[] files,
+                                   HttpServletRequest request, HttpServletResponse response, Model model) {
         System.out.println("访问 /image/uploadImages");
         List<String> list = new ArrayList<String>();
         String encodeFileStr = null;
@@ -112,16 +113,22 @@ public class ImageRecognitionController {
             }
         }
 
-        InvoiceEn invoiceEn = this.imageRecognitionService.explainJsonToEntity(stringBuilder.toString());
-        if(invoiceEn == null){
-            invoiceEn = new InvoiceEn();
+        InvoiceMain invoiceMain = this.imageRecognitionService.explainJsonToEntity(stringBuilder.toString());
+        if(invoiceMain == null){
+            invoiceMain = new InvoiceMain();
         }
-        request.setAttribute("invoiceEn", invoiceEn);
-        request.setAttribute("abc", "invoiceEn");
-        model.addAttribute("abc", "成功了");
+        request.setAttribute("invoiceEn", invoiceMain);
         JSONObject json = new JSONObject();
         json.put("result",stringBuilder.toString());
-        return invoiceEn;//跳转的页面
+        return invoiceMain;//跳转的页面
+    }
+
+    @RequestMapping("/saveInvoiceMain")
+    @ResponseBody
+    public Results saveInvoiceMain(InvoiceMain invoiceMain,
+                                   HttpServletRequest request, HttpServletResponse response, Model model) {
+        System.out.println("访问 /image/saveInvoiceMain");
+        return this.imageRecognitionService.insertInvoiceMain(invoiceMain);//跳转的页面
     }
 
     @RequestMapping("/examineImage")

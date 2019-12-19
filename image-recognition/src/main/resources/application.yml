@@ -1,6 +1,7 @@
 spring:
     profiles:
-        include: baidu
+        include: db,baidu,mybatis
+
     mvc:
         view:
             prefix: /view/
@@ -28,3 +29,27 @@ server:
                 development: true
 
 
+---
+#数据源配置
+spring:
+    datasource:
+        image:
+            jdbc-url: jdbc:mysql://localhost:3306/image?serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false
+            username: root
+            password: root
+
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            type: com.zaxxer.hikari.HikariDataSource
+            hikari:
+                minimum-idle: 1
+                maximum-pool-size: 5
+                idle-timeout: 30000
+                connection-timeout: 20000
+    jpa:
+        # 是否打印sql
+        show-sql: true
+        hibernate:
+            # 开启自动建表功能，一般选update，每次启动会对比实体和数据表结构是否相同，不相同会更新
+            ddl-auto: update
+        # 设置创表引擎为Innodb，不然默认为MyiSam
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

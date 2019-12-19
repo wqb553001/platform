@@ -1,6 +1,6 @@
 <%@page language="java" import="java.util.*" isELIgnored="false" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/context/mytags.jsp"%>
-
+<%@ taglib prefix="myfn" uri="/WEB-INF/myfn.tld" %>
 <html>
 <head >
     <title>本地jar包加到本地仓库</title>
@@ -23,14 +23,14 @@
                 // dataType: "json",
                 processData: false,
                 contentType: false,
-                success: function(invoiceEn) {
-                    setInvoiceEnVal(invoiceEn);
+                success: function(invoiceMain) {
+                    setInvoiceEnVal(invoiceMain);
                     $('#checkJar').val("成功了！");
                     // $('#checkJar').val(data.result);
                     $("#makeJarBtn").removeAttr('disabled');
                     $("#examineBtn").removeAttr('display');
                 },
-                failure:function (invoiceEn) {
+                failure:function (invoiceMain) {
                     $('#checkJar').val("出错了！");
                     // $('#checkJar').val(data.result);
                     $("#makeJarBtn").removeAttr('disabled');
@@ -39,25 +39,25 @@
             return false;
         }
 
-        function setInvoiceEnVal(invoiceEn) {
-            // var wordsResult = eval("("+invoiceEn.wordsResult+")");
-            $("#invoiceType").val(invoiceEn.wordsResult.invoiceType);
-            $("#invoiceNum").val(invoiceEn.wordsResult.invoiceNum);
-            $("#logId").val(invoiceEn.logId);
-            $("#invoiceDate").val(invoiceEn.wordsResult.invoiceDate);
-            $("#commodityName").val(invoiceEn.wordsResult.commodityName[0].word);
-            $("#commodityNum").val(invoiceEn.wordsResult.commodityNum[0].word);
-            $("#amountInFiguers").val(invoiceEn.wordsResult.amountInFiguers);
-            $("#amountInWords").val(invoiceEn.wordsResult.amountInWords);
+        function setInvoiceEnVal(invoiceMain) {
+            // var wordsResult = eval("("+invoiceMain.wordsResult+")");
+            $("#invoiceType").val(invoiceMain.wordsResult.invoiceType);
+            $("#invoiceNum").val(invoiceMain.wordsResult.invoiceNum);
+            $("#logId").val(invoiceMain.logId);
+            $("#invoiceDate").val(invoiceMain.wordsResult.invoiceDate);
+            $("#commodityName").val(invoiceMain.wordsResult.commodityName[0].word);
+            $("#commodityNum").val(invoiceMain.wordsResult.commodityNum[0].word);
+            $("#amountInFiguers").val(invoiceMain.wordsResult.amountInFiguers);
+            $("#amountInWords").val(invoiceMain.wordsResult.amountInWords);
 
-            $("#invoiceCode").val(invoiceEn.wordsResult.invoiceCode);
-            $("#wordsResultNum").val(invoiceEn.wordsResultNum);
-            $("#sellerRegisterNum").val(invoiceEn.wordsResult.sellerRegisterNum);
-            $("#purchaserRegisterNum").val(invoiceEn.wordsResult.purchaserRegisterNum);
-            $("#commodityPrice").val(invoiceEn.wordsResult.commodityPrice[0].word);
-            $("#commodityAmount").val(invoiceEn.wordsResult.commodityAmount[0].word);
-            $("#totalTax").val(invoiceEn.wordsResult.totalTax);
-            $("#checkCode").val(invoiceEn.wordsResult.checkCode);
+            $("#invoiceCode").val(invoiceMain.wordsResult.invoiceCode);
+            $("#wordsResultNum").val(invoiceMain.wordsResultNum);
+            $("#sellerRegisterNum").val(invoiceMain.wordsResult.sellerRegisterNum);
+            $("#purchaserRegisterNum").val(invoiceMain.wordsResult.purchaserRegisterNum);
+            $("#commodityPrice").val(invoiceMain.wordsResult.commodityPrice[0].word);
+            $("#commodityAmount").val(invoiceMain.wordsResult.commodityAmount[0].word);
+            $("#totalTax").val(invoiceMain.wordsResult.totalTax);
+            $("#checkCode").val(invoiceMain.wordsResult.checkCode);
 
         }
 
@@ -72,14 +72,14 @@
                 type: "POST",
                 processData: false,
                 contentType: false,
-                success: function(invoiceEn) {
-                    setInvoiceEnVal(invoiceEn);
-                    $('#checkJar').val("成功了！");
+                success: function(invoiceMain) {
+                    setInvoiceEnVal(invoiceMain);
+                    $('#checkJar').val("OK 了！");
                     // $('#checkJar').val(data.result);
                     $("#makeJarBtn").removeAttr('disabled');
                     $("#examineBtn").attributes('display', 'none');
                 },
-                failure:function (invoiceEn) {
+                failure:function (invoiceMain) {
                     $('#checkJar').val("出错了！");
                     // $('#checkJar').val(data.result);
                     $("#makeJarBtn").removeAttr('disabled');
@@ -133,22 +133,41 @@
         <%--                            </thead>--%>
                                     <tbody style="border: 1px ;solid-color: black;">
                                         <tr>
-                                            <td>发票类型：</td><td><input name="invoiceType" id="invoiceType" value="${invoiceEn.wordsResult.wordsResultType}" /></td><td>发票代码：</td><td><input name="invoiceCode" id="invoiceCode" value="${invoiceEn.wordsResult.InvoiceCode}" /></td>
-                                            <td>发票号码：</td><td><input name="invoiceNum" id="invoiceNum" value="${invoiceEn.wordsResult.InvoiceNum}" /></td><td>机打号码：</td><td><input name="wordsResultNum" id="wordsResultNum" value="${invoiceEn.wordsResultNum}" /></td>
+                                            <td>发票类型：</td><td><input name="invoiceType" id="invoiceType" value="${invoiceMain.wordsResult.wordsResultType}" /></td><td>发票代码：</td><td><input name="invoiceCode" id="invoiceCode" value="${invoiceMain.wordsResult.InvoiceCode}" /></td>
+                                            <td>发票号码：</td><td><input name="invoiceNum" id="invoiceNum" value="${invoiceMain.wordsResult.InvoiceNum}" /></td><td>机打号码：</td><td><input name="wordsResultNum" id="wordsResultNum" value="${invoiceMain.wordsResultNum}" /></td>
                                         </tr>
                                         <tr>
-                                            <td>机器编号：</td><td><input name="logId" id="logId" value="${invoiceEn.logId}" /></td><td>销售方纳税人识别号：</td><td><input name="sellerRegisterNum" id="sellerRegisterNum" value="${invoiceEn.wordsResult.SellerRegisterNum}" /></td>
-                                            <td>开票日期：</td><td><input name="invoiceDate" id="invoiceDate" value="${invoiceEn.wordsResult.InvoiceDate}" /></td><td>购买方纳税人识别号：</td><td><input name="purchaserRegisterNum" id="purchaserRegisterNum" value="${invoiceEn.wordsResult.PurchaserRegisterNum}" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>项目</td><td><input name="commodityName" id="commodityName" value="${invoiceEn.wordsResult.CommodityName}" /></td><td>单价</td><td><input name="commodityPrice" id="commodityPrice" value="${invoiceEn.wordsResult.CommodityPrice[0].word}" /></td>
-                                            <td>数量</td><td><input name="commodityNum" id="commodityNum" value="${invoiceEn.wordsResult.CommodityNum[0].word}" /></td><td>金额</td><td><input name="commodityAmount" id="commodityAmount" value="${invoiceEn.wordsResult.CommodityAmount[0].word}" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>合计金额(小写)</td><td><input name="amountInFiguers" id="amountInFiguers" value="${invoiceEn.wordsResult.AmountInFiguers}" /></td><td>税额</td><td><input name="totalTax" id="totalTax" value="${invoiceEn.wordsResult.TotalTax}" /></td>
-                                            <td>合计金额(大写)</td><td><input name="amountInWords" id="amountInWords" value="${invoiceEn.wordsResult.AmountInWords}" /></td><td>校验码</td><td><input name="checkCode" id="checkCode" value="${invoiceEn.wordsResult.CheckCode}" /></td>
+                                            <td>机器编号：</td><td><input name="logId" id="logId" value="${invoiceMain.logId}" /></td><td>销售方纳税人识别号：</td><td><input name="sellerRegisterNum" id="sellerRegisterNum" value="${invoiceMain.wordsResult.SellerRegisterNum}" /></td>
+                                            <td>开票日期：</td><td><input name="invoiceDate" id="invoiceDate" value="${invoiceMain.wordsResult.InvoiceDate}" /></td><td>购买方纳税人识别号：</td><td><input name="purchaserRegisterNum" id="purchaserRegisterNum" value="${invoiceMain.wordsResult.PurchaserRegisterNum}" /></td>
                                         </tr>
                                     </tbody>
+                                </table>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <td>项目</td><td>规格型号</td><td>单位</td><td>数量</td><td>单价</td><td>金额</td><td>税率</td><td>税额</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="i" begin="0" end="${items}" step="1">
+                                        <tr>
+                                            <td><input name="commodityName" id="commodityName" value="${myfn:rollGetValue(i,invoiceMain.wordsResult.CommodityName[i].row,invoiceMain.wordsResult.CommodityName[i].word,invoiceMain.wordsResult.CommodityName)}" /></td>
+                                            <td><input name="commodityType" id="commodityType" value="${myfn:rollGetValue(i,invoiceMain.wordsResult.CommodityName[i].row,invoiceMain.wordsResult.CommodityName[i].word,invoiceMain.wordsResult.CommodityName)}" /></td>
+                                            <td><input name="commodityUnit" id="commodityUnit" value="${myfn:rollGetValue(i,invoiceMain.wordsResult.CommodityName[i].row,invoiceMain.wordsResult.CommodityName[i].word,invoiceMain.wordsResult.CommodityName)}" /></td>
+                                            <td><input name="commodityNum" id="commodityNum" value="${myfn:rollGetValue(i,invoiceMain.wordsResult.CommodityName[i].row,invoiceMain.wordsResult.CommodityName[i].word,invoiceMain.wordsResult.CommodityName)}" /></td>
+                                            <td><input name="commodityPrice" id="commodityPrice" value="${myfn:rollGetValue(i,invoiceMain.wordsResult.CommodityName[i].row,invoiceMain.wordsResult.CommodityName[i].word,invoiceMain.wordsResult.CommodityName)}" /></td>
+                                            <td><input name="commodityAmount" id="commodityAmount" value="${myfn:rollGetValue(i,invoiceMain.wordsResult.CommodityName[i].row,invoiceMain.wordsResult.CommodityName[i].word,invoiceMain.wordsResult.CommodityName)}" /></td>
+                                            <td><input name="commodityTaxRate" id="commodityTaxRate" value="${myfn:rollGetValue(i,invoiceMain.wordsResult.CommodityName[i].row,invoiceMain.wordsResult.CommodityName[i].word,invoiceMain.wordsResult.CommodityName)}" /></td>
+                                            <td><input name="CommodityTax" id="CommodityTax" value="${myfn:rollGetValue(i,invoiceMain.wordsResult.CommodityName[i].row,invoiceMain.wordsResult.CommodityName[i].word,invoiceMain.wordsResult.CommodityName)}" /></td>
+                                        </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                                <table>
+                                        <tr>
+                                            <td>合计金额(小写)</td><td><input name="amountInFiguers" id="amountInFiguers" value="${invoiceMain.wordsResult.AmountInFiguers}" /></td><td>税额</td><td><input name="totalTax" id="totalTax" value="${invoiceMain.wordsResult.TotalTax}" /></td>
+                                            <td>合计金额(大写)</td><td><input name="amountInWords" id="amountInWords" value="${invoiceMain.wordsResult.AmountInWords}" /></td><td>校验码</td><td><input name="checkCode" id="checkCode" value="${invoiceMain.wordsResult.CheckCode}" /></td>
+                                        </tr>
                                 </table>
                             </div>
                         </form>
