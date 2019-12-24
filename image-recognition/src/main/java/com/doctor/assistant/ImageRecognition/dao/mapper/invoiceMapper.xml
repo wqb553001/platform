@@ -4,11 +4,26 @@
         "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 <mapper namespace="com.doctor.assistant.ImageRecognition.dao.ElementDao">
-    <insert id="batchInsertElementList" useGeneratedKeys="true">
-        insert into Element(commodityId, word, row)
-        values
-        <foreach item="item" index="index" collection="elementList" separator=",">
-            (#{item.commodityId},#{item.word},#{item.row})
+    <resultMap type="com.doctor.assistant.ImageRecognition.entity.Element" id="result">
+        <result property="id" column="id"/>
+        <result property="commodityId" column="commodity_id"/>
+        <result property="word" column="word"/>
+        <result property="row" column="row_sort"/>
+    </resultMap>
+
+    <select id="findElementByCommodityId" parameterType="String" resultMap="result">
+       SELECT * FROM tb_element
+        WHERE commodity_id = #{commodityId}
+    </select>
+
+    <insert id="batchInsertElementList" useGeneratedKeys="true" parameterType="java.util.List" >
+        INSERT INTO tb_element(commodity_id, word, row_sort)
+        VALUES
+        <foreach collection="elementList" item="album"  separator="," close=";">
+            (#{album.commodityId}, #{album.word}, #{album.row})
         </foreach>
+<!--        <foreach item="e" collection="list" separator=",">-->
+<!--            (#{e.commodityId}, #{e.word}, #{e.row})-->
+<!--        </foreach>-->
     </insert>
 </mapper>

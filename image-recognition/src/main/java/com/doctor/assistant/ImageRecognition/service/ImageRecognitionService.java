@@ -2,6 +2,7 @@ package com.doctor.assistant.ImageRecognition.service;
 
 import com.alibaba.fastjson.JSON;
 import com.doctor.assistant.ImageRecognition.dao.ElementDao;
+import com.doctor.assistant.ImageRecognition.dao.InvoiceDao;
 import com.doctor.assistant.ImageRecognition.dao.InvoiceMainDaoI;
 import com.doctor.assistant.ImageRecognition.entity.Element;
 import com.doctor.assistant.ImageRecognition.entity.Invoice;
@@ -9,13 +10,11 @@ import com.doctor.assistant.ImageRecognition.entity.InvoiceMain;
 import com.doctor.assistant.ImageRecognition.utils.HttpPostUtil;
 import com.doctor.assistant.ImageRecognition.utils.Results;
 import com.doctor.assistant.ImageRecognition.utils.UUIDUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BinaryOperator;
 
 @Service
@@ -23,6 +22,8 @@ public class ImageRecognitionService {
 
     @Autowired
     InvoiceMainDaoI invoiceMainDao;
+    @Autowired
+    InvoiceDao invoiceDao;
     @Autowired
     ElementDao elementDao;
 
@@ -64,8 +65,15 @@ public class ImageRecognitionService {
         wordsResult.setCommodityPrices(commodityPrices);
         wordsResult.setCommodityNames(commodityNames);
         wordsResult.setCommodityTypes(commodityTypes);
+
+//        invoiceDao.save(wordsResult);
+        wordsResult.setId(UUIDUtil.getUUID());
+        invoiceDao.saveAndFlush(wordsResult);
+
+        invoiceMain.setId(UUIDUtil.getUUID());
         // 保存 票据主体信息
-        invoiceMainDao.save(invoiceMain);
+//        invoiceMainDao.save(invoiceMain);
+        invoiceMainDao.saveAndFlush(invoiceMain);
 
         List<Element> resultElements = new ArrayList<>(14);
         // 分别保存 元数据
@@ -84,9 +92,42 @@ public class ImageRecognitionService {
         this.setElements(resultElements, commodityPrice, commodityPrices);
         this.setElements(resultElements, commodityName, commodityNames);
         this.setElements(resultElements, commodityType, commodityTypes);
+        if(!resultElements.isEmpty()) this.elementDao.batchInsertElementList(resultElements);
+        if(!resultElements.isEmpty()) this.elementDao.findElementByCommodityId("resultElements");
+        Results results = Results.OK();
+        results.setResult(invoiceMain);
+        return results;
+    }
 
-        this.elementDao.batchInsertElementList(resultElements);
-        return Results.OK;
+    public Results getInvoiceMain(String invoiceMainId) {
+        Results results = new Results(Results.empty);
+        InvoiceMain invoiceMain = new InvoiceMain();
+        if(StringUtils.isEmpty(invoiceMainId)) return results;
+        Optional<InvoiceMain> invoiceMainOptional = invoiceMainDao.findById(invoiceMainId);
+        if(invoiceMainOptional.isPresent()){
+            invoiceMain = invoiceMainOptional.get();
+            if(invoiceMain != null){
+                Invoice invoice = invoiceMain.getWordsResult();
+                this.queryAndSetElementByInvoice(invoice);
+            }
+            results.setState(Results.OK);
+            results.setResult(invoiceMain);
+        }
+        return results;
+    }
+
+    private void queryAndSetElementByInvoice(Invoice invoice){
+        if(invoice != null){
+            String commodityAmounts = invoice.getCommodityAmounts();
+            invoice.setCommodityAmount(elementDao.findElementByCommodityId(commodityAmounts));
+            invoice.setCommodityName(elementDao.findElementByCommodityId(invoice.getCommodityNames()));
+            invoice.setCommodityUnit(elementDao.findElementByCommodityId(invoice.getCommodityUnits()));
+            invoice.setCommodityNum(elementDao.findElementByCommodityId(invoice.getCommodityNums()));
+            invoice.setCommodityPrice(elementDao.findElementByCommodityId(invoice.getCommodityPrices()));
+            invoice.setCommodityTax(elementDao.findElementByCommodityId(invoice.getCommodityTaxs()));
+            invoice.setCommodityTaxRate(elementDao.findElementByCommodityId(invoice.getCommodityTaxRates()));
+            invoice.setCommodityType(elementDao.findElementByCommodityId(invoice.getCommodityTypes()));
+        }
     }
 
     private int countItems(Invoice wordsResult){
@@ -115,7 +156,7 @@ public class ImageRecognitionService {
     }
 
     private List<Element> setElements(List<Element> resultElements, List<Element> elements, String commodityId){
-        if(elements.isEmpty()){
+        if(!elements.isEmpty()){
             for (Element element : elements) {
                 element.setCommodityId(commodityId);
                 resultElements.add(element);
@@ -126,7 +167,7 @@ public class ImageRecognitionService {
 
     public Results insertInvoice(){
 
-        return Results.OK;
+        return Results.OK();
     }
 
 }

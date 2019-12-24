@@ -1,16 +1,16 @@
 package com.doctor.assistant.ImageRecognition.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.doctor.assistant.ImageRecognition.dao.InvoiceMainDaoI;
 import com.doctor.assistant.ImageRecognition.entity.InvoiceMain;
 import com.doctor.assistant.ImageRecognition.service.ImageRecognitionService;
 import com.doctor.assistant.ImageRecognition.utils.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
@@ -18,12 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping({"/image"})
 public class ImageRecognitionController {
     @Autowired private ImageRecognitionService imageRecognitionService;
@@ -44,6 +45,9 @@ public class ImageRecognitionController {
     private String useIOCRAPIKey;
     @Value("${useIOCR.SecretKey}")
     private String useIOCRSecretKey;
+
+    @Autowired
+    InvoiceMainDaoI invoiceMainDao;
 
     @RequestMapping({"/index"})
     public String index(){
@@ -73,15 +77,19 @@ public class ImageRecognitionController {
 
     @RequestMapping("/uploadImages")
     @ResponseBody
-    public InvoiceMain filesUpload(@RequestParam("images") MultipartFile[] files,
-                                   HttpServletRequest request, HttpServletResponse response, Model model) {
+    public InvoiceMain filesUpload(MultipartFile[] images,
+                                   HttpServletRequest request, HttpServletResponse response) {
         System.out.println("访问 /image/uploadImages");
+        long timeBefore = LocalTime.now().toNanoOfDay();
+        long timeSecondBefore = LocalTime.now().toSecondOfDay();
         List<String> list = new ArrayList<String>();
         String encodeFileStr = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        if (files != null && files.length > 0) {
-            for (int i = 0; i < files.length; i++) {
-                MultipartFile file = files[i];
+        StringBuilder stringBuilder = null;
+        InvoiceMain invoiceMain = null;
+        if (images != null && images.length > 0) {
+            for (int i = 0; i < images.length; i++) {
+                stringBuilder = new StringBuilder();
+                MultipartFile file = images[i];
                 // 保存文件
 //                list = saveFile(request, file, list);
                 final BASE64Encoder encoder = new BASE64Encoder();
@@ -107,20 +115,31 @@ public class ImageRecognitionController {
                 //- roll：可识别增值税卷票
                 paramMap.put("type","normal");
                 paramMap.put("access_token","24.d967bbf7c5ad6c77cfdd614d3ef352a2.2592000.1578992008.282335-17963898");
-                System.out.println("zzsBaiduApiURL:" + zzsBaiduApiURL);
+//                System.out.println("zzsBaiduApiURL:" + zzsBaiduApiURL);
                 stringBuilder.append("\r\n");
                 stringBuilder.append(this.imageRecognitionService.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap));
+                invoiceMain = this.imageRecognitionService.explainJsonToEntity(stringBuilder.toString());
+                if(invoiceMain != null) {
+                    if(invoiceMain.getLogId() != null)
+                    this.imageRecognitionService.insertInvoiceMain(invoiceMain);
+                    System.out.println("");
+                }
+                request.setAttribute("invoiceEn", invoiceMain);
+                long timeMid = LocalTime.now().toNanoOfDay();
+                long timeSecondMid = LocalTime.now().toSecondOfDay();
+                System.out.println("至第"+(i+1)+"张:");
+                System.out.println("用时秒数:"+(timeSecondMid - timeSecondBefore));
+                System.out.println("用时毫秒：" +(timeMid - timeBefore));
+
             }
         }
 
-        InvoiceMain invoiceMain = this.imageRecognitionService.explainJsonToEntity(stringBuilder.toString());
         if(invoiceMain == null){
             invoiceMain = new InvoiceMain();
         }
-        request.setAttribute("invoiceEn", invoiceMain);
-        JSONObject json = new JSONObject();
-        json.put("result",stringBuilder.toString());
-        return invoiceMain;//跳转的页面
+        long timeEnd = LocalTime.now().toNanoOfDay();
+        System.out.println("总用时：" +(timeEnd - timeBefore));
+        return invoiceMain;
     }
 
     @RequestMapping("/saveInvoiceMain")
@@ -129,6 +148,15 @@ public class ImageRecognitionController {
                                    HttpServletRequest request, HttpServletResponse response, Model model) {
         System.out.println("访问 /image/saveInvoiceMain");
         return this.imageRecognitionService.insertInvoiceMain(invoiceMain);//跳转的页面
+    }
+
+
+    @RequestMapping("/invoiceMain/{invoiceMainId}")
+    @ResponseBody
+    public Results getInvoiceMain(@PathVariable(value = "invoiceMainId") String invoiceMainId,
+                                   HttpServletRequest request, HttpServletResponse response, Model model) {
+        System.out.println("访问 /image/invoiceMain/"+invoiceMainId);
+        return imageRecognitionService.getInvoiceMain(invoiceMainId);
     }
 
     @RequestMapping("/examineImage")

@@ -13,7 +13,9 @@ import java.io.Serializable;
 public class InvoiceMain implements Serializable {
     @Id
     private String id;
+    @Column(name = "log_id")
     private String logId;
+    @Column(name = "words_result_num")
     private String wordsResultNum;
 
     @ManyToOne
