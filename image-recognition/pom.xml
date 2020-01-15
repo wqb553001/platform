@@ -24,6 +24,7 @@
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j2.version>2.6.2</log4j2.version>
+<!--		<tomcat.version>8.0.29</tomcat.version>&lt;!&ndash;设置 springboot 内嵌tomcat的版本&ndash;&gt;-->
 	</properties>
 
 	<dependencies>
@@ -109,6 +110,14 @@
 			<artifactId>spring-rabbit-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!--devtools热部署-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+			<scope>true</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -135,6 +144,16 @@
 				</includes>
 			</resource>
 		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>

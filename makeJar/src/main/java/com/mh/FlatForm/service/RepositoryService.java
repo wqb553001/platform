@@ -7,18 +7,15 @@ package com.mh.FlatForm.service;
 
 import com.mh.FlatForm.entity.DependencyBean;
 import com.mh.FlatForm.enums.ResultEnum;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class RepositoryService {
@@ -98,15 +95,16 @@ public class RepositoryService {
     public ResultEnum existsJarForLocal(String jarPath, DependencyBean dependencyBean) {
         System.out.println("judge.existsJar():" + jarPath);
         jarPath = this.getPath(jarPath);
-        File jarFile = null;
-        String jarAllPath = "";
-        jarAllPath = jarPath + "\\" + dependencyBean.getArtifactId() + "-" + dependencyBean.getVersion() + ".jar";
-        System.out.println("jarAllPath1:" + jarAllPath);
-        jarFile = new File(jarAllPath);
-        if (jarFile != null && jarFile.exists()) {
+        if (this.judgeExist(jarPath, dependencyBean.getArtifactId() + "-" + dependencyBean.getVersion())) {
             return ResultEnum.FULL;
-        } else {
-            if (StringUtils.isNotBlank(dependencyBean.getVersion()) && ("1.0.0".equals(dependencyBean.getVersion()) || "0.0.1".equals(dependencyBean.getVersion()) || "1.0.0.0".equals(dependencyBean.getVersion()) || "0.0.0.1".equals(dependencyBean.getVersion()))) {
+        } else if(this.judgeExist(jarPath, dependencyBean.getArtifactId())) {
+            return ResultEnum.DEFECT;
+        }else {
+            File jarFile = null;
+            String jarAllPath = "";
+            if (StringUtils.isNotBlank(dependencyBean.getVersion()) && ("1.0.0".equals(dependencyBean.getVersion())
+                    || "0.0.1".equals(dependencyBean.getVersion()) || "1.0.0.0".equals(dependencyBean.getVersion())
+                    || "0.0.0.1".equals(dependencyBean.getVersion()))) {
                 jarAllPath = jarPath + "\\" + dependencyBean.getArtifactId() + ".jar";
             }
 
@@ -114,6 +112,16 @@ public class RepositoryService {
             jarFile = new File(jarAllPath);
             return jarFile != null && jarFile.exists() ? ResultEnum.DEFECT : ResultEnum.NULL;
         }
+    }
+
+    boolean judgeExist(String jarPath, String context){
+        String jarAllPath = jarPath + "\\" + context + ".jar";
+        System.out.println("jarAllPath1:" + jarAllPath);
+        File jarFile = new File(jarAllPath);
+        if (jarFile != null && jarFile.exists()){
+            return true;
+        }
+        return false;
     }
 
     public String getPath(String jarPath) {

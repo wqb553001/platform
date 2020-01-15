@@ -105,6 +105,7 @@ public class HttpPostUtil {
                 String content = responseEntity.toString();
                 System.out.println("responseContent : " + content);
                 resData = EntityUtils.toString(responseEntity);
+                resData.contains(null);
                 System.out.println("返回信息："+resData);
             }
 

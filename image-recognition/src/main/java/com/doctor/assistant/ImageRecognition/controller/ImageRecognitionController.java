@@ -1,28 +1,27 @@
 package com.doctor.assistant.ImageRecognition.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.doctor.assistant.ImageRecognition.dao.InvoiceMainDaoI;
 import com.doctor.assistant.ImageRecognition.entity.InvoiceMain;
 import com.doctor.assistant.ImageRecognition.service.ImageRecognitionService;
 import com.doctor.assistant.ImageRecognition.utils.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Example;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Base64.Encoder;
 
 @RestController
 @RequestMapping({"/image"})
@@ -86,15 +85,15 @@ public class ImageRecognitionController {
         String encodeFileStr = null;
         StringBuilder stringBuilder = null;
         InvoiceMain invoiceMain = null;
-        if (images != null && images.length > 0) {
+        if (images != null && images.length > 0 && !images[0].isEmpty()) {
             for (int i = 0; i < images.length; i++) {
                 stringBuilder = new StringBuilder();
                 MultipartFile file = images[i];
                 // 保存文件
 //                list = saveFile(request, file, list);
-                final BASE64Encoder encoder = new BASE64Encoder();
+                final Encoder encoder = Base64.getEncoder();
                 try {
-                    encodeFileStr = encoder.encode(file.getBytes());
+                    encodeFileStr = encoder.encodeToString(file.getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -118,11 +117,12 @@ public class ImageRecognitionController {
 //                System.out.println("zzsBaiduApiURL:" + zzsBaiduApiURL);
                 stringBuilder.append("\r\n");
                 stringBuilder.append(this.imageRecognitionService.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap));
-                invoiceMain = this.imageRecognitionService.explainJsonToEntity(stringBuilder.toString());
+                String json = stringBuilder.toString();
+                System.out.println("数据：" + json);
+                invoiceMain = this.imageRecognitionService.explainJsonToEntity(json);
                 if(invoiceMain != null) {
                     if(invoiceMain.getLogId() != null)
                     this.imageRecognitionService.insertInvoiceMain(invoiceMain);
-                    System.out.println("");
                 }
                 request.setAttribute("invoiceEn", invoiceMain);
                 long timeMid = LocalTime.now().toNanoOfDay();
@@ -130,15 +130,17 @@ public class ImageRecognitionController {
                 System.out.println("至第"+(i+1)+"张:");
                 System.out.println("用时秒数:"+(timeSecondMid - timeSecondBefore));
                 System.out.println("用时毫秒：" +(timeMid - timeBefore));
-
             }
         }
 
-        if(invoiceMain == null){
-            invoiceMain = new InvoiceMain();
-        }
+//        if(invoiceMain == null){
+//            invoiceMain = new InvoiceMain();
+//            Invoice invoice = new Invoice();
+//            invoiceMain.setWordsResult(invoice);
+//        }
         long timeEnd = LocalTime.now().toNanoOfDay();
         System.out.println("总用时：" +(timeEnd - timeBefore));
+        System.out.println("存入后返回：" + JSON.toJSON(invoiceMain));
         return invoiceMain;
     }
 
@@ -159,13 +161,30 @@ public class ImageRecognitionController {
         return imageRecognitionService.getInvoiceMain(invoiceMainId);
     }
 
-    @RequestMapping("/examineImage")
+    @RequestMapping("/flushImage")
     @ResponseBody
-    public String examineImage(){
-        System.out.println("访问 /image/examineImage");
+    public InvoiceMain flushImage(InvoiceMain invoiceMain,
+                             HttpServletRequest request, HttpServletResponse response){
+        System.out.println("访问 /image/flushImage");
+//        this.imageRecognitionService.insertInvoiceMain(invoiceMain);
+        return invoiceMain;
+    }
 
-        this.imageRecognitionService.getAccessToken(tokenUrl, null, null);
-        return "SUCCESS !!!";
+    @RequestMapping("/nextOneCheckImage")
+    @ResponseBody
+    public InvoiceMain nextOneCheckImage(HttpServletRequest request, HttpServletResponse response){
+        System.out.println("访问 /image/flushImage");
+        InvoiceMain invoiceMain = new InvoiceMain();
+        invoiceMain.setChecked(0);
+        Optional<InvoiceMain> mainOptional = this.invoiceMainDao.findOne(Example.of(invoiceMain));
+        if(mainOptional.isPresent()){
+            invoiceMain = mainOptional.get();
+        }
+//        else{
+//            // 空值填充
+//            invoiceMain.setWordsResult(new Invoice());
+//        }
+        return invoiceMain;
     }
 
     private List<String> saveFile(HttpServletRequest request,

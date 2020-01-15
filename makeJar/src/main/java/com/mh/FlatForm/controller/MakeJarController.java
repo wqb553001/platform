@@ -10,12 +10,6 @@ import com.mh.FlatForm.entity.DependencyBean;
 import com.mh.FlatForm.entity.ParamBean;
 import com.mh.FlatForm.enums.ResultEnum;
 import com.mh.FlatForm.service.RepositoryService;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -26,7 +20,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Controller
 @RequestMapping({"/demo"})
@@ -90,7 +89,7 @@ public class MakeJarController {
 
                         try {
                             doc = DocumentHelper.parseText(mavenSrc);
-                        } catch (DocumentException var21) {
+                        } catch (DocumentException e21) {
                             System.out.println("dependencies 补充前：" + mavenSrc);
                             if (!mavenSrc.contains("<dependencies>")) {
                                 mavenSrc = "<dependencies>" + mavenSrc;
@@ -180,8 +179,8 @@ public class MakeJarController {
                                 }
                             }
                         }
-                    } catch (Exception var22) {
-                        var22.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                     result = "";

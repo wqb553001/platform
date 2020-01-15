@@ -30,6 +30,40 @@
             return false;
         }
 
+        function hiddenOneself() {
+            let tempCss = $("#tempId").css('display');
+            let clsCss = $("#clsId").css('display');
+            $("#tempId").css("display", clsCss);
+            $("#clsId").css("display", tempCss);
+        }
+
+        function tempClick() {
+            hiddenOneself();
+            let tempHtml = '    <dependencies>\n' +
+                '        <dependency>\n' +
+                '            <groupId>com.test</groupId>\n' +
+                '            <artifactId>one</artifactId>\n' +
+                '            <version>1.0.0</version>\n' +
+                '        </dependency>\n' +
+                '        <dependency>\n' +
+                '            <groupId>com.test</groupId>\n' +
+                '            <artifactId>two</artifactId>\n' +
+                '            <version>0.0.1</version>\n' +
+                '        </dependency>\n' +
+                '        <dependency>\n' +
+                '            <groupId>com.test</groupId>\n' +
+                '            <artifactId>three</artifactId>\n' +
+                '            <version>0.0.1</version>\n' +
+                '        </dependency>\n' +
+                '    </dependencies>';
+            $('#mavenSrc').val(tempHtml);
+        }
+
+        function clsClick() {
+            hiddenOneself();
+            $('#mavenSrc').val('');
+        }
+
     </script>
 </head>
 <body>
@@ -50,6 +84,8 @@
         <div>
             <div style="display: inline;float: left;width: 47%;height: 70%;">
                 <label>3. 需打包的jar（maven格式）</label>
+                <button id="tempId" type="button" onclick="tempClick()" >模板</button>
+                <button id="clsId" type="button" style="display: none" onclick="clsClick()" >清空</button>
                 <br/>
                 <textarea  name="mavenSrc" id="mavenSrc" style="width: 100%;height: 100%;" placeholder="这里粘贴<dependencies></dependencies>及里面的内容。
 【示例】：

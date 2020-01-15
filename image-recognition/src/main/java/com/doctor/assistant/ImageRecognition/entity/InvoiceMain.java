@@ -17,9 +17,13 @@ public class InvoiceMain implements Serializable {
     private String logId;
     @Column(name = "words_result_num")
     private String wordsResultNum;
-
     @ManyToOne
     @JoinColumn(name = "invoice_id")
     @NotFound(action = NotFoundAction.IGNORE)
     private Invoice wordsResult;
+    private int checked;// 是否校验过:0 未校验（初始值）；1 已校验
+
+    public InvoiceMain() {
+        this.wordsResult = new Invoice();
+    }
 }

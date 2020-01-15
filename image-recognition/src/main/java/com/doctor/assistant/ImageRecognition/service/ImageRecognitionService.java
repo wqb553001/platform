@@ -1,6 +1,7 @@
 package com.doctor.assistant.ImageRecognition.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.doctor.assistant.ImageRecognition.dao.ElementDao;
 import com.doctor.assistant.ImageRecognition.dao.InvoiceDao;
 import com.doctor.assistant.ImageRecognition.dao.InvoiceMainDaoI;
@@ -11,6 +12,7 @@ import com.doctor.assistant.ImageRecognition.utils.HttpPostUtil;
 import com.doctor.assistant.ImageRecognition.utils.Results;
 import com.doctor.assistant.ImageRecognition.utils.UUIDUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,16 @@ public class ImageRecognitionService {
     }
 
     public InvoiceMain explainJsonToEntity(String jsonStr){
+        JSONObject jsonObject = JSON.parseObject(jsonStr);
+        if(jsonObject != null && jsonObject.containsKey("error_code")){
+            Object error_code = jsonObject.get("error_code");
+            if(error_code.toString().equals("111") && jsonObject.get("error_msg").toString().equalsIgnoreCase("Access token expired")){
+                // token 过期了
+                // 1. 重新 获取 token
+                // 2. 将最新的 token 写入 配置文件
+                // 3. 刷新缓存
+            }
+        }
         InvoiceMain invoiceMain = JSON.toJavaObject(JSON.parseObject(jsonStr), InvoiceMain.class);
         if(invoiceMain == null) return null;
         Invoice wordsResult = invoiceMain.getWordsResult();
@@ -48,8 +60,9 @@ public class ImageRecognitionService {
         return invoiceMain;
     }
 
-    public Results insertInvoiceMain(InvoiceMain invoiceMain){
+    public Results insertInvoiceMain(InvoiceMain invoiceMain) {
         String commodityTaxRates = UUIDUtil.getUUID();
+        String commodityTaxs = UUIDUtil.getUUID();
         String commodityAmounts = UUIDUtil.getUUID();
         String commodityNums = UUIDUtil.getUUID();
         String commodityUnits = UUIDUtil.getUUID();
@@ -59,6 +72,7 @@ public class ImageRecognitionService {
         Invoice wordsResult = invoiceMain.getWordsResult();
 
         wordsResult.setCommodityTaxRates(commodityTaxRates);
+        wordsResult.setCommodityTaxs(commodityTaxs);
         wordsResult.setCommodityAmounts(commodityAmounts);
         wordsResult.setCommodityNums(commodityNums);
         wordsResult.setCommodityUnits(commodityUnits);
@@ -78,6 +92,7 @@ public class ImageRecognitionService {
         List<Element> resultElements = new ArrayList<>(14);
         // 分别保存 元数据
         List<Element> commodityTaxRate = wordsResult.getCommodityTaxRate();
+        List<Element> commodityTax = wordsResult.getCommodityTax();
         List<Element> commodityAmount = wordsResult.getCommodityAmount();
         List<Element> commodityNum = wordsResult.getCommodityNum();
         List<Element> commodityUnit = wordsResult.getCommodityUnit();
@@ -86,6 +101,7 @@ public class ImageRecognitionService {
         List<Element> commodityType = wordsResult.getCommodityType();
 
         this.setElements(resultElements, commodityTaxRate, commodityTaxRates);
+        this.setElements(resultElements, commodityTax, commodityTaxs);
         this.setElements(resultElements, commodityAmount, commodityAmounts);
         this.setElements(resultElements, commodityNum, commodityNums);
         this.setElements(resultElements, commodityUnit, commodityUnits);
@@ -93,7 +109,6 @@ public class ImageRecognitionService {
         this.setElements(resultElements, commodityName, commodityNames);
         this.setElements(resultElements, commodityType, commodityTypes);
         if(!resultElements.isEmpty()) this.elementDao.batchInsertElementList(resultElements);
-        if(!resultElements.isEmpty()) this.elementDao.findElementByCommodityId("resultElements");
         Results results = Results.OK();
         results.setResult(invoiceMain);
         return results;
@@ -170,4 +185,16 @@ public class ImageRecognitionService {
         return Results.OK();
     }
 
+    public static void main(String[] args) {
+        func();
+    }
+
+
+    private static void func(){
+        // 1. 时区
+        System.out.println("时区：" + System.getProperty("user.timezone"));
+        // 2. 时间戳 转换 时间
+        long dateL = 1317225600000l;
+        System.out.println("时间：" + DateFormatUtils.format(dateL,"yyyy-MM-dd hh:mm:ss"));
+    }
 }

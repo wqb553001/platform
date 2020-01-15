@@ -34,7 +34,7 @@ server:
 spring:
     datasource:
         image:
-            jdbc-url: jdbc:mysql://localhost:3306/image?serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false
+            jdbc-url: jdbc:mysql://localhost:3306/image?serverTimezone=Asia/Shanghai&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false
             username: root
             password: root
 
@@ -53,3 +53,20 @@ spring:
             ddl-auto: update
         # 设置创表引擎为Innodb，不然默认为MyiSam
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+---
+# 配置spring的时区
+spring:
+    jackson:
+        time-zone: GMT+8
+
+---
+spring:
+    devtools:
+        restart:
+            enabled: true  #设置开启热部署
+            additional-paths: src/main/java #重启目录
+            exclude: WEB-INF/**
+    freemarker:
+        cache: false    #页面不加载缓存，修改即时生效
+

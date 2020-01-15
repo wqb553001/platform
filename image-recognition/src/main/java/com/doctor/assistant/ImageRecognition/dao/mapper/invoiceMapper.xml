@@ -16,7 +16,7 @@
         WHERE commodity_id = #{commodityId}
     </select>
 
-    <insert id="batchInsertElementList" useGeneratedKeys="true" parameterType="java.util.List" >
+    <insert id="batchInsertElementList" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List" >
         INSERT INTO tb_element(commodity_id, word, row_sort)
         VALUES
         <foreach collection="elementList" item="album"  separator="," close=";">

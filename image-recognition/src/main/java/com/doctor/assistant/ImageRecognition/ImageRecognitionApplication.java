@@ -30,5 +30,4 @@ public class ImageRecognitionApplication  extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(ImageRecognitionApplication.class, args);
 	}
-
 }
