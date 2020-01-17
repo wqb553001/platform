@@ -6,8 +6,6 @@ spring:
          name: image-recognition
     cloud:
         config:
-            label: master
-            profile: dev
             uri: http://localhost:8769
             fail-fast: true
     mvc:
@@ -35,9 +33,6 @@ server:
         jsp:
             init-parameters:
                 development: true
-
-#management.endpoints.web.exposure.include: *
-
 
 ---
 # 配置spring的时区

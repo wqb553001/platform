@@ -1,0 +1,24 @@
+spring:
+    cloud:
+        config:
+            uri: http://localhost:8769
+            fail-fast: true
+
+
+management.endpoints.web.exposure.include: health, info, refresh
+
+---
+spring:
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: test
+        password: test2020
+        virtual-host: /
+
+#暴露全部的监控信息
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'

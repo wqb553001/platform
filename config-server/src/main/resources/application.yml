@@ -1,0 +1,53 @@
+spring:
+    application:
+        config-server
+    profiles:
+        include: db
+        active: jdbc
+
+
+server:
+    port: 8769
+
+---
+# 配置spring的时区
+spring:
+    jackson:
+        time-zone: GMT+8
+
+---
+spring:
+    devtools:
+        restart:
+            enabled: true  #设置开启热部署
+            additional-paths: src/main/java #重启目录
+            exclude: WEB-INF/**
+    freemarker:
+        cache: false    #页面不加载缓存，修改即时生效
+
+---
+spring:
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: test
+        password: test2020
+        virtual-host: /
+
+#暴露全部的监控信息
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+
+---
+spring:
+    cloud:
+        config:
+            label: master
+            server:
+                jdbc: true
+
+spring.cloud.config.server.jdbc.sql: SELECT api_key,  api_addr FROM tb_baidu_ocr WHERE enable = 1 AND APPLICATION=? AND PROFILE=? AND LABEL=?
+

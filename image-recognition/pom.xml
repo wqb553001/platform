@@ -24,20 +24,34 @@
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j2.version>2.6.2</log4j2.version>
+		<spring-cloud.version>Hoxton.SR1</spring-cloud.version>
 <!--		<tomcat.version>8.0.29</tomcat.version>&lt;!&ndash;设置 springboot 内嵌tomcat的版本&ndash;&gt;-->
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-amqp</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<!--Spring Boot Actuator，感应服务端变化-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+        </dependency>
 
 		<!--引入springboot 内嵌tomcat对jsp的解析包-->
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
-			<!--            <scope>provided</scope>-->
+			<!-- <scope>provided</scope>-->
 		</dependency>
 		<!--servlet依赖jar-->
 		<dependency>
@@ -118,7 +132,20 @@
 			<optional>true</optional>
 			<scope>true</scope>
 		</dependency>
+
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<finalName>ROOT</finalName>

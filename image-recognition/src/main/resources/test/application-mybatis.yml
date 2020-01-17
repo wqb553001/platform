@@ -1,0 +1,4 @@
+mybatis:
+    type-aliases-package: com.doctor.assistant.ImageRecognition.entity
+    mapper-locations: classpath*:com/doctor/assistant/ImageRecognition/dao/mapper/*Mapper.xml
+

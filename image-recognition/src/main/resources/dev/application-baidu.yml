@@ -1,0 +1,15 @@
+tokenUrl: https://aip.baidubce.com/oauth/2.0/token
+
+zzs:
+    BaiduApiURL: https://aip.baidubce.com/rest/2.0/ocr/v1/vat_invoice
+    AppID: 17963898
+    APIKey: XLBdfCnTUhNTWMG43h0GBAmU
+    SecretKey: hRwmv9BGsskO5OncZ4TWg68lXCPdpd8A
+
+useIOCR:
+    BaiduApiURL: https://aip.baidubce.com/rest/2.0/ocr/v1/vat_invoice
+    AppID: 17966483
+    APIKey: TeOZf24qFv9K8jDu2Am1a5cK
+    SecretKey: MpIw1hCBCYr1PPCMs5xiqVU4NWUhAHfR
+
+  
