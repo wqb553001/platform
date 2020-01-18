@@ -68,10 +68,12 @@ public class ImageRecognitionController {
     @RequestMapping({"/refresh"})
     public String refresh(){
         System.out.println("访问了 /image/refresh");
-        return this.imageRecognitionService.refresh();
+        this.imageRecognitionService.refresh();
+        return "SUCCESS!!!";
     }
 
     @RequestMapping({"/utilToken"})
+    @ResponseBody
     public String index(){
         System.out.println("访问了 /image/utilToken");
         return this.imageRecognitionService.getAccessToken();
@@ -135,19 +137,12 @@ public class ImageRecognitionController {
                 //- normal：可识别增值税普票、专票、电子发票
                 //- roll：可识别增值税卷票
                 paramMap.put("type","normal");
-//                paramMap.put("access_token","24.d967bbf7c5ad6c77cfdd614d3ef352a2.2592000.1578992008.282335-17963898");
-//                paramMap.put("access_token","24.afda75510b955b281f81135e19aa8689.2592000.1581699891.282335-17963898");
                 paramMap.put("access_token",accessToken);
 //                System.out.println("zzsBaiduApiURL:" + zzsBaiduApiURL);
                 stringBuilder.append("\r\n");
-                stringBuilder.append(this.imageRecognitionService.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap));
-                String json = stringBuilder.toString();
-                System.out.println("数据：" + json);
-                invoiceMain = this.imageRecognitionService.explainJsonToEntity(json);
-                if(invoiceMain != null) {
-                    if(invoiceMain.getLogId() != null)
-                    this.imageRecognitionService.insertInvoiceMain(invoiceMain);
-                }
+//                stringBuilder.append();
+                invoiceMain = this.imageRecognitionService.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap);
+                System.out.println("存入后返回：" + JSON.toJSON(invoiceMain));
                 request.setAttribute("invoiceEn", invoiceMain);
                 long timeMid = LocalTime.now().toNanoOfDay();
                 long timeSecondMid = LocalTime.now().toSecondOfDay();
@@ -157,11 +152,6 @@ public class ImageRecognitionController {
             }
         }
 
-//        if(invoiceMain == null){
-//            invoiceMain = new InvoiceMain();
-//            Invoice invoice = new Invoice();
-//            invoiceMain.setWordsResult(invoice);
-//        }
         long timeEnd = LocalTime.now().toNanoOfDay();
         System.out.println("总用时：" +(timeEnd - timeBefore));
         System.out.println("存入后返回：" + JSON.toJSON(invoiceMain));

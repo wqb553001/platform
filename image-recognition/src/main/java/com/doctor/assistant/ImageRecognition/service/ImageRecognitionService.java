@@ -33,8 +33,7 @@ public class ImageRecognitionService {
     @Value("${zzs_SecretKey}")
     private String zzsSecretKey;
     @Value(value="${access_token}") // "access_token":"24.d967bbf7c5ad6c77cfdd614d3ef352a2.2592000.1578992008.282335-17963898"
-    // 返回信息：{"refresh_token":"25.257f0dbe0061e321c130e61992dd1159.315360000.1891760008.282335-17963898","expires_in":2592000,"session_key":"9mzdX+OCakh4wx60ybtuGXoSLksEhS7vnd\/DwS2GSmSRbwssN9tSWfueQw81cQVvL9YZ5tL5BPCbw8MnMu\/nN5GJ2WO\/cg==","access_token":"24.d967bbf7c5ad6c77cfdd614d3ef352a2.2592000.1578992008.282335-17963898","scope":"public vis-ocr_ocr brain_ocr_scope brain_ocr_general brain_ocr_general_basic vis-ocr_business_license brain_ocr_webimage brain_all_scope brain_ocr_idcard brain_ocr_driving_license brain_ocr_vehicle_license vis-ocr_plate_number brain_solution brain_ocr_plate_number brain_ocr_accurate brain_ocr_accurate_basic brain_ocr_receipt brain_ocr_business_license brain_solution_iocr brain_qrcode brain_ocr_handwriting brain_ocr_passport brain_ocr_vat_invoice brain_numbers brain_ocr_business_card brain_ocr_train_ticket brain_ocr_taxi_receipt vis-ocr_household_register vis-ocr_vis-classify_birth_certificate vis-ocr_\u53f0\u6e7e\u901a\u884c\u8bc1 vis-ocr_\u6e2f\u6fb3\u901a\u884c\u8bc1 vis-ocr_\u673a\u52a8\u8f66\u68c0\u9a8c\u5408\u683c\u8bc1\u8bc6\u522b vis-ocr_\u8f66\u8f86vin\u7801\u8bc6\u522b vis-ocr_\u5b9a\u989d\u53d1\u7968\u8bc6\u522b vis-ocr_\u4fdd\u5355\u8bc6\u522b brain_ocr_vin brain_ocr_quota_invoice brain_ocr_birth_certificate brain_ocr_household_register brain_ocr_HK_Macau_pass brain_ocr_taiwan_pass brain_ocr_vehicle_certificate brain_ocr_insurance_doc wise_adapt lebo_resource_base lightservice_public hetu_basic lightcms_map_poi kaidian_kaidian ApsMisTest_Test\u6743\u9650 vis-classify_flower lpq_\u5f00\u653e cop_helloScope ApsMis_fangdi_permission smartapp_snsapi_base iop_autocar oauth_tp_app smartapp_smart_game_openapi oauth_sessionkey smartapp_swanid_verify smartapp_opensource_openapi smartapp_opensource_recapi fake_face_detect_\u5f00\u653eScope vis-ocr_\u865a\u62df\u4eba\u7269\u52a9\u7406 idl-video_\u865a\u62df\u4eba\u7269\u52a9\u7406","session_secret":"762ae94eb8b8fdc5de6e516415d64e03"}
-    private String accessToken;
+    private String accessToken;    // 返回信息：{"refresh_token":"25.257f0dbe0061e321c130e61992dd1159.315360000.1891760008.282335-17963898","expires_in":2592000,"session_key":"9mzdX+OCakh4wx60ybtuGXoSLksEhS7vnd\/DwS2GSmSRbwssN9tSWfueQw81cQVvL9YZ5tL5BPCbw8MnMu\/nN5GJ2WO\/cg==","access_token":"24.d967bbf7c5ad6c77cfdd614d3ef352a2.2592000.1578992008.282335-17963898","scope":"public vis-ocr_ocr brain_ocr_scope brain_ocr_general brain_ocr_general_basic vis-ocr_business_license brain_ocr_webimage brain_all_scope brain_ocr_idcard brain_ocr_driving_license brain_ocr_vehicle_license vis-ocr_plate_number brain_solution brain_ocr_plate_number brain_ocr_accurate brain_ocr_accurate_basic brain_ocr_receipt brain_ocr_business_license brain_solution_iocr brain_qrcode brain_ocr_handwriting brain_ocr_passport brain_ocr_vat_invoice brain_numbers brain_ocr_business_card brain_ocr_train_ticket brain_ocr_taxi_receipt vis-ocr_household_register vis-ocr_vis-classify_birth_certificate vis-ocr_\u53f0\u6e7e\u901a\u884c\u8bc1 vis-ocr_\u6e2f\u6fb3\u901a\u884c\u8bc1 vis-ocr_\u673a\u52a8\u8f66\u68c0\u9a8c\u5408\u683c\u8bc1\u8bc6\u522b vis-ocr_\u8f66\u8f86vin\u7801\u8bc6\u522b vis-ocr_\u5b9a\u989d\u53d1\u7968\u8bc6\u522b vis-ocr_\u4fdd\u5355\u8bc6\u522b brain_ocr_vin brain_ocr_quota_invoice brain_ocr_birth_certificate brain_ocr_household_register brain_ocr_HK_Macau_pass brain_ocr_taiwan_pass brain_ocr_vehicle_certificate brain_ocr_insurance_doc wise_adapt lebo_resource_base lightservice_public hetu_basic lightcms_map_poi kaidian_kaidian ApsMisTest_Test\u6743\u9650 vis-classify_flower lpq_\u5f00\u653e cop_helloScope ApsMis_fangdi_permission smartapp_snsapi_base iop_autocar oauth_tp_app smartapp_smart_game_openapi oauth_sessionkey smartapp_swanid_verify smartapp_opensource_openapi smartapp_opensource_recapi fake_face_detect_\u5f00\u653eScope vis-ocr_\u865a\u62df\u4eba\u7269\u52a9\u7406 idl-video_\u865a\u62df\u4eba\u7269\u52a9\u7406","session_secret":"762ae94eb8b8fdc5de6e516415d64e03"}
     @Value(value="${tokenUrl}") // "access_token":"24.d967bbf7c5ad6c77cfdd614d3ef352a2.2592000.1578992008.282335-17963898"
     private String tokenUrl;
     @Value(value="${refresh_url}")
@@ -43,6 +42,13 @@ public class ImageRecognitionService {
     @Autowired
     private BaiduOcrDao baiduOcrDao;
 
+    private InvoiceMain invoiceMain;
+    public void setInvoiceMain(InvoiceMain invoiceMain){
+        this.invoiceMain = invoiceMain;
+    }
+    public InvoiceMain getInvoiceMain(){
+        return this.invoiceMain;
+    }
 
     @Autowired
     InvoiceMainDaoI invoiceMainDao;
@@ -56,31 +62,37 @@ public class ImageRecognitionService {
     }
 
     public String getAccessToken(){
-        return this.getAccessToken();
+        return accessToken;
     }
 
-    public String callBaiduImageRecognition(String url, Map<String, String> headerMap, Map<String, String> paramMap){
+    public InvoiceMain callBaiduImageRecognition(String url, Map<String, String> headerMap, Map<String, String> paramMap){
         int flag = 5;
         String resData = HttpPostUtil.doPost(url, headerMap, paramMap);
         if(resData.contains("error_code")){
-            Thread thread = new children(resData);
-            thread.start();
+            // 刷新 Token
+            String freshAccessToken = this.refreshToken(resData);
+
             while (resData.contains("error_code") && flag > 0){
-                // 刷新 Token
-//                this.refreshToken(resData);
 //                Thread.yield();
-                try {
-                    Thread.sleep(((-flag+5)*5)*1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(((-flag+6)*10)*1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                paramMap.put("access_token", freshAccessToken);
                 resData = HttpPostUtil.doPost(url, headerMap, paramMap);
-                flag--;
-                System.out.println("第"+(-flag+5)+"次 处理");
+                System.out.println("第"+(-flag+6)+"次 处理");
             }
         }
 
-        return resData;
+        InvoiceMain invoiceMain = this.explainJsonToEntity(resData);
+        if(invoiceMain != null) {
+            if(invoiceMain.getLogId() != null)
+                this.insertInvoiceMain(invoiceMain);
+        }else{
+            invoiceMain = new InvoiceMain();
+        }
+        return invoiceMain;
     }
 
     public String examineImage(InvoiceMain invoiceMain){
@@ -167,18 +179,20 @@ public class ImageRecognitionService {
         return results;
     }
 
-    private void refreshToken(String jsonStr){
+    private String refreshToken(String jsonStr){
         JSONObject jsonObject = JSON.parseObject(jsonStr);
+        String resData = jsonStr;
+        String accessToken = jsonStr;
         if(jsonObject != null && jsonObject.containsKey("error_code")){
             Object error_code = jsonObject.get("error_code");
             if(error_code.toString().equals("111") || jsonObject.get("error_msg").toString().toLowerCase().contains("token")){
                 // token 过期了
                 // 1. 重新 获取 token
-                String resData = this.getToken();
+                resData = this.getToken();
                 // 2. 解析 新的token
-                String access_token = this.example(resData, "access_token");
+                accessToken = this.example(resData, "access_token");
                 // 3. 将最新的 token 存库
-                if(StringUtils.isNotBlank(access_token)){
+                if(StringUtils.isNotBlank(accessToken)){
                     // 3.1 将 configServer 原记录读取过来
                     BaiduOcr baiduOcr = new BaiduOcr();
                     baiduOcr.setApiKey("access_token");
@@ -190,16 +204,16 @@ public class ImageRecognitionService {
                     }
                     // 3.2 填充新值
                     baiduOcr.setProfile("dev");
-                    baiduOcr.setApiAddr(access_token);
+                    baiduOcr.setApiAddr(accessToken);
                     // 3.3 更新到库
                     this.baiduOcrDao.saveAndFlush(baiduOcr);
-                    this.baiduOcrDao.save(baiduOcr);
                 }
 
                 // 4. 刷新缓存
                 this.refresh();
             }
         }
+        return accessToken;
     }
 
     private String example(String jsonStr, String requestKey){
@@ -272,19 +286,20 @@ public class ImageRecognitionService {
         return HttpPostUtil.doGet(tokenUrl, null, paramMap);
     }
 
-    public String refresh() {
+    public void refresh() {
         String resData = "";
         // 3. 刷新缓存
         String urlStr = refreshUrl;
         if(StringUtils.isBlank(urlStr)){
             urlStr = "http://localhost:8769/actuator/bus-refresh";
 //            urlStr = "http://localhost:8082/actuator/refresh";
+            System.out.println("配置暂未更新。。。");
+//            return "{\"error_code\":111,\"error_msg\":\"Access token expired\"}";
         }
 
         HttpPost httpPost = new HttpPost(urlStr);
         resData = HttpPostUtil.midCall(httpPost);
         System.out.println("刷新缓存: " +urlStr+ "  返回：" + resData);
-        return resData;
     }
 
     class children extends Thread{
