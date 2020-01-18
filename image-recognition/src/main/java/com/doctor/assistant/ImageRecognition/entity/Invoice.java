@@ -130,5 +130,45 @@ public class Invoice implements Serializable {
     @Transient
     private List<Element> commodityType;
 
+    public Invoice setCommodityTaxRates(String commodityTaxRates){
+        this.commodityTaxRates = commodityTaxRates;
+        return this;
+    }
+
+    public Invoice setCommodityTaxs(String commodityTaxs){
+        this.commodityTaxs = commodityTaxs;
+        return this;
+    }
+
+    public Invoice setCommodityAmounts(String commodityAmounts){
+        this.commodityAmounts = commodityAmounts;
+        return this;
+    }
+
+    public Invoice setCommodityNums(String commodityNums){
+        this.commodityNums = commodityNums;
+        return this;
+    }
+
+    public Invoice setCommodityUnits(String commodityUnits){
+        this.commodityUnits = commodityUnits;
+        return this;
+    }
+
+    public Invoice setCommodityPrices(String commodityPrices){
+        this.commodityPrices = commodityPrices;
+        return this;
+    }
+
+    public Invoice setCommodityNames(String commodityNames){
+        this.commodityNames = commodityNames;
+        return this;
+    }
+
+    public Invoice setCommodityTypes(String commodityTypes){
+        this.commodityTypes = commodityTypes;
+        return this;
+    }
+
 }
 

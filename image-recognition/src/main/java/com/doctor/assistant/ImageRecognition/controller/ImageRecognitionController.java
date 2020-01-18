@@ -142,7 +142,6 @@ public class ImageRecognitionController {
                 stringBuilder.append("\r\n");
 //                stringBuilder.append();
                 invoiceMain = this.imageRecognitionService.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap);
-                System.out.println("存入后返回：" + JSON.toJSON(invoiceMain));
                 request.setAttribute("invoiceEn", invoiceMain);
                 long timeMid = LocalTime.now().toNanoOfDay();
                 long timeSecondMid = LocalTime.now().toSecondOfDay();

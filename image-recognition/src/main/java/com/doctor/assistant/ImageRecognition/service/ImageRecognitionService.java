@@ -41,15 +41,6 @@ public class ImageRecognitionService {
 
     @Autowired
     private BaiduOcrDao baiduOcrDao;
-
-    private InvoiceMain invoiceMain;
-    public void setInvoiceMain(InvoiceMain invoiceMain){
-        this.invoiceMain = invoiceMain;
-    }
-    public InvoiceMain getInvoiceMain(){
-        return this.invoiceMain;
-    }
-
     @Autowired
     InvoiceMainDaoI invoiceMainDao;
     @Autowired
@@ -73,12 +64,6 @@ public class ImageRecognitionService {
             String freshAccessToken = this.refreshToken(resData);
 
             while (resData.contains("error_code") && flag > 0){
-//                Thread.yield();
-//                try {
-//                    Thread.sleep(((-flag+6)*10)*1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
                 paramMap.put("access_token", freshAccessToken);
                 resData = HttpPostUtil.doPost(url, headerMap, paramMap);
                 System.out.println("第"+(-flag+6)+"次 处理");
@@ -119,23 +104,20 @@ public class ImageRecognitionService {
         String commodityTypes = UUIDUtil.getUUID();
         Invoice wordsResult = invoiceMain.getWordsResult();
 
-        wordsResult.setCommodityTaxRates(commodityTaxRates);
-        wordsResult.setCommodityTaxs(commodityTaxs);
-        wordsResult.setCommodityAmounts(commodityAmounts);
-        wordsResult.setCommodityNums(commodityNums);
-        wordsResult.setCommodityUnits(commodityUnits);
-        wordsResult.setCommodityPrices(commodityPrices);
-        wordsResult.setCommodityNames(commodityNames);
-        wordsResult.setCommodityTypes(commodityTypes);
-
-//        invoiceDao.save(wordsResult);
+        wordsResult = wordsResult.setCommodityTaxRates(commodityTaxRates)
+                .setCommodityTaxs(commodityTaxs)
+                .setCommodityAmounts(commodityAmounts)
+                .setCommodityNums(commodityNums)
+                .setCommodityUnits(commodityUnits)
+                .setCommodityPrices(commodityPrices)
+                .setCommodityNames(commodityNames)
+                .setCommodityTypes(commodityTypes);
         wordsResult.setId(UUIDUtil.getUUID());
-        invoiceDao.saveAndFlush(wordsResult);
+        this.invoiceDao.saveAndFlush(wordsResult);
 
         invoiceMain.setId(UUIDUtil.getUUID());
         // 保存 票据主体信息
-//        invoiceMainDao.save(invoiceMain);
-        invoiceMainDao.saveAndFlush(invoiceMain);
+        this.invoiceMainDao.saveAndFlush(invoiceMain);
 
         List<Element> resultElements = new ArrayList<>(14);
         // 分别保存 元数据
@@ -293,8 +275,6 @@ public class ImageRecognitionService {
         if(StringUtils.isBlank(urlStr)){
             urlStr = "http://localhost:8769/actuator/bus-refresh";
 //            urlStr = "http://localhost:8082/actuator/refresh";
-            System.out.println("配置暂未更新。。。");
-//            return "{\"error_code\":111,\"error_msg\":\"Access token expired\"}";
         }
 
         HttpPost httpPost = new HttpPost(urlStr);
@@ -302,15 +282,4 @@ public class ImageRecognitionService {
         System.out.println("刷新缓存: " +urlStr+ "  返回：" + resData);
     }
 
-    class children extends Thread{
-        private String handleJson;
-        public children(String handleJson) {
-            this.handleJson = handleJson;
-        }
-
-        @Override
-        public void run() {
-            new ImageRecognitionService().refreshToken(handleJson);
-        }
-    }
 }
