@@ -84,8 +84,8 @@
         <div>
             <div style="display: inline;float: left;width: 47%;height: 70%;">
                 <label>3. 需打包的jar（maven格式）</label>
-                <button id="tempId" type="button" onclick="tempClick()" >模板</button>
-                <button id="clsId" type="button" style="display: none" onclick="clsClick()" >清空</button>
+                <button id="tempId" type="button" onclick="tempClick()" style="mso-foreground: green;background-color: lightgreen;" >模板</button>
+                <button id="clsId" type="button" style="display: none; background-color: aquamarine" onclick="clsClick()" >清空</button>
                 <br/>
                 <textarea  name="mavenSrc" id="mavenSrc" style="width: 100%;height: 100%;" placeholder="这里粘贴<dependencies></dependencies>及里面的内容。
 【示例】：

@@ -106,7 +106,55 @@ public class ImageRecognitionController {
                                    HttpServletRequest request, HttpServletResponse response) {
         System.out.println("访问 /image/uploadImages");
         long timeBefore = LocalTime.now().toNanoOfDay();
-        InvoiceMain invoiceMain = this.imageRecognitionService.recogeImage(images);
+        long timeSecondBefore = LocalTime.now().toSecondOfDay();
+        List<String> list = new ArrayList<String>();
+        String encodeFileStr = null;
+        StringBuilder stringBuilder = null;
+        InvoiceMain invoiceMain = null;
+//        InvoiceMain invoiceMain = this.imageRecognitionService.recogeImage(images);
+
+//        if (images != null && images.length > 0 && !images[0].isEmpty()) {
+//            for (int i = 0; i < images.length; i++) {
+//                stringBuilder = new StringBuilder();
+//                MultipartFile file = images[i];
+//                // 保存文件
+////                list = saveFile(request, file, list);
+//                final Base64.Encoder encoder = Base64.getEncoder();
+//                try {
+//                    encodeFileStr = encoder.encodeToString(file.getBytes());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                Map<String,String> headerMap = new HashMap<>();
+//                headerMap.put("Content-Type", "application/x-www-form-urlencoded");
+//                // image	是	string	-	图像数据，
+//                // base64编码后进行urlencode，
+//                // 要求base64编码和urlencode后大小不超过4M，最短边至少15px，最长边最大4096px,
+//                // 支持jpg/jpeg/png/bmp格式
+//                Map<String,String> paramMap = new HashMap<>();
+//                paramMap.put("image", encodeFileStr);
+//                // accuracy	否	string	normal/high
+//                // normal（默认配置）对应普通精度模型，识别速度较快，在四要素的准确率上和 high 模型保持一致，
+//                // high对应高精度识别模型，相应的时延会增加，因为超时导致失败的情况也会增加（错误码282000）
+//                paramMap.put("accuracy","normal");
+//                // type	否	string	normal/roll	进行识别的增值税发票类型，默认为 normal，可缺省
+//                //- normal：可识别增值税普票、专票、电子发票
+//                //- roll：可识别增值税卷票
+//                paramMap.put("type","normal");
+//                paramMap.put("access_token",accessToken);
+////                System.out.println("zzsBaiduApiURL:" + zzsBaiduApiURL);
+//                stringBuilder.append("\r\n");
+////                stringBuilder.append();
+//                invoiceMain = this.imageRecognitionService.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap);
+//                long timeMid = LocalTime.now().toNanoOfDay();
+//                long timeSecondMid = LocalTime.now().toSecondOfDay();
+//                System.out.println("至第"+(i+1)+"张:");
+//                System.out.println("用时秒数:"+(timeSecondMid - timeSecondBefore));
+//                System.out.println("用时毫秒：" +(timeMid - timeBefore));
+//            }
+//        }
+
+        invoiceMain = this.imageRecognitionService.recogeImage(images);
         long timeEnd = LocalTime.now().toNanoOfDay();
         log.info("总用时：" +(timeEnd - timeBefore));
         log.info("存入后返回：" + JSON.toJSON(invoiceMain));
@@ -179,5 +227,15 @@ public class ImageRecognitionController {
             }
         }
         return list;
+    }
+//    @RequestMapping("/testMQ")
+//    @ResponseBody
+    @RequestMapping("/testMQ")
+    @ResponseBody
+    public String testMQ(){
+        String context = "2020年4月14日 WQB testMQ";
+        System.out.println("日志：=========== "+context);
+        imageRecognitionService.senderMQ(context);
+        return "OK";
     }
 }

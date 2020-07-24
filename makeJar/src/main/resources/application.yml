@@ -1,4 +1,5 @@
 spring:
+    application: ROOT
     mvc:
         view:
             prefix: /view/

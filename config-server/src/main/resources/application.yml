@@ -26,13 +26,13 @@ spring:
         cache: false    #页面不加载缓存，修改即时生效
 
 ---
-spring:
-    rabbitmq:
-        host: localhost
-        port: 5672
-        username: test
-        password: test2020
-        virtual-host: /
+#spring:
+#    rabbitmq:
+#        host: localhost
+#        port: 5672
+#        username: test
+#        password: test2020
+#        virtual-host: /
 
 #暴露全部的监控信息
 management:

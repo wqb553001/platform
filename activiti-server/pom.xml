@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>PlatFormRoot</artifactId>
+		<groupId>com.doctor.assistant</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>com.doctor.activiti</groupId>
+	<artifactId>activiti-server</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>activiti-server</name>
+	<description>activiti-server</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+		<activiti-dependencies.version>7.1.123</activiti-dependencies.version>
+		<!--<activiti-dependencies.version>7.0.0.SR1</activiti-dependencies.version>-->
+		<!--<activiti-dependencies.version>7.1.0.M5</activiti-dependencies.version>-->
+		<!--<activiti-dependencies.version>7.1.7</activiti-dependencies.version>-->
+		<!--<activiti-dependencies.version>7.1.24</activiti-dependencies.version>-->
+		<slf4j.version>1.7.16</slf4j.version>
+		<log4j.version>1.2.12</log4j.version>
+		<druid.version>1.1.9</druid.version>
+		<fastjson-lib.version>1.2.6</fastjson-lib.version>
+	</properties>
+	<!-- 设定主仓库，按设定顺序进行查找  -->
+	<repositories>
+		<repository>
+			<id>aliyun</id>
+			<name>aliyun Repository</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+			<!--<snapshots>-->
+			<!--<enabled>false</enabled>-->
+			<!--</snapshots>-->
+		</repository>
+		<repository>
+			<id>alfresco</id>
+			<name>Activiti Releases</name>
+			<url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>jeecg-snapshots</id>
+			<name>jeecg-snapshots Repository</name>
+			<url>http://maven.jeecg.org/nexus/content/repositories/snapshots</url>
+
+		</repository>
+		<repository>
+			<id>com.github.jgraph</id>
+			<name>Mulesoft repository</name>
+			<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+
+		</repository>
+	</repositories>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.activiti.dependencies</groupId>
+				<artifactId>activiti-dependencies</artifactId>
+				<version>${activiti-dependencies.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-engine</artifactId>
+		</dependency>
+
+		<!-- Activiti生成流程图 -->
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-image-generator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.security</groupId>-->
+			<!--<artifactId>spring-security-test</artifactId>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.h2database</groupId>-->
+			<!--<artifactId>h2</artifactId>-->
+			<!--<version>1.4.197</version>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
+		<!-- druid连接池  -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid.version}</version>
+			<!--<scope>runtime</scope>-->
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson-lib.version}</version>
+		</dependency>
+
+		<!--<dependency>-->
+			<!--<groupId>org.mybatis</groupId>-->
+			<!--<artifactId>mybatis</artifactId>-->
+			<!--<version>3.4.2</version>-->
+		<!--</dependency>-->
+		<!-- log4j12 -->
+		<!--<dependency>-->
+			<!--<groupId>org.slf4j</groupId>-->
+			<!--<artifactId>slf4j-log4j12</artifactId>-->
+			<!--<version>${slf4j.version}</version>-->
+			<!--<exclusions>-->
+				<!--<exclusion>-->
+					<!--<groupId>log4j</groupId>-->
+					<!--<artifactId>log4j</artifactId>-->
+				<!--</exclusion>-->
+			<!--</exclusions>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>log4j</groupId>-->
+			<!--<artifactId>log4j</artifactId>-->
+			<!--<version>${log4j.version}</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-devtools</artifactId>-->
+			<!--<version>${devtools.version}</version>-->
+			<!--&lt;!&ndash;<scope>runtime</scope>&ndash;&gt;-->
+		<!--</dependency>-->
+		<!-- Thymeleaf依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.9.1</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>Activiti-Server</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/webapp</directory>
+				<targetPath>META-INF/resources</targetPath>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+</project>

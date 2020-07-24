@@ -2,6 +2,7 @@ package com.doctor.assistant.ImageRecognition.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.doctor.assistant.ImageRecognition.MQ.Sender;
 import com.doctor.assistant.ImageRecognition.dao.BaiduOcrDao;
 import com.doctor.assistant.ImageRecognition.dao.ElementDao;
 import com.doctor.assistant.ImageRecognition.dao.InvoiceDao;
@@ -47,6 +48,11 @@ public class ImageRecognitionService {
     private String tokenUrl;
     @Value(value="${refresh_url}")
     private String refreshUrl;
+
+
+
+    @Autowired
+    private Sender sender;
 
     @Autowired
     private BaiduOcrDao baiduOcrDao;
@@ -132,6 +138,7 @@ public class ImageRecognitionService {
                 paramMap.put("access_token", freshAccessToken);
                 resData = HttpPostUtil.doPost(url, headerMap, paramMap);
                 System.out.println("第"+(-flag+6)+"次 处理");
+                flag --;
             }
         }
 
@@ -345,6 +352,18 @@ public class ImageRecognitionService {
         HttpPost httpPost = new HttpPost(urlStr);
         resData = HttpPostUtil.midCall(httpPost);
         System.out.println("刷新缓存: " +urlStr+ "  返回：" + resData);
+    }
+
+    public void senderMQ(String context){
+        sender.send();
+        if(StringUtils.isBlank(context)) {
+            context = "testMQ for WQB";
+        }
+        sender.sendMessage(context);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("2<<3 = " + (2 << 3));
     }
 
 }

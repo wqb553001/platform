@@ -9,6 +9,7 @@ public class DependencyBean {
     String groupId;
     String artifactId;
     String version;
+    String classifier;
 
     public DependencyBean() {
     }
@@ -37,7 +38,21 @@ public class DependencyBean {
         this.version = version;
     }
 
+    public String getClassifier() {
+        return classifier;
+    }
+
+    public void setClassifier(String classifier) {
+        this.classifier = classifier;
+    }
+
+    @Override
     public String toString() {
-        return "DependencyBean(groupId=" + this.getGroupId() + ", artifactId=" + this.getArtifactId() + ", version=" + this.getVersion() + ")";
+        return "DependencyBean{" +
+                "groupId='" + groupId + '\'' +
+                ", artifactId='" + artifactId + '\'' +
+                ", version='" + version + '\'' +
+                ", classifier='" + classifier + '\'' +
+                '}';
     }
 }

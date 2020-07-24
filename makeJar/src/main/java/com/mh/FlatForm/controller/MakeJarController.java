@@ -112,45 +112,57 @@ public class MakeJarController {
                             Element groupIdElement;
                             Element artifactIdElement;
                             Element versionElement;
+                            Element classifierElement;
                             while(true) {
                                 Element recordEle;
                                 while(true) {
-                                    while(true) {
-                                        if (!dependency.hasNext()) {
-                                            break label100;
-                                        }
+                                    while (true) {
+                                        while (true) {
+                                            if (!dependency.hasNext()) {
+                                                break label100;
+                                            }
 
-                                        dependencyBean = new DependencyBean();
-                                        recordEle = (Element)dependency.next();
-                                        groupIdElement = recordEle.element("groupId");
-                                        if (groupIdElement == null) {
+                                            dependencyBean = new DependencyBean();
+                                            recordEle = (Element) dependency.next();
+                                            groupIdElement = recordEle.element("groupId");
+                                            if (groupIdElement == null) {
+                                                break;
+                                            }
+
+                                            if (!StringUtils.isBlank(groupIdElement.getText())) {
+                                                dependencyBean.setGroupId(groupIdElement.getText());
+                                                break;
+                                            }
+                                        }
+                                        artifactIdElement = recordEle.element("artifactId");
+                                        if (artifactIdElement == null) {
                                             break;
                                         }
 
-                                        if (!StringUtils.isBlank(groupIdElement.getText())) {
-                                            dependencyBean.setGroupId(groupIdElement.getText());
+                                        if (!StringUtils.isBlank(artifactIdElement.getText())) {
+                                            dependencyBean.setArtifactId(artifactIdElement.getText());
                                             break;
                                         }
                                     }
 
-                                    artifactIdElement = recordEle.element("artifactId");
-                                    if (artifactIdElement == null) {
+                                    versionElement = recordEle.element("version");
+                                    if (versionElement == null) {
                                         break;
                                     }
 
-                                    if (!StringUtils.isBlank(artifactIdElement.getText())) {
-                                        dependencyBean.setArtifactId(artifactIdElement.getText());
+                                    if (!StringUtils.isBlank(versionElement.getText())) {
+                                        dependencyBean.setVersion(versionElement.getText());
                                         break;
                                     }
                                 }
 
-                                versionElement = recordEle.element("version");
-                                if (versionElement == null) {
+                                classifierElement = recordEle.element("classifier");
+                                if (classifierElement == null) {
                                     break;
                                 }
 
-                                if (!StringUtils.isBlank(versionElement.getText())) {
-                                    dependencyBean.setVersion(versionElement.getText());
+                                if (!StringUtils.isBlank(classifierElement.getText())) {
+                                    dependencyBean.setClassifier(classifierElement.getText());
                                     break;
                                 }
                             }

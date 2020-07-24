@@ -95,23 +95,36 @@ public class RepositoryService {
     public ResultEnum existsJarForLocal(String jarPath, DependencyBean dependencyBean) {
         System.out.println("judge.existsJar():" + jarPath);
         jarPath = this.getPath(jarPath);
-        if (this.judgeExist(jarPath, dependencyBean.getArtifactId() + "-" + dependencyBean.getVersion())) {
+        String context = dependencyBean.getArtifactId() + "-" + dependencyBean.getVersion();
+        if (this.judgeExist(jarPath, context)) {
             return ResultEnum.FULL;
-        } else if(this.judgeExist(jarPath, dependencyBean.getArtifactId())) {
-            return ResultEnum.DEFECT;
-        }else {
-            File jarFile = null;
-            String jarAllPath = "";
-            if (StringUtils.isNotBlank(dependencyBean.getVersion()) && ("1.0.0".equals(dependencyBean.getVersion())
-                    || "0.0.1".equals(dependencyBean.getVersion()) || "1.0.0.0".equals(dependencyBean.getVersion())
-                    || "0.0.0.1".equals(dependencyBean.getVersion()))) {
-                jarAllPath = jarPath + "\\" + dependencyBean.getArtifactId() + ".jar";
-            }
-
-            System.out.println("jarAllPath2:" + jarAllPath);
-            jarFile = new File(jarAllPath);
-            return jarFile != null && jarFile.exists() ? ResultEnum.DEFECT : ResultEnum.NULL;
         }
+        if(StringUtils.isNotBlank(dependencyBean.getClassifier())) context += ("-"+dependencyBean.getClassifier());
+        if (this.judgeExist(jarPath, context)) {
+            return ResultEnum.FULL;
+        }
+        if(this.judgeExist(jarPath, dependencyBean.getArtifactId())) {
+            return ResultEnum.DEFECT;
+        }
+
+        File jarFile = null;
+        String jarAllPath = "";
+        if (StringUtils.isNotBlank(dependencyBean.getVersion()) && ("1.0.0".equals(dependencyBean.getVersion())
+                || "0.0.1".equals(dependencyBean.getVersion()) || "1.0.0.0".equals(dependencyBean.getVersion())
+                || "0.0.0.1".equals(dependencyBean.getVersion()))) {
+            jarAllPath = jarPath + "\\" + dependencyBean.getArtifactId() + ".jar";
+        }
+
+        System.out.println("jarAllPath2:" + jarAllPath);
+        jarFile = new File(jarAllPath);
+        return jarFile != null && jarFile.exists() ? ResultEnum.DEFECT : ResultEnum.NULL;
+    }
+
+    String getClassifierStr(DependencyBean dependencyBean){
+        if(StringUtils.isNotBlank(dependencyBean.getClassifier())){
+            return dependencyBean.getClassifier();
+        }
+        return "";
     }
 
     boolean judgeExist(String jarPath, String context){
@@ -151,7 +164,23 @@ public class RepositoryService {
         Runtime runtime = Runtime.getRuntime();
         Process process = null;
         try {
-            String cmd = "cmd /c   cd " + jarPath + " && mvn install:install-file  -Dfile=" + jarPath + "\\\\" + dependencyBean.getArtifactId() + (resultEnum == ResultEnum.FULL ? "-" + dependencyBean.getVersion() : "") + ".jar -DgroupId=" + dependencyBean.getGroupId() + " -DartifactId=" + dependencyBean.getArtifactId() + " -Dversion=" + dependencyBean.getVersion() + " -Dpackaging=jar";
+            StringBuffer cmdSB = new StringBuffer();
+            String classifierStr = "";
+            String classifierCmd = "";
+            if(StringUtils.isNotBlank(dependencyBean.getClassifier())){
+                classifierStr = "-" + dependencyBean.getClassifier();
+                classifierCmd = " -Dclassifier=" + dependencyBean.getClassifier();
+            }
+            String cmd = cmdSB.append("cmd /c   cd " + jarPath)
+                    .append(" && mvn install:install-file  -Dfile=" + jarPath + "\\\\")
+                    .append(dependencyBean.getArtifactId())
+                    .append(resultEnum == ResultEnum.FULL ? "-" + dependencyBean.getVersion() : "")
+                    .append(classifierStr)
+                    .append(".jar -DgroupId=" + dependencyBean.getGroupId())
+                    .append(" -DartifactId=" + dependencyBean.getArtifactId())
+                    .append(" -Dversion=" + dependencyBean.getVersion())
+                    .append(classifierCmd)
+                    .append(" -Dpackaging=jar").toString();
             System.out.println(cmd);
             process = runtime.exec(cmd);
             synchronized (process) {

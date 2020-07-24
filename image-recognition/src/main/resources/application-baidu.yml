@@ -1,4 +1,5 @@
 tokenUrl: https://aip.baidubce.com/oauth/2.0/token
+authorize: http://openapi.baidu.com/oauth/2.0/authorize
 
 zzs:
     BaiduApiURL: https://aip.baidubce.com/rest/2.0/ocr/v1/vat_invoice

@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ImageRecognitionApplicationTests {
 
 //	@Test
-//	void contextLoads() {
-//	}
+	void contextLoads() {
+	}
 
 }
