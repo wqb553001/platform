@@ -1,5 +1,5 @@
 spring:
-    application: ROOT
+    application: makeJar
     mvc:
         view:
             prefix: /view/

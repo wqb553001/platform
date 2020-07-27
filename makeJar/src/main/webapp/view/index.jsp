@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=GBK">
+    <title>make-jar</title>
     <script type="text/javascript">
         // $(function () {
         //     window.location.href = "/login";

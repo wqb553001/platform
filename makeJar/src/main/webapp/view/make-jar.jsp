@@ -2,7 +2,7 @@
 <%@include file="/context/mytags.jsp"%>
 <html>
 <head>
-    <title>本地jar包加到本地仓库</title>
+    <title>make-jar</title>
     <script src="/static/jquery/jquery-1.8.0.min.js"></script>
 
     <script type="text/javascript">

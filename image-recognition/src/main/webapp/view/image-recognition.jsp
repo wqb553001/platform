@@ -3,7 +3,7 @@
 <%@ taglib prefix="myfn" uri="/WEB-INF/myfn.tld" %>
 <html>
 <head >
-    <title>本地jar包加到本地仓库</title>
+    <title>image-recognition</title>
     <script src="../static/jquery/jquery-1.8.0.min.js"></script>
     <script src="../static/js/recognition.js"></script>
 
