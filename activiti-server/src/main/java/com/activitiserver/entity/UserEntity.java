@@ -1,0 +1,1 @@
+package com.activitiserver.entity;import lombok.Data;import org.apache.ibatis.annotations.Mapper;import javax.persistence.Table;import java.io.Serializable;@Mapper@Data@Table(name = "users")public class UserEntity implements Serializable {    int id;    String username;    String password;    int enabled;}

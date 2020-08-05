@@ -12,29 +12,51 @@ spring:
         db-history-used: true
 
     datasource:
-        username: root
-        password: root
-        url: jdbc:mysql://localhost:3306/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        type: com.alibaba.druid.pool.DruidDataSource
+        assumed:
+            username: root
+            password: root
+            url: jdbc:mysql://localhost:3306/assumed?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            type: com.alibaba.druid.pool.DruidDataSource
 
-        initialization-mode: always
+            initialization-mode: always
 
-        initialSize: 5
-        minIdle: 5
-        maxActive: 20
-        maxWait: 60000
-        timeBetweenEvictionRunsMillis: 60000
-        minEvictableIdleTimeMillis: 300000
-        validationQuery: SELECT 1 FROM DUAL
-        testWhileIdle: true
-        testOnBorrow: false
-        testOnReturn: false
-        poolPreparedStatements: true
-#        filters: stat,wall,log4j
-#        maxPoolPreparedStatementPerConnectionSize: 20
-#        useGlobalDataSourceStat: true
-#        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+            initialSize: 5
+            minIdle: 5
+            maxActive: 20
+            maxWait: 60000
+            timeBetweenEvictionRunsMillis: 60000
+            minEvictableIdleTimeMillis: 300000
+            validationQuery: SELECT 1 FROM DUAL
+            testWhileIdle: true
+            testOnBorrow: false
+            testOnReturn: false
+            poolPreparedStatements: true
+
+        activiti:
+            username: root
+            password: root
+            url: jdbc:mysql://localhost:3306/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            type: com.alibaba.druid.pool.DruidDataSource
+
+            initialization-mode: always
+
+            initialSize: 5
+            minIdle: 5
+            maxActive: 20
+            maxWait: 60000
+            timeBetweenEvictionRunsMillis: 60000
+            minEvictableIdleTimeMillis: 300000
+            validationQuery: SELECT 1 FROM DUAL
+            testWhileIdle: true
+            testOnBorrow: false
+            testOnReturn: false
+            poolPreparedStatements: true
+    #        filters: stat,wall,log4j
+    #        maxPoolPreparedStatementPerConnectionSize: 20
+    #        useGlobalDataSourceStat: true
+    #        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
     mvc:
         view:
             prefix: /
@@ -58,8 +80,8 @@ spring:
 logging:
     level:
         com.ascendant: debug
-    pattern:
-        console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(-%5p)  %clr(${PID:- }){magenta} --- %clr([%15.15t]){faint} %highlight(%-80.80logger{300}){cyan} %clr(:) %m %n%wEx"
+#    pattern:
+#        console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(-%5p)  %clr(${PID:- }){magenta} --- %clr([%15.15t]){faint} %highlight(%-80.80logger{300}){cyan} %clr(:) %m %n%wEx"
 
 
 eureka:
@@ -67,3 +89,12 @@ eureka:
         service-url:
             defaultZone: http://192.168.163.1:8761/eureka/
 
+feign:
+    client:
+        config:
+            connectTimeout: 7000
+            readTimeout: 7000
+
+activiti-server:
+    ribbon:
+        NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule

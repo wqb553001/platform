@@ -1,6 +1,7 @@
 package com.doctor.assistant.ImageRecognition.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.doctor.assistant.ImageRecognition.dao.InvoiceMainDaoI;
 import com.doctor.assistant.ImageRecognition.entity.InvoiceMain;
 import com.doctor.assistant.ImageRecognition.service.ImageRecognitionService;
@@ -102,63 +103,17 @@ public class ImageRecognitionController {
 
     @RequestMapping("/uploadImages")
     @ResponseBody
-    public InvoiceMain filesUpload(MultipartFile[] images,
+    public String filesUpload(MultipartFile[] images,
                                    HttpServletRequest request, HttpServletResponse response) {
+        Map<String,List<InvoiceMain>> invoiceMainsMap = new HashMap<>();
         System.out.println("访问 /image/uploadImages");
         long timeBefore = LocalTime.now().toNanoOfDay();
-        long timeSecondBefore = LocalTime.now().toSecondOfDay();
-        List<String> list = new ArrayList<String>();
-        String encodeFileStr = null;
-        StringBuilder stringBuilder = null;
-        InvoiceMain invoiceMain = null;
-//        InvoiceMain invoiceMain = this.imageRecognitionService.recogeImage(images);
-
-//        if (images != null && images.length > 0 && !images[0].isEmpty()) {
-//            for (int i = 0; i < images.length; i++) {
-//                stringBuilder = new StringBuilder();
-//                MultipartFile file = images[i];
-//                // 保存文件
-////                list = saveFile(request, file, list);
-//                final Base64.Encoder encoder = Base64.getEncoder();
-//                try {
-//                    encodeFileStr = encoder.encodeToString(file.getBytes());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                Map<String,String> headerMap = new HashMap<>();
-//                headerMap.put("Content-Type", "application/x-www-form-urlencoded");
-//                // image	是	string	-	图像数据，
-//                // base64编码后进行urlencode，
-//                // 要求base64编码和urlencode后大小不超过4M，最短边至少15px，最长边最大4096px,
-//                // 支持jpg/jpeg/png/bmp格式
-//                Map<String,String> paramMap = new HashMap<>();
-//                paramMap.put("image", encodeFileStr);
-//                // accuracy	否	string	normal/high
-//                // normal（默认配置）对应普通精度模型，识别速度较快，在四要素的准确率上和 high 模型保持一致，
-//                // high对应高精度识别模型，相应的时延会增加，因为超时导致失败的情况也会增加（错误码282000）
-//                paramMap.put("accuracy","normal");
-//                // type	否	string	normal/roll	进行识别的增值税发票类型，默认为 normal，可缺省
-//                //- normal：可识别增值税普票、专票、电子发票
-//                //- roll：可识别增值税卷票
-//                paramMap.put("type","normal");
-//                paramMap.put("access_token",accessToken);
-////                System.out.println("zzsBaiduApiURL:" + zzsBaiduApiURL);
-//                stringBuilder.append("\r\n");
-////                stringBuilder.append();
-//                invoiceMain = this.imageRecognitionService.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap);
-//                long timeMid = LocalTime.now().toNanoOfDay();
-//                long timeSecondMid = LocalTime.now().toSecondOfDay();
-//                System.out.println("至第"+(i+1)+"张:");
-//                System.out.println("用时秒数:"+(timeSecondMid - timeSecondBefore));
-//                System.out.println("用时毫秒：" +(timeMid - timeBefore));
-//            }
-//        }
-
-        invoiceMain = this.imageRecognitionService.recogeImage(images);
+        List<InvoiceMain> invoiceMains = this.imageRecognitionService.recogeImage(request, images);
         long timeEnd = LocalTime.now().toNanoOfDay();
         log.info("总用时：" +(timeEnd - timeBefore));
-        log.info("存入后返回：" + JSON.toJSON(invoiceMain));
-        return invoiceMain;
+        log.info("存入后返回：" + JSON.toJSON(invoiceMains));
+        invoiceMainsMap.put("invoiceMains", invoiceMains);
+        return JSONObject.toJSONString(invoiceMainsMap);
     }
 
     @RequestMapping("/saveInvoiceMain")
@@ -180,54 +135,33 @@ public class ImageRecognitionController {
 
     @RequestMapping("/flushImage")
     @ResponseBody
-    public InvoiceMain flushImage(InvoiceMain invoiceMain,
+    public List<InvoiceMain> flushImage(InvoiceMain invoiceMain,
                              HttpServletRequest request, HttpServletResponse response){
         System.out.println("访问 /image/flushImage");
+        List<InvoiceMain> invoiceMains = new ArrayList<>();
 //        this.imageRecognitionService.insertInvoiceMain(invoiceMain);
-        return invoiceMain;
+        return invoiceMains;
     }
 
     @RequestMapping("/nextOneCheckImage")
     @ResponseBody
-    public InvoiceMain nextOneCheckImage(HttpServletRequest request, HttpServletResponse response){
+    public List<InvoiceMain> nextOneCheckImage(HttpServletRequest request, HttpServletResponse response){
+        List<InvoiceMain> invoiceMains = new ArrayList<>();
         System.out.println("访问 /image/flushImage");
         InvoiceMain invoiceMain = new InvoiceMain();
         invoiceMain.setChecked(0);
         Optional<InvoiceMain> mainOptional = this.invoiceMainDao.findOne(Example.of(invoiceMain));
         if(mainOptional.isPresent()){
             invoiceMain = mainOptional.get();
+            invoiceMains.add(invoiceMain);
         }
 //        else{
 //            // 空值填充
 //            invoiceMain.setWordsResult(new Invoice());
 //        }
-        return invoiceMain;
+        return invoiceMains;
     }
 
-    private List<String> saveFile(HttpServletRequest request,
-                                  MultipartFile file, List<String> list) {
-        // 判断文件是否为空
-        if (!file.isEmpty()) {
-            try {
-                // 保存的文件路径(如果用的是Tomcat服务器，文件会上传到\\%TOMCAT_HOME%\\webapps\\YourWebProject\\upload\\文件夹中
-                // )
-                String filePath = request.getSession().getServletContext()
-                        .getRealPath("/")
-                        + "upload/" + file.getOriginalFilename();
-                list.add(file.getOriginalFilename());
-                File saveDir = new File(filePath);
-                if (!saveDir.getParentFile().exists())
-                    saveDir.getParentFile().mkdirs();
-
-                // 转存文件
-                file.transferTo(saveDir);
-                return list;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return list;
-    }
 //    @RequestMapping("/testMQ")
 //    @ResponseBody
     @RequestMapping("/testMQ")

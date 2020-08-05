@@ -1,18 +1,19 @@
 #数据源配置
+#    image:
 spring:
     datasource:
-#        image:
-        url: jdbc:mysql://localhost:3306/image?serverTimezone=Asia/Shanghai&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false
-        username: root
-        password: root
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        type: com.zaxxer.hikari.HikariDataSource
-        hikari:
-#                jdbc-url: jdbc:mysql://localhost:3306/image?serverTimezone=Asia/Shanghai&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false
-            minimum-idle: 1
-            maximum-pool-size: 5
-            idle-timeout: 30000
-            connection-timeout: 20000
+        image:
+            jdbc-url: jdbc:mysql://localhost:3306/image?serverTimezone=Asia/Shanghai&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false
+            username: root
+            password: root
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            type: com.zaxxer.hikari.HikariDataSource
+            hikari:
+    #            jdbc-url: jdbc:mysql://localhost:3306/image?serverTimezone=Asia/Shanghai&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false
+                minimum-idle: 1
+                maximum-pool-size: 5
+                idle-timeout: 30000
+                connection-timeout: 20000
     jpa:
         # 是否打印sql
         show-sql: true

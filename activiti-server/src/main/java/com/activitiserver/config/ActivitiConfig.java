@@ -6,9 +6,17 @@ import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.activiti.engine.impl.history.HistoryLevel;
 import org.activiti.image.ProcessDiagramGenerator;
 import org.activiti.image.impl.DefaultProcessDiagramGenerator;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
@@ -20,8 +28,8 @@ import javax.sql.DataSource;
 
 @Configuration
 public class ActivitiConfig {
-//    @Autowired
-//    private DataSource dataSource;
+//    @Qualifier("activitiDataSource")
+//    private DataSource activitiDataSource;
 //    @Autowired
 //    private Environment env;
 
@@ -31,9 +39,9 @@ public class ActivitiConfig {
      *@return
      */
     @Bean
-    public StandaloneProcessEngineConfiguration processEngineConfiguration(DataSource dataSource){
+    public StandaloneProcessEngineConfiguration processEngineConfiguration(@Qualifier("activitiDataSource") DataSource activitiDataSource){
         StandaloneProcessEngineConfiguration standaloneProcessEngineConfiguration = new StandaloneProcessEngineConfiguration();
-        standaloneProcessEngineConfiguration.setDataSource(dataSource);
+        standaloneProcessEngineConfiguration.setDataSource(activitiDataSource);
         //自动更新表结构，数据库表不存在时会自动创建表
         standaloneProcessEngineConfiguration.setDatabaseSchemaUpdate("true");
         //保存历史数据级别设置为full最高级别，便于历史数据的追溯
@@ -127,15 +135,6 @@ public class ActivitiConfig {
         return new DefaultProcessDiagramGenerator();
     }
 
-    /**
-     * 数据源
-     * @return
-     */
-    @ConfigurationProperties(prefix = "spring.datasource")
-    @Bean
-    public DataSource dataSource(){
-        return new DruidDataSource();
-    }
 
 
 //    /**

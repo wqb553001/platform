@@ -95,8 +95,8 @@ spring:
 logging:
     level:
         com.ascendant: debug
-    pattern:
-        console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(-%5p)  %clr(${PID:- }){magenta} --- %clr([%15.15t]){faint} %highlight(%-80.80logger{300}){cyan} %clr(:) %m %n%wEx"
+#    pattern:
+#        console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(-%5p)  %clr(${PID:- }){magenta} --- %clr([%15.15t]){faint} %highlight(%-80.80logger{300}){cyan} %clr(:) %m %n%wEx"
 
 
 eureka:
@@ -104,5 +104,5 @@ eureka:
         hostname: localhost
     client:
         service-url:
-            defaultZone: http://192.168.163.1:8761/eureka/
+            defaultZone: http://192.168.1.106:8761/eureka/
 

@@ -1,0 +1,1 @@
+package com.activitiserver.entity;import lombok.Data;import org.apache.ibatis.annotations.Mapper;import javax.persistence.Column;import javax.persistence.Table;import java.io.Serializable;@Mapper@Table(name = "groups")@Datapublic class GroupInfoEntity implements Serializable {    int id;    @Column(name = "group_name")    String groupName;}

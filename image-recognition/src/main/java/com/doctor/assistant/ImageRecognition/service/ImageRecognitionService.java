@@ -25,6 +25,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.*;
@@ -49,8 +51,6 @@ public class ImageRecognitionService {
     @Value(value="${refresh_url}")
     private String refreshUrl;
 
-
-
     @Autowired
     private Sender sender;
 
@@ -74,27 +74,30 @@ public class ImageRecognitionService {
         return this.accessToken = access_token;
     }
 
-    public InvoiceMain recogeImage(MultipartFile[] images){
+    public List<InvoiceMain> recogeImage(HttpServletRequest request, MultipartFile[] images){
 
         long timeBefore = LocalTime.now().toNanoOfDay();
         long timeSecondBefore = LocalTime.now().toSecondOfDay();
         List<String> list = new ArrayList<String>();
         String encodeFileStr = null;
         StringBuilder stringBuilder = null;
+        List<InvoiceMain> invoiceMains = new ArrayList<>();
         InvoiceMain invoiceMain = null;
 
         if (images != null && images.length > 0 && !images[0].isEmpty()) {
             for (int i = 0; i < images.length; i++) {
                 stringBuilder = new StringBuilder();
                 MultipartFile file = images[i];
-                // 保存文件
-//                list = saveFile(request, file, list);
                 final Base64.Encoder encoder = Base64.getEncoder();
                 try {
                     encodeFileStr = encoder.encodeToString(file.getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
+                    stemp(false, i, timeSecondBefore, timeBefore);
+                    continue;
                 }
+                // 保存文件
+                list = saveFile(request, file, list);
                 Map<String,String> headerMap = new HashMap<>();
                 headerMap.put("Content-Type", "application/x-www-form-urlencoded");
                 // image	是	string	-	图像数据，
@@ -116,15 +119,49 @@ public class ImageRecognitionService {
                 stringBuilder.append("\r\n");
 //                stringBuilder.append();
                 invoiceMain = this.callBaiduImageRecognition(zzsBaiduApiURL, headerMap, paramMap);
-                long timeMid = LocalTime.now().toNanoOfDay();
-                long timeSecondMid = LocalTime.now().toSecondOfDay();
-                System.out.println("至第"+(i+1)+"张:");
-                System.out.println("用时秒数:"+(timeSecondMid - timeSecondBefore));
-                System.out.println("用时毫秒：" +(timeMid - timeBefore));
+                invoiceMains.add(invoiceMain);
+                stemp(true, i, timeSecondBefore, timeBefore);
             }
         }
 
-        return invoiceMain;
+        return invoiceMains;
+    }
+
+    private void stemp(boolean OK_NO, int i, long timeSecondBefore, long timeBefore){
+        if(!OK_NO) System.out.println("本张图片处理失败！");
+        long timeMid = LocalTime.now().toNanoOfDay();
+        long timeSecondMid = LocalTime.now().toSecondOfDay();
+        System.out.println("至第"+(i+1)+"张:");
+        System.out.println("用时秒数:"+(timeSecondMid - timeSecondBefore));
+        System.out.println("用时毫秒：" +(timeMid - timeBefore));
+    }
+
+    private List<String> saveFile(HttpServletRequest request,
+                                  MultipartFile file, List<String> list) {
+        // 判断文件是否为空
+        if (!file.isEmpty()) {
+            try {
+                // 保存的文件路径(如果用的是Tomcat服务器，文件会上传到\\%TOMCAT_HOME%\\webapps\\YourWebProject\\upload\\文件夹中
+                // )
+                String originalFilename = file.getOriginalFilename();
+                System.out.println("originalFilename : " + originalFilename);
+                String filePath = request.getSession().getServletContext()
+                        .getRealPath("/")
+                        + "upload\\" + file.getOriginalFilename();
+                System.out.println("originalFilename : " + originalFilename);
+                list.add(originalFilename);
+                File saveDir = new File(filePath);
+                if (!saveDir.getParentFile().exists())
+                    saveDir.getParentFile().mkdirs();
+
+                // 转存文件
+                file.transferTo(saveDir);
+                return list;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
     }
 
     public InvoiceMain callBaiduImageRecognition(String url, Map<String, String> headerMap, Map<String, String> paramMap){
@@ -361,9 +398,4 @@ public class ImageRecognitionService {
         }
         sender.sendMessage(context);
     }
-
-    public static void main(String[] args) {
-        System.out.println("2<<3 = " + (2 << 3));
-    }
-
 }
