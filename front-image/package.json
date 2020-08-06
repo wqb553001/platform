@@ -8,15 +8,19 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.18.0",
     "bootstrap": "^3.3.7",
+    "css-loader": "^4.2.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0"
+    "react-scripts": "3.3.0",
+    "style-loader": "^1.2.1"
   },
   "scripts": {
+    "dev": "webpack-dev-server build/webpack.dev.conf.js",
     "start": "SET PORT=3030&react-scripts start --open chrome",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "webpack": "webpack --version"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -33,5 +37,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8082"
+  "proxy": "http://localhost:8082",
+  "devDependencies": {
+    "webpack-cli": "^3.3.12"
+  }
 }

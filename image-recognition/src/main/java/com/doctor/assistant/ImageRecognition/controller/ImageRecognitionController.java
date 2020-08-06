@@ -32,7 +32,6 @@ public class ImageRecognitionController {
     final static Logger log = LoggerFactory.getLogger(ImageRecognitionController.class);
     @Autowired
     private ImageRecognitionService imageRecognitionService;
-//    public ImageRecognitionController(){}
     @Value(value="${tokenUrl}") // "access_token":"24.d967bbf7c5ad6c77cfdd614d3ef352a2.2592000.1578992008.282335-17963898"
     private String tokenUrl;// 返回信息：{"refresh_token":"25.257f0dbe0061e321c130e61992dd1159.315360000.1891760008.282335-17963898","expires_in":2592000,"session_key":"9mzdX+OCakh4wx60ybtuGXoSLksEhS7vnd\/DwS2GSmSRbwssN9tSWfueQw81cQVvL9YZ5tL5BPCbw8MnMu\/nN5GJ2WO\/cg==","access_token":"24.d967bbf7c5ad6c77cfdd614d3ef352a2.2592000.1578992008.282335-17963898","scope":"public vis-ocr_ocr brain_ocr_scope brain_ocr_general brain_ocr_general_basic vis-ocr_business_license brain_ocr_webimage brain_all_scope brain_ocr_idcard brain_ocr_driving_license brain_ocr_vehicle_license vis-ocr_plate_number brain_solution brain_ocr_plate_number brain_ocr_accurate brain_ocr_accurate_basic brain_ocr_receipt brain_ocr_business_license brain_solution_iocr brain_qrcode brain_ocr_handwriting brain_ocr_passport brain_ocr_vat_invoice brain_numbers brain_ocr_business_card brain_ocr_train_ticket brain_ocr_taxi_receipt vis-ocr_household_register vis-ocr_vis-classify_birth_certificate vis-ocr_\u53f0\u6e7e\u901a\u884c\u8bc1 vis-ocr_\u6e2f\u6fb3\u901a\u884c\u8bc1 vis-ocr_\u673a\u52a8\u8f66\u68c0\u9a8c\u5408\u683c\u8bc1\u8bc6\u522b vis-ocr_\u8f66\u8f86vin\u7801\u8bc6\u522b vis-ocr_\u5b9a\u989d\u53d1\u7968\u8bc6\u522b vis-ocr_\u4fdd\u5355\u8bc6\u522b brain_ocr_vin brain_ocr_quota_invoice brain_ocr_birth_certificate brain_ocr_household_register brain_ocr_HK_Macau_pass brain_ocr_taiwan_pass brain_ocr_vehicle_certificate brain_ocr_insurance_doc wise_adapt lebo_resource_base lightservice_public hetu_basic lightcms_map_poi kaidian_kaidian ApsMisTest_Test\u6743\u9650 vis-classify_flower lpq_\u5f00\u653e cop_helloScope ApsMis_fangdi_permission smartapp_snsapi_base iop_autocar oauth_tp_app smartapp_smart_game_openapi oauth_sessionkey smartapp_swanid_verify smartapp_opensource_openapi smartapp_opensource_recapi fake_face_detect_\u5f00\u653eScope vis-ocr_\u865a\u62df\u4eba\u7269\u52a9\u7406 idl-video_\u865a\u62df\u4eba\u7269\u52a9\u7406","session_secret":"762ae94eb8b8fdc5de6e516415d64e03"}
 
@@ -118,34 +117,33 @@ public class ImageRecognitionController {
 
     @RequestMapping("/saveInvoiceMain")
     @ResponseBody
-    public Results saveInvoiceMain(InvoiceMain invoiceMain,
+    public String saveInvoiceMain(InvoiceMain invoiceMain,
                                    HttpServletRequest request, HttpServletResponse response, Model model) {
         System.out.println("访问 /image/saveInvoiceMain");
-        return this.imageRecognitionService.insertInvoiceMain(invoiceMain);//跳转的页面
+        return this.ObjectToJSON(this.imageRecognitionService.insertInvoiceMain(invoiceMain));//跳转的页面
     }
 
 
     @RequestMapping("/invoiceMain/{invoiceMainId}")
     @ResponseBody
-    public Results getInvoiceMain(@PathVariable(value = "invoiceMainId") String invoiceMainId,
+    public String getInvoiceMain(@PathVariable(value = "invoiceMainId") String invoiceMainId,
                                    HttpServletRequest request, HttpServletResponse response, Model model) {
         System.out.println("访问 /image/invoiceMain/"+invoiceMainId);
-        return imageRecognitionService.getInvoiceMain(invoiceMainId);
+        return this.ObjectToJSON(imageRecognitionService.getInvoiceMain(invoiceMainId));
     }
 
     @RequestMapping("/flushImage")
     @ResponseBody
-    public List<InvoiceMain> flushImage(InvoiceMain invoiceMain,
+    public String flushImage(InvoiceMain invoiceMain,
                              HttpServletRequest request, HttpServletResponse response){
         System.out.println("访问 /image/flushImage");
-        List<InvoiceMain> invoiceMains = new ArrayList<>();
-//        this.imageRecognitionService.insertInvoiceMain(invoiceMain);
-        return invoiceMains;
+        this.imageRecognitionService.insertInvoiceMain(invoiceMain);
+        return this.ObjectToJSON(invoiceMain);
     }
 
     @RequestMapping("/nextOneCheckImage")
     @ResponseBody
-    public List<InvoiceMain> nextOneCheckImage(HttpServletRequest request, HttpServletResponse response){
+    public String nextOneCheckImage(HttpServletRequest request, HttpServletResponse response){
         List<InvoiceMain> invoiceMains = new ArrayList<>();
         System.out.println("访问 /image/flushImage");
         InvoiceMain invoiceMain = new InvoiceMain();
@@ -159,7 +157,18 @@ public class ImageRecognitionController {
 //            // 空值填充
 //            invoiceMain.setWordsResult(new Invoice());
 //        }
-        return invoiceMains;
+        return this.ObjectToJSON(invoiceMains);
+    }
+
+    private String ObjectToJSON(List<InvoiceMain> invoiceMains){
+        Map<String,List<InvoiceMain>> invoiceMainsMap = new HashMap<>();
+        invoiceMainsMap.put("invoiceMains", invoiceMains);
+        return JSONObject.toJSONString(invoiceMainsMap);
+    }
+    private String ObjectToJSON(InvoiceMain invoiceMain){
+        List<InvoiceMain> invoiceMains = new ArrayList<>();
+        invoiceMains.add(invoiceMain);
+        return this.ObjectToJSON(invoiceMains);
     }
 
 //    @RequestMapping("/testMQ")

@@ -202,7 +202,7 @@ public class ImageRecognitionService {
         return invoiceMain;
     }
 
-    public Results insertInvoiceMain(InvoiceMain invoiceMain) {
+    public InvoiceMain insertInvoiceMain(InvoiceMain invoiceMain) {
         String commodityTaxRates = UUIDUtil.getUUID();
         String commodityTaxs = UUIDUtil.getUUID();
         String commodityAmounts = UUIDUtil.getUUID();
@@ -248,15 +248,15 @@ public class ImageRecognitionService {
         this.setElements(resultElements, commodityName, commodityNames);
         this.setElements(resultElements, commodityType, commodityTypes);
         if(!resultElements.isEmpty()) this.elementDao.batchInsertElementList(resultElements);
-        Results results = Results.OK();
-        results.setResult(invoiceMain);
-        return results;
+//        Results results = Results.OK();
+//        results.setResult(invoiceMain);
+        return invoiceMain;
     }
 
-    public Results getInvoiceMain(String invoiceMainId) {
-        Results results = new Results(Results.empty);
+    public InvoiceMain getInvoiceMain(String invoiceMainId) {
+//        Results results = new Results(Results.empty);
         InvoiceMain invoiceMain = new InvoiceMain();
-        if(StringUtils.isEmpty(invoiceMainId)) return results;
+        if(StringUtils.isEmpty(invoiceMainId)) return null;
         Optional<InvoiceMain> invoiceMainOptional = invoiceMainDao.findById(invoiceMainId);
         if(invoiceMainOptional.isPresent()){
             invoiceMain = invoiceMainOptional.get();
@@ -264,10 +264,10 @@ public class ImageRecognitionService {
                 Invoice invoice = invoiceMain.getWordsResult();
                 this.queryAndSetElementByInvoice(invoice);
             }
-            results.setState(Results.OK);
-            results.setResult(invoiceMain);
+//            results.setState(Results.OK);
+//            results.setResult(invoiceMain);
         }
-        return results;
+        return invoiceMain;
     }
 
     private String refreshToken(String jsonStr){
