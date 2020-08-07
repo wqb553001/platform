@@ -8,9 +8,7 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Macx
@@ -18,7 +16,7 @@ import java.util.List;
  * @Description: 账簿信息
  */
 @Entity
-@Table(name = "tb_accountbook", schema = "")
+@Table(name = "tb_accountbook")
 @SuppressWarnings("serial")
 public class AccountbookEntity extends IdEntity implements java.io.Serializable {
     /**
@@ -35,7 +33,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
     /**
      * 子账簿
      */
-    private List<AccountbookEntity> accountbookList = new ArrayList<AccountbookEntity>();
+    private Set<AccountbookEntity> accountbookSet = new HashSet<>();
 
     private String rootId;
 
@@ -180,7 +178,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
     /** 状态: 0:不删除  1：删除 */
     private Short deleteFlag;
 
-	@Column(name = "ROOT_ID", nullable = true, length = 36)
+	@Column(name = "root_id", nullable = true, length = 36)
 	public String getRootId() {
 		return rootId;
 	}
@@ -189,7 +187,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
 		this.rootId = rootId;
 	}
 
-    @Column(name = "PARENT_ID", nullable = true, length = 36)
+    @Column(name = "parent_id", nullable = true, length = 36)
     public String getParentAccountbookId() {
         return parentAccountbookId;
     }
@@ -199,7 +197,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "PARENT_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "parent_id", insertable = false, updatable = false)
     @NotFound(action= NotFoundAction.IGNORE)
     @JsonBackReference
     public AccountbookEntity getParentAccountbook() {
@@ -213,15 +211,15 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
     @OneToMany(mappedBy = "parentAccountbook")
     @JsonManagedReference
     @NotFound(action= NotFoundAction.IGNORE)
-    public List<AccountbookEntity> getAccountbookList() {
-        return accountbookList;
+    public Set<AccountbookEntity> getAccountbookSet() {
+        return accountbookSet;
     }
     @JsonManagedReference
-    public void setAccountbookList(List<AccountbookEntity> accountbookList) {
-        this.accountbookList = accountbookList;
+    public void setAccountbookSet(Set<AccountbookEntity> accountbookSet) {
+        this.accountbookSet = accountbookSet;
     }
 
-    @Column(name = "ACCOUNTBOOK_CODE", nullable = true, length = 32)
+    @Column(name = "accountbook_code", nullable = true, length = 32)
     public String getAccountbookCode() {
         return this.accountbookCode;
     }
@@ -239,7 +237,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
 //		this.accountbookLevel = accountbookLevel;
 //	}
 
-    @Column(name = "ACCOUNTBOOK_NAME", nullable = true, length = 32)
+    @Column(name = "accountbook_name", nullable = true, length = 32)
     public String getAccountbookName() {
         return this.accountbookName;
     }
@@ -248,7 +246,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.accountbookName = accountbookName;
     }
 
-    @Column(name = "COMPANY", nullable = true, length = 32)
+    @Column(name = "company", nullable = true, length = 32)
     public String getCompany() {
         return this.company;
     }
@@ -257,7 +255,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.company = company;
     }
 
-    @Column(name = "USE_STATUS", nullable = true, length = 32)
+    @Column(name = "use_status", nullable = true, length = 32)
     public Integer getUseStatus() {
         return this.useStatus;
     }
@@ -266,7 +264,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.useStatus = useStatus;
     }
 
-    @Column(name = "USE_DATE_TIME", nullable = true, length = 32)
+    @Column(name = "use_date_time", nullable = true, length = 32)
     public Date getUseDateTime() {
         return this.useDateTime;
     }
@@ -275,7 +273,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.useDateTime = useDateTime;
     }
 
-    @Column(name = "ESTABLISH_DATE_TIME", nullable = true, length = 32)
+    @Column(name = "establish_date_time", nullable = true, length = 32)
     public Date getEstablishDateTime() {
         return this.establishDateTime;
     }
@@ -284,7 +282,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.establishDateTime = establishDateTime;
     }
 
-    @Column(name = "CHECKOUT_MONTH")
+    @Column(name = "checkout_month")
     public String getCheckoutMonth() {
         return checkoutMonth;
     }
@@ -293,7 +291,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.checkoutMonth = checkoutMonth;
     }
 
-    @Column(name = "REGISTERED_CAPITAL", nullable = true, length = 32)
+    @Column(name = "registered_capital", nullable = true, length = 32)
     public BigDecimal getRegisteredCapital() {
         return this.registeredCapital;
     }
@@ -302,7 +300,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.registeredCapital = registeredCapital;
     }
 
-    @Column(name = "LEGAL_PERSON", nullable = true, length = 32)
+    @Column(name = "legal_person", nullable = true, length = 32)
     public String getLegalPerson() {
         return this.legalPerson;
     }
@@ -311,7 +309,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.legalPerson = legalPerson;
     }
 
-    @Column(name = "SHAREHOLDING_RATIO", nullable = true, scale = 2, length = 32)
+    @Column(name = "shareholding_ratio", nullable = true, scale = 2, length = 32)
     public BigDecimal getShareholdingRatio() {
         return this.shareholdingRatio;
     }
@@ -320,7 +318,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.shareholdingRatio = shareholdingRatio;
     }
 
-    @Column(name = "ADDRESS", nullable = true, length = 32)
+    @Column(name = "address", nullable = true, length = 32)
     public String getAddress() {
         return this.address;
     }
@@ -334,7 +332,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
      *      一般纳税人：1   （专票）
      *      小规模纳税人：2 （普票）
      */
-    @Column(name = "TAXPAYER_TYPE", nullable = false, length = 32)
+    @Column(name = "taxpayer_type", nullable = false, length = 32)
     public java.lang.Integer getTaxpayerType() {
         return this.taxpayerType;
     }
@@ -343,7 +341,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.taxpayerType = taxpayerType;
     }
 
-    @Column(name = "TAX_AREA", nullable = true, length = 32)
+    @Column(name = "tax_area", nullable = true, length = 32)
     public String getTaxArea() {
         return this.taxArea;
     }
@@ -352,7 +350,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.taxArea = taxArea;
     }
 
-    @Column(name = "TAXPAYER_CODE", nullable = true, length = 32)
+    @Column(name = "taxpayer_code", nullable = true, length = 32)
     public String getTaxpayerCode() {
         return this.taxpayerCode;
     }
@@ -361,7 +359,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.taxpayerCode = taxpayerCode;
     }
 
-    @Column(name = "TAX_RATE", nullable = true, scale = 2, length = 32)
+    @Column(name = "tax_rate", nullable = true, scale = 2, length = 32)
     public BigDecimal getTaxRate() {
         return this.taxRate;
     }
@@ -370,7 +368,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.taxRate = taxRate;
     }
 
-    @Column(name = "REMARK", nullable = true, length = 32)
+    @Column(name = "remark", nullable = true, length = 32)
     public String getRemark() {
         return this.remark;
     }
@@ -379,7 +377,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.remark = remark;
     }
 
-    @Column(name = "CREATE_NAME", nullable = true, length = 50)
+    @Column(name = "create_name", nullable = true, length = 50)
     public String getCreateName() {
         return this.createName;
     }
@@ -388,7 +386,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.createName = createName;
     }
 
-    @Column(name = "CREATE_BY", nullable = true, length = 50)
+    @Column(name = "create_by", nullable = true, length = 50)
     public String getCreateBy() {
         return this.createBy;
     }
@@ -397,7 +395,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.createBy = createBy;
     }
 
-    @Column(name = "CREATE_DATE", nullable = true, length = 20)
+    @Column(name = "create_date", nullable = true, length = 20)
     public Date getCreateDate() {
         return this.createDate;
     }
@@ -406,7 +404,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.createDate = createDate;
     }
 
-    @Column(name = "UPDATE_NAME", nullable = true, length = 50)
+    @Column(name = "update_name", nullable = true, length = 50)
     public String getUpdateName() {
         return this.updateName;
     }
@@ -415,7 +413,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.updateName = updateName;
     }
 
-    @Column(name = "UPDATE_BY", nullable = true, length = 50)
+    @Column(name = "update_by", nullable = true, length = 50)
     public String getUpdateBy() {
         return this.updateBy;
     }
@@ -424,7 +422,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.updateBy = updateBy;
     }
 
-    @Column(name = "UPDATE_DATE", nullable = true, length = 20)
+    @Column(name = "update_date", nullable = true, length = 20)
     public Date getUpdateDate() {
         return this.updateDate;
     }
@@ -433,7 +431,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.updateDate = updateDate;
     }
 
-    @Column(name = "SYS_COMPANY_CODE", nullable = true, length = 50)
+    @Column(name = "sys_company_code", nullable = true, length = 50)
     public String getSysCompanyCode() {
         return this.sysCompanyCode;
     }
@@ -442,7 +440,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.sysCompanyCode = sysCompanyCode;
     }
 
-    @Column(name = "SYS_ORG_CODE", nullable = true, length = 50)
+    @Column(name = "sys_org_code", nullable = true, length = 50)
     public String getSysOrgCode() {
         return this.sysOrgCode;
     }
@@ -451,7 +449,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.sysOrgCode = sysOrgCode;
     }
 
-    @Column(name = "DELETE_FLAG", columnDefinition="default 0")
+    @Column(name = "delete_flag", columnDefinition="default 0")
     public Short getDeleteFlag() {
         return deleteFlag;
     }
@@ -460,7 +458,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.deleteFlag = deleteFlag;
     }
 
-    @Column(name = "INVOICE_LIMIT", nullable = true, length = 50)
+    @Column(name = "invoice_limit", nullable = true, length = 50)
     public BigDecimal getInvoiceLimit() {
         return invoiceLimit;
     }
@@ -469,7 +467,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.invoiceLimit = invoiceLimit;
     }
 
-    @Column(name = "INVOICE_LIMIT_SPECIAL", nullable = true, length = 50)
+    @Column(name = "invoice_limit_special", nullable = true, length = 50)
     public BigDecimal getInvoiceLimitSpecial() {
         return invoiceLimitSpecial;
     }

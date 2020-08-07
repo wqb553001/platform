@@ -1,6 +1,6 @@
 package com.doctor.assistant.userserver.springdata.entity;
 
-import com.doctor.assistant.userserver.springdata.utils.CustomJsonDateDeserializer;
+import com.doctor.assistant.userserver.springdata.utils.JsonDateDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
@@ -106,7 +106,7 @@ public class TSDepart extends IdEntity implements java.io.Serializable {
 	 *方法: 设置java.util.Date
 	 *@param: java.util.Date  创建日期
 	 */
-	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public void setCreateDate(java.util.Date createDate){
 		this.createDate = createDate;
 	}
@@ -150,7 +150,7 @@ public class TSDepart extends IdEntity implements java.io.Serializable {
 	 */
 
 	@Column(name ="UPDATE_DATE",nullable=true,length=20)
-	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public java.util.Date getUpdateDate(){
 		return this.updateDate;
 	}

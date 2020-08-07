@@ -1,6 +1,6 @@
 package com.doctor.assistant.userserver.controller;
 
-import com.alibaba.druid.support.json.JSONUtils;
+import com.doctor.assistant.commonserver.utils.JsonUtils;
 import com.doctor.assistant.userserver.springdata.entity.TSUser;
 import com.doctor.assistant.userserver.springdata.repository.UserRepository;
 import com.doctor.assistant.userserver.springdata.service.UserRoleService;
@@ -26,16 +26,17 @@ public class UserController {
     private UserRoleService userRoleService;
 
     /**
-     *
+     * 根据 员工号 查询员工信息
      * @param empNo
      * @return
      */
     @RequestMapping(value = "/empNo/{empNo}", method = RequestMethod.GET)
     public String findByEmpNo(@PathVariable(required = false) String empNo){
         String result = null;
-        if(StringUtils.isBlank(empNo)){
+        if(StringUtils.isNotBlank(empNo)){
             TSUser user = userRepository.findByEmpNo(empNo);
-            result = JSONUtils.toJSONString(user);
+            result = JsonUtils.objectToJson(user);
+//            result = JSONUtils.toJSONString(user);
         }
         return result;
     }
@@ -48,9 +49,11 @@ public class UserController {
     @RequestMapping(value = "/roleName/{roleName}", method = RequestMethod.GET)
     public String findByRoleName(@PathVariable(required = false) String roleName){
         String result = null;
-        if(StringUtils.isBlank(roleName)){
-            List<TSUser> userList = userRoleService.findByRoleName(roleName);
-            result = JSONUtils.toJSONString(userList);
+        if(StringUtils.isNotBlank(roleName)){
+//            List<TSUser> userList = userRoleService.findByRoleName(roleName);
+            List<TSUser> userList = userRepository.findByRoleName(roleName);
+            result = JsonUtils.objectToJson(userList);
+//            result = JSONUtils.toJSONString(userList);
         }
         return result;
     }

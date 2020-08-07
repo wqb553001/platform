@@ -15,7 +15,7 @@ import java.util.Date;
  * @author scott
  *
  */
-public class CustomJsonDateDeserializer extends JsonDeserializer<Date> {
+public class JsonDateDeserializer extends JsonDeserializer<Date> {
 	private SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 

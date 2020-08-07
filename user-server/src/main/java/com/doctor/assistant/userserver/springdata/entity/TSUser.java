@@ -1,6 +1,6 @@
 package com.doctor.assistant.userserver.springdata.entity;
 
-import com.doctor.assistant.userserver.springdata.utils.CustomJsonDateDeserializer;
+import com.doctor.assistant.userserver.springdata.utils.JsonDateDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
@@ -277,7 +277,7 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 		return enterDate;
 	}
 
-	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public void setEnterDate(Date enterDate) {
 		this.enterDate = enterDate;
 	}
@@ -287,7 +287,7 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 		return leaveDate;
 	}
 
-	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public void setLeaveDate(Date leaveDate) {
 		this.leaveDate = leaveDate;
 	}
@@ -310,11 +310,6 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 		this.bankAccountNumber = bankAccountNumber;
 	}
 
-//	@ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-//	@JoinTable(name = "t_s_role_user",
-//		joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id"),
-//			inverseJoinColumns = @JoinColumn(name = "roleid", referencedColumnName = "id")
-//	)
 	@ManyToMany(mappedBy = "userSet")
 	public Set<TSRole> getRoleSet(){
 		return roleSet;

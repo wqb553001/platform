@@ -53,7 +53,6 @@ public class DepartEntity implements java.io.Serializable {
 	@Id
 	@GeneratedValue(generator = "paymentableGenerator")
 	@GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
-
 	@Column(name = "ID", nullable = false, length = 36)
 	public String getId() {
 		return this.id;

@@ -16,13 +16,15 @@ import java.util.Date;
  *
  */
 @Entity
-@Table(name = "tb_user_depart", schema = "")
+@Table(name = "tb_user_depart")
 @SuppressWarnings("serial")
 public class UserDepartEntity implements java.io.Serializable {
 	/**主键*/
 	private String id;
 	/**用户Id*/
 	// @Excel(name="用户Id",width=15)
+	@ManyToOne
+	@JoinColumn(name="user_id")
 	private String userId;
 	/**账簿Id*/
 	// @Excel(name="账簿Id",width=15)
@@ -57,7 +59,6 @@ public class UserDepartEntity implements java.io.Serializable {
 	@Id
 	@GeneratedValue(generator = "paymentableGenerator")
 	@GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
-
 	@Column(name ="ID",nullable=false,length=36)
 	public String getId(){
 		return this.id;
@@ -67,7 +68,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name ="USER_ID",nullable=true,length=32)
+	@Column(name ="user_id",nullable=true,length=32)
 	public String getUserId(){
 		return this.userId;
 	}
@@ -76,7 +77,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.userId = userId;
 	}
 
-	@Column(name ="ACCOUNTBOOK_ID",nullable=true,length=32)
+	@Column(name ="accountbook_id",nullable=true,length=32)
 	public String getAccountbookId(){
 		return this.accountbookId;
 	}
@@ -95,7 +96,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.departDetailId = departDetailId;
 	}
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "depart_detail_id")
 	@NotFound(action= NotFoundAction.IGNORE)
 	public DepartDetailEntity getDepartDetail() {
@@ -106,7 +107,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.departDetail = departDetail;
 	}
 
-	@Column(name ="CREATE_NAME",nullable=true,length=50)
+	@Column(name ="create_name",nullable=true,length=50)
 	public String getCreateName(){
 		return this.createName;
 	}
@@ -115,7 +116,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.createName = createName;
 	}
 
-	@Column(name ="CREATE_BY",nullable=true,length=50)
+	@Column(name ="create_by",nullable=true,length=50)
 	public String getCreateBy(){
 		return this.createBy;
 	}
@@ -124,7 +125,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.createBy = createBy;
 	}
 
-	@Column(name ="CREATE_DATE",nullable=true,length=20)
+	@Column(name ="create_date",nullable=true,length=20)
 	public Date getCreateDate(){
 		return this.createDate;
 	}
@@ -133,7 +134,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.createDate = createDate;
 	}
 
-	@Column(name ="UPDATE_NAME",nullable=true,length=50)
+	@Column(name ="update_name",nullable=true,length=50)
 	public String getUpdateName(){
 		return this.updateName;
 	}
@@ -142,7 +143,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.updateName = updateName;
 	}
 
-	@Column(name ="UPDATE_BY",nullable=true,length=50)
+	@Column(name ="update_by",nullable=true,length=50)
 	public String getUpdateBy(){
 		return this.updateBy;
 	}
@@ -151,7 +152,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.updateBy = updateBy;
 	}
 
-	@Column(name ="UPDATE_DATE",nullable=true,length=20)
+	@Column(name ="update_date",nullable=true,length=20)
 	public Date getUpdateDate(){
 		return this.updateDate;
 	}
@@ -160,7 +161,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.updateDate = updateDate;
 	}
 
-	@Column(name ="SYS_ORG_CODE",nullable=true,length=50)
+	@Column(name ="sys_org_code",nullable=true,length=50)
 	public String getSysOrgCode(){
 		return this.sysOrgCode;
 	}
@@ -169,7 +170,7 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.sysOrgCode = sysOrgCode;
 	}
 
-	@Column(name ="SYS_COMPANY_CODE",nullable=true,length=50)
+	@Column(name ="sys_company_code",nullable=true,length=50)
 	public String getSysCompanyCode(){
 		return this.sysCompanyCode;
 	}

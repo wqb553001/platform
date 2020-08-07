@@ -38,6 +38,21 @@ public class UserRoleService {
         return resultList;
     }
 
+//    public TSUser findByEmpNoStr(String empNo){
+//        String sqlStr = "SELECT u.*,u.accountbook.accountbookName = a.accountbookName,u.departDetail.depart.departName = d.departName FROM TSUser u \n" +
+//                "LEFT JOIN TSBaseUser bu \t\t\t\t\t\t\t\t\tON u.ID = bu.ID \n" +
+//                "LEFT JOIN UserAccountbookEntity ua \t\t\tON u.ID = ua.userId  \n" +
+//                "LEFT JOIN AccountbookEntity a \t\t\t\t\t\tON a.ID = ua.accountbookId\n" +
+//                "LEFT JOIN UserDepartEntity ud\t\t\t\t\t\tON u.ID = ud.userId \n" +
+//                "LEFT JOIN DepartDetailEntity dd\t\t\t\t\tON dd.ID = ud.departDetailId \n" +
+//                "LEFT JOIN DepartEntity d \t\t\t\t\t\t\t\tON d.ID = dd.departId \n" +
+//                "WHERE u.emp_no = 'U00148';";
+//
+//        Query query = entityManager.createQuery(sqlStr);
+//        TSUser result = (TSUser) query.getSingleResult();
+//        return result;
+//    }
+
     public static void main(String[] args) {
         Map map = new HashMap();
         String put1 = (String)map.put("aa", "aaaaa");

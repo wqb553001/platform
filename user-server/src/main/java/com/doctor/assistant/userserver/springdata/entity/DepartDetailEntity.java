@@ -64,7 +64,7 @@ public class DepartDetailEntity implements java.io.Serializable {
 		this.accountbookId = accountbookId;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = DepartEntity.class, fetch = FetchType.EAGER)
 	@JoinColumn(name = "depart_id")
 	public DepartEntity getDepart() {
 		return depart;

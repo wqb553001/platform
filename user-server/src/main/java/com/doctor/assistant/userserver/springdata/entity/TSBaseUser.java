@@ -1,6 +1,9 @@
 package com.doctor.assistant.userserver.springdata.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -14,20 +17,20 @@ import java.util.Set;
 @Entity
 @Table(name = "t_s_base_user")
 @Inheritance(strategy = InheritanceType.JOINED)
-@NamedEntityGraph(name = "base_user.Graph", attributeNodes = {
-		@NamedAttributeNode(value = "userOrgList"),
-		@NamedAttributeNode(value = "userDepartDetailList",subgraph = "departDetailGraph"),
-		@NamedAttributeNode(value = "userAccountbookList", subgraph = "accountbookGraph")
-}
-,subgraphs = {
-		@NamedSubgraph(name = "departDetailGraph",attributeNodes = {
-				@NamedAttributeNode(value = "departDetail",subgraph = "departGraph")
-		}),@NamedSubgraph(name = "departGraph",attributeNodes = {
-				@NamedAttributeNode("depart")
-		}),@NamedSubgraph(name = "accountbookGraph",attributeNodes = {
-				@NamedAttributeNode("accountbook")
-		})
-})
+//@NamedEntityGraph(name = "base_user.Graph", attributeNodes = {
+//		@NamedAttributeNode(value = "userOrgSet"),
+//		@NamedAttributeNode(value = "userDepartDetailSet",subgraph = "departDetailGraph"),
+//		@NamedAttributeNode(value = "userAccountbookSet", subgraph = "accountbookGraph")
+//}
+//,subgraphs = {
+//		@NamedSubgraph(name = "departDetailGraph",attributeNodes = {
+//				@NamedAttributeNode(value = "departDetail",subgraph = "departGraph")
+//		}),@NamedSubgraph(name = "departGraph",attributeNodes = {
+//				@NamedAttributeNode("depart")
+//		}),@NamedSubgraph(name = "accountbookGraph",attributeNodes = {
+//				@NamedAttributeNode("accountbook")
+//		})
+//})
 public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -68,19 +71,22 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	private String departid;
 
 	/** 部门列表（非表字段，已废弃） */
-	private Set<TSUserOrg> userOrgList = new HashSet<>();
+	private Set<TSUserOrg> userOrgSet = new HashSet<>();
 
 	/** 当前部门（非表字段，已废弃） */
+	@Transient
 	private TSDepart currentDepart = new TSDepart();
 
 	/** 账簿列表（非表字段） */
-	private Set<UserDepartEntity> userDepartDetailList = new HashSet<>();
+	private Set<UserDepartEntity> userDepartDetailSet = new HashSet<>();
 	/** 当前部门（非表字段） */
+	@javax.persistence.Transient
 	private DepartDetailEntity currentDepartDetail = new DepartDetailEntity();
 
 	/** 账簿列表（非表字段） */
-	private Set<UserAccountbookEntity> userAccountbookList = new HashSet<>();
+	private Set<UserAccountbookEntity> userAccountbookSet = new HashSet<>();
 	/** 当前账簿（非表字段） */
+	@Transient
 	private AccountbookEntity currentAccountbook = new AccountbookEntity();
 
 	@Column(name = "signature", length = 3000)
@@ -128,7 +134,6 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 		this.activitiSync = activitiSync;
 	}
 
-
 	@Column(name = "password", length = 100)
 	public String getPassword() {
 		return this.password;
@@ -164,54 +169,65 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	public void setCurrentDepart(TSDepart currentDepart) {
 		this.currentDepart = currentDepart;
 	}
-
+	// FetchMode可选值意义与区别如下：
+	//@ Fetch (FetchMode.JOIN) will use the left join query produced only one sql statement
+	//@ Fetch (FetchMode.SELECT) will have N +1 clause sql statement
+	//@ Fetch (FetchMode.SUBSELECT) produce two sql statement to use the second statement id in (.....) check out all the data associated
+	//
+	//@Fetch(FetchMode.JOIN)： 始终立刻加载，使用外连(outer join)查询的同时加载关联对象，忽略FetchType.LAZY设定。
+	//@Fetch(FetchMode.SELECT) ：默认懒加载(除非设定关联属性lazy=false)，当访问每一个关联对象时加载该对象，会累计产生N+1条sql语句
+	//@Fetch(FetchMode.SUBSELECT)  默认懒加载(除非设定关联属性lazy=false),在访问第一个关联对象时加载所有的关联对象。会累计产生两条sql语句。且FetchType设定有效。
+	//
+	// FetchType可选值意义与区别如下：
+	//FetchType.LAZY: 懒加载，在访问关联对象的时候加载(即从数据库读入内存)
+	//FetchType.EAGER:立刻加载，在查询主对象的时候同时加载关联对象。
+	@Fetch(FetchMode.JOIN)
 	@JsonIgnore
-	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
-//	@Fetch(FetchMode.JOIN)
-	public Set<UserDepartEntity> getUserDepartDetailList() {
-		return userDepartDetailList;
+	@OneToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "userId")
+	public Set<UserDepartEntity> getUserDepartDetailSet() {
+		return userDepartDetailSet;
 	}
 
-	public void setUserDepartDetailList(Set<UserDepartEntity> userDepartDetailList) {
-		this.userDepartDetailList = userDepartDetailList;
+	public void setUserDepartDetailSet(Set<UserDepartEntity> userDepartDetailSet) {
+		this.userDepartDetailSet = userDepartDetailSet;
 	}
 
 	@Transient
 	public DepartDetailEntity getCurrentDepartDetail() {
 		return currentDepartDetail;
 	}
-
+	@Transient
 	public void setCurrentDepartDetail(DepartDetailEntity currentDepartDetail) {
 		this.currentDepartDetail = currentDepartDetail;
 	}
 
+	@Fetch(FetchMode.JOIN)
 	@JsonIgnore
-	@OneToMany(mappedBy = "tsUser", fetch = FetchType.EAGER)
-//	@Fetch(FetchMode.JOIN)
-	public Set<TSUserOrg> getUserOrgList() {
-		return userOrgList;
+	@OneToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "tsUser")
+	public Set<TSUserOrg> getUserOrgSet() {
+		return userOrgSet;
 	}
 
-	public void setUserOrgList(Set<TSUserOrg> userOrgList) {
-		this.userOrgList = userOrgList;
+	public void setUserOrgSet(Set<TSUserOrg> userOrgSet) {
+		this.userOrgSet = userOrgSet;
 	}
 
+	@Fetch(FetchMode.JOIN)
 	@JsonIgnore
-	@OneToMany(mappedBy = "tsUser", fetch = FetchType.EAGER)
-//	@Fetch(FetchMode.JOIN)
-	public Set<UserAccountbookEntity> getUserAccountbookList() {
-		return userAccountbookList;
+	@OneToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "tsUser")
+	public Set<UserAccountbookEntity> getUserAccountbookSet() {
+		return userAccountbookSet;
 	}
 
-	public void setUserAccountbookList(Set<UserAccountbookEntity> userAccountbookList) {
-		this.userAccountbookList = userAccountbookList;
+	public void setUserAccountbookSet(Set<UserAccountbookEntity> userAccountbookSet) {
+		this.userAccountbookSet = userAccountbookSet;
 	}
 
-	@Transient
+	@javax.persistence.Transient
 	public AccountbookEntity getCurrentAccountbook() {
 		return currentAccountbook;
 	}
-
+	@Transient
 	public void setCurrentAccountbook(AccountbookEntity currentAccountbook) {
 		this.currentAccountbook = currentAccountbook;
 	}
@@ -259,10 +275,10 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 				", signature=" + Arrays.toString(signature) +
 				", userNameEn='" + userNameEn + '\'' +
 				", departid='" + departid + '\'' +
-				", userOrgList=" + userOrgList +
+				", userOrgSet=" + userOrgSet +
 				", currentDepart=" + currentDepart +
 				", currentDepartDetail=" + currentDepartDetail +
-				", userAccountbookList=" + userAccountbookList +
+				", userAccountbookSet=" + userAccountbookSet +
 				", currentAccountbook=" + currentAccountbook +
 				'}';
 	}

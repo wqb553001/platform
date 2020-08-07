@@ -143,8 +143,7 @@ public class TSRole extends IdEntity implements java.io.Serializable {
 			joinColumns = @JoinColumn(name = "roleid", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "userid", referencedColumnName = "id")
 	)
-	@ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-//	@ManyToMany(mappedBy = "roleSet")
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	public Set<TSUser> getUserSet(){
 		return userSet;
 	}
