@@ -87,13 +87,21 @@ logging:
 eureka:
     client:
         service-url:
-            defaultZone: http://192.168.163.1:8761/eureka/
+            defaultZone: http://192.168.1.106:8761/eureka/
 
 feign:
     client:
         config:
-            connectTimeout: 7000
-            readTimeout: 7000
+            feignName:
+                connectTimeout: 5000
+                readTimeout: 5000
+                loggerLevel: full
+#                errorDecoder: com.example.SimpleErrorDecoder
+#                retryer: com.example.SimpleRetryer
+#                requestInterceptors:
+#                    - com.example.FooRequestInterceptor
+#                    - com.example.BarRequestInterceptor
+#                decode404: false
 
 activiti-server:
     ribbon:
