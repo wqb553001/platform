@@ -15,8 +15,8 @@ spring:
         assumed:
             username: root
             password: root
-            url: jdbc:mysql://localhost:3306/assumed?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
-            driver-class-name: com.mysql.cj.jdbc.Driver
+            jdbcUrl: jdbc:mysql://localhost:3306/assumed?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
+            driverClassName: com.mysql.cj.jdbc.Driver
             type: com.alibaba.druid.pool.DruidDataSource
 
             initialization-mode: always
@@ -61,14 +61,16 @@ spring:
         view:
             prefix: /
             suffix: /
-
+        date-format: yyyy-MM-dd HH:mm:ss
     http:
         encoding:
             force: true
             charset: utf-8
             enabled: true
 
-
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
 #    mvc:
 #        # 静态资源路径
 #        static-path-pattern: /static/**
@@ -93,8 +95,8 @@ feign:
     client:
         config:
             feignName:
-                connectTimeout: 5000
-                readTimeout: 5000
+                connectTimeout: 50000
+                readTimeout: 50000
                 loggerLevel: full
 #                errorDecoder: com.example.SimpleErrorDecoder
 #                retryer: com.example.SimpleRetryer
@@ -103,6 +105,8 @@ feign:
 #                    - com.example.BarRequestInterceptor
 #                decode404: false
 
-activiti-server:
-    ribbon:
-        NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+#activiti-server:
+ribbon:
+    ConnectTimeout: 50000 #请求连接的超时时间，默认时间为1秒
+    ReadTimeout: 50000 #请求处理的超时时间
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule

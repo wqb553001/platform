@@ -14,4 +14,6 @@ public class BFNQFun {
         if (in == 1) return 1;
         return getCount(in - 1) + getCount(in - 2);
     }
+
+
 }

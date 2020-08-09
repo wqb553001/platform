@@ -33,6 +33,8 @@ public class ActivitiController {
     @Autowired
     private RuntimeService runtimeService;
 
+    private static final String accountbookId = "2c91e3ec6ad89cfb016ae4657a010362"; 		// 110100掌上纵横
+    private static final String departDetailId = "2c91e3ec6ad89cfb016ae4657a0c0368";
 
     @RequestMapping(value="/deployment", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     public String deployment(){
