@@ -1,9 +1,7 @@
 package com.doctor.assistant.userserver.springdata.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -67,26 +65,23 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	/** 英文名 */
 	private String userNameEn;
 
-//	// @Excel(name = "组织机构编码(多个组织机构编码用逗号分隔，非必填)", width = 50)
-	private String departid;
-
-	/** 部门列表（非表字段，已废弃） */
+	//	// @Excel(name = "组织机构编码(多个组织机构编码用逗号分隔，非必填)", width = 50)
 	private Set<TSUserOrg> userOrgSet = new HashSet<>();
 
+	/** 部门列表（非表字段，已废弃） */
+	private String departid;
+
 	/** 当前部门（非表字段，已废弃） */
-	@Transient
 	private TSDepart currentDepart = new TSDepart();
 
 	/** 账簿列表（非表字段） */
 	private Set<UserDepartEntity> userDepartDetailSet = new HashSet<>();
 	/** 当前部门（非表字段） */
-	@javax.persistence.Transient
 	private DepartDetailEntity currentDepartDetail = new DepartDetailEntity();
 
 	/** 账簿列表（非表字段） */
 	private Set<UserAccountbookEntity> userAccountbookSet = new HashSet<>();
 	/** 当前账簿（非表字段） */
-	@Transient
 	private AccountbookEntity currentAccountbook = new AccountbookEntity();
 
 	@Column(name = "signature", length = 3000)
@@ -138,7 +133,6 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	public String getPassword() {
 		return this.password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -147,7 +141,6 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	public String getUserName() {
 		return this.userName;
 	}
-
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
@@ -156,7 +149,6 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	public String getRealName() {
 		return this.realName;
 	}
-
 	public void setRealName(String realName) {
 		this.realName = realName;
 	}
@@ -165,10 +157,10 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	public TSDepart getCurrentDepart() {
 		return currentDepart;
 	}
-
 	public void setCurrentDepart(TSDepart currentDepart) {
 		this.currentDepart = currentDepart;
 	}
+
 	// FetchMode可选值意义与区别如下：
 	//@ Fetch (FetchMode.JOIN) will use the left join query produced only one sql statement
 	//@ Fetch (FetchMode.SELECT) will have N +1 clause sql statement
@@ -181,13 +173,12 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	// FetchType可选值意义与区别如下：
 	//FetchType.LAZY: 懒加载，在访问关联对象的时候加载(即从数据库读入内存)
 	//FetchType.EAGER:立刻加载，在查询主对象的时候同时加载关联对象。
+//	@JsonIgnore
 	@Fetch(FetchMode.JOIN)
-	@JsonIgnore
 	@OneToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "userId")
 	public Set<UserDepartEntity> getUserDepartDetailSet() {
 		return userDepartDetailSet;
 	}
-
 	public void setUserDepartDetailSet(Set<UserDepartEntity> userDepartDetailSet) {
 		this.userDepartDetailSet = userDepartDetailSet;
 	}
@@ -196,69 +187,60 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	public DepartDetailEntity getCurrentDepartDetail() {
 		return currentDepartDetail;
 	}
-	@Transient
 	public void setCurrentDepartDetail(DepartDetailEntity currentDepartDetail) {
 		this.currentDepartDetail = currentDepartDetail;
 	}
 
+	//	@JsonIgnore
 	@Fetch(FetchMode.JOIN)
-	@JsonIgnore
 	@OneToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "tsUser")
 	public Set<TSUserOrg> getUserOrgSet() {
 		return userOrgSet;
 	}
-
 	public void setUserOrgSet(Set<TSUserOrg> userOrgSet) {
 		this.userOrgSet = userOrgSet;
 	}
 
+	//	@JsonIgnore
 	@Fetch(FetchMode.JOIN)
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "tsUser")
+	@OneToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "userId")
 	public Set<UserAccountbookEntity> getUserAccountbookSet() {
 		return userAccountbookSet;
 	}
-
 	public void setUserAccountbookSet(Set<UserAccountbookEntity> userAccountbookSet) {
 		this.userAccountbookSet = userAccountbookSet;
 	}
 
-	@javax.persistence.Transient
+	@Transient
 	public AccountbookEntity getCurrentAccountbook() {
 		return currentAccountbook;
 	}
-	@Transient
 	public void setCurrentAccountbook(AccountbookEntity currentAccountbook) {
 		this.currentAccountbook = currentAccountbook;
-	}
-
-	public void setDeleteFlag(Short deleteFlag) {
-		this.deleteFlag = deleteFlag;
 	}
 
 	@Column(name = "delete_flag")
 	public Short getDeleteFlag() {
 		return deleteFlag;
 	}
-
+	public void setDeleteFlag(Short deleteFlag) {
+		this.deleteFlag = deleteFlag;
+	}
 
 	@Column(name = "user_name_en")
 	public String getUserNameEn() {
 		return userNameEn;
 	}
-
 	public void setUserNameEn(String userNameEn) {
 		this.userNameEn = userNameEn;
-	}
-
-
-	public void setDepartid(String departid) {
-		this.departid = departid;
 	}
 
 	@Column(name = "departid", length = 32)
 	public String getDepartid() {
 		return departid;
+	}
+	public void setDepartid(String departid) {
+		this.departid = departid;
 	}
 
 	@Override

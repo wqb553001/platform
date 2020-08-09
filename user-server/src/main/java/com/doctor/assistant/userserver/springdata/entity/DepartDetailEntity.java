@@ -1,5 +1,6 @@
 package com.doctor.assistant.userserver.springdata.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -64,6 +65,7 @@ public class DepartDetailEntity implements java.io.Serializable {
 		this.accountbookId = accountbookId;
 	}
 
+	@JsonIgnoreProperties({ "handler","hibernateLazyInitializer","serializeAsField","serialize","serializeContents" })
 	@ManyToOne(targetEntity = DepartEntity.class, fetch = FetchType.EAGER)
 	@JoinColumn(name = "depart_id")
 	public DepartEntity getDepart() {

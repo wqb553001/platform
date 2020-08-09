@@ -22,15 +22,13 @@ public class UserDepartEntity implements java.io.Serializable {
 	/**主键*/
 	private String id;
 	/**用户Id*/
-	// @Excel(name="用户Id",width=15)
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private String userId;
+
 	/**账簿Id*/
-	// @Excel(name="账簿Id",width=15)
 	private String accountbookId;
-//	/**部门Id*/
-//	// @Excel(name="部门Id",width=15)
+
 	private String departDetailId;
 
 	private DepartDetailEntity departDetail;
@@ -86,7 +84,6 @@ public class UserDepartEntity implements java.io.Serializable {
 		this.accountbookId = accountbookId;
 	}
 
-//	@Column(name ="DEPART_DETAIL_ID",nullable=true,length=32)
 	@Transient
 	public String getDepartDetailId() {
 		return departDetailId;

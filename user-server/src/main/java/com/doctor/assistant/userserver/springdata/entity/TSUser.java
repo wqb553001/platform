@@ -2,6 +2,7 @@ package com.doctor.assistant.userserver.springdata.entity;
 
 import com.doctor.assistant.userserver.springdata.utils.JsonDateDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import reactor.util.annotation.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -69,9 +70,11 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 	private String updateName;
 	/** 入职时间 */
 	// @Excel(name="入职时间",format = "yyyy-MM-dd")
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date enterDate;
 	/** 离职时间 */
 	// @Excel(name="离职时间",format = "yyyy-MM-dd")
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date leaveDate;
 	/** 收款账户 */
 	// @Excel(name = "收款账户",width = 25)
@@ -272,7 +275,9 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 		this.memo = memo;
 	}
 
+	@Nullable
 	@Column(name = "enter_date")
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public Date getEnterDate() {
 		return enterDate;
 	}
@@ -282,7 +287,9 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 		this.enterDate = enterDate;
 	}
 
+	@Nullable
 	@Column(name = "leave_date")
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public Date getLeaveDate() {
 		return leaveDate;
 	}

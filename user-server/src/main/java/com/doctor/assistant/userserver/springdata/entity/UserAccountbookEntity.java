@@ -1,5 +1,8 @@
 package com.doctor.assistant.userserver.springdata.entity;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
 
 /**
@@ -8,21 +11,33 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tb_user_accountbook")
 public class UserAccountbookEntity extends IdEntity implements java.io.Serializable {
-    @Column(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private String userId;
+
+    private String accountbookId;
     private TSUser tsUser;
-    @Column(name = "accountbook_id")
     private AccountbookEntity accountbook;
 
-//	public UserAccountbookEntity() {
-//	}
-//
-//	public UserAccountbookEntity(TSUser tsUser, AccountbookEntity accountbook) {
-//		this.tsUser = tsUser;
-//		this.accountbook = accountbook;
-//	}
+    @Column(name = "user_id", insertable = false, updatable = false)//外键名称，参考主键
+    public String getUserId() {
+        return userId;
+    }
 
-	@ManyToOne(targetEntity = TSUser.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)//外键名称，参考主键
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Transient
+    public String getAccountbookId() {
+        return accountbookId;
+    }
+
+    public void setAccountbookId(String accountbookId) {
+        this.accountbookId = accountbookId;
+    }
+
+    @Transient
     public TSUser getTsUser() {
         return tsUser;
     }
@@ -31,8 +46,9 @@ public class UserAccountbookEntity extends IdEntity implements java.io.Serializa
         this.tsUser = tsDepart;
     }
 
-    @ManyToOne(targetEntity = AccountbookEntity.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "accountbook_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "accountbook_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     public AccountbookEntity getAccountbook() {
         return accountbook;
     }

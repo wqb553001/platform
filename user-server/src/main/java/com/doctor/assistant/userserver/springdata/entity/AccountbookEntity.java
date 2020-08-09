@@ -8,7 +8,9 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Macx
@@ -208,7 +210,7 @@ public class AccountbookEntity extends IdEntity implements java.io.Serializable 
         this.parentAccountbook = parentAccountbook;
     }
 
-    @OneToMany(mappedBy = "parentAccountbook")
+    @OneToMany(mappedBy = "parentAccountbook", fetch = FetchType.EAGER)
     @JsonManagedReference
     @NotFound(action= NotFoundAction.IGNORE)
     public Set<AccountbookEntity> getAccountbookSet() {

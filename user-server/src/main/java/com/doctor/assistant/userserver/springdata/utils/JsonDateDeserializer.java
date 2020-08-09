@@ -24,12 +24,17 @@ public class JsonDateDeserializer extends JsonDeserializer<Date> {
 		String text = jp.getText();
 
 		if (StringUtils.hasText(text)) {
+			System.out.println("日期处理出错前：" + text);
+
 			try {
 				if (text.indexOf(":") == -1 && text.length() == 10) {
 					return this.dateFormat.parse(text);
 				} else if (text.indexOf(":") > 0 && text.length() == 19) {
 					return this.datetimeFormat.parse(text);
+				} else if(org.apache.commons.lang.StringUtils.isNumeric(text)) {
+					return null;
 				} else {
+					System.out.println("确实出错：" + text);
 					throw new IllegalArgumentException("Could not parse date, date format is error ");
 				}
 			} catch (ParseException ex) {

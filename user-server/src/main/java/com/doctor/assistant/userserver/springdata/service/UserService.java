@@ -1,20 +1,21 @@
 package com.doctor.assistant.userserver.springdata.service;
 
-import com.doctor.assistant.commonserver.utils.JsonUtils;
 import com.doctor.assistant.userserver.springdata.entity.DepartDetailEntity;
 import com.doctor.assistant.userserver.springdata.entity.TSUser;
+import com.doctor.assistant.userserver.springdata.entity.UserDepartEntity;
 import com.doctor.assistant.userserver.springdata.repository.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
+import java.util.*;
 
 @Service
-public class UserRoleService {
+public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -25,6 +26,8 @@ public class UserRoleService {
     private DepartRepository departRepository;
     @Autowired
     private DepartDetailRepository departDetailRepository;
+    @Autowired
+    private UserDepartRepository userDepartRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -41,12 +44,35 @@ public class UserRoleService {
         return resultList;
     }
 
-    public String findUserByAccountbookIdAndDepartDetailId(String accountbookId){
+    public List<DepartDetailEntity> findDepartDetailByAccountbookIdAndDepartDetailId(String accountbookId){
         if(StringUtils.isBlank(accountbookId)){
             accountbookId = "2c91e3ec6ad89cfb016ae4657a010362";
         }
+//        List<DepartDetailEntity> detailEntityList = departDetailRepository.findByAccountbookId(accountbookId);
         List<DepartDetailEntity> detailEntityList = departDetailRepository.findByAccountbookId(accountbookId);
-        return JsonUtils.objectToJson(detailEntityList);
+//        return JsonUtils.objectToJson(detailEntityList);
+        return detailEntityList;
+    }
+
+    public List<TSUser> findUserByAccountbookIdAndDepartDetailId(String accountbookId, String departDetailId){
+        if(StringUtils.isBlank(accountbookId)){
+            accountbookId = "2c91e3ec6ad89cfb016ae4657a010362";
+        }
+        List<UserDepartEntity> userDepartEntities = userDepartRepository.findUserDepartEntitiesByAccountbookIdAndDepartDetail_Id(accountbookId, departDetailId);
+        if(CollectionUtils.isEmpty(userDepartEntities)){
+            return null;
+        }
+        List<TSUser> userList = new ArrayList<>(userDepartEntities.size());
+        for (UserDepartEntity userDepartEntity : userDepartEntities){
+//            Set<UserDepartEntity> userDepartEntitySet = new HashSet<>();
+//            userDepartEntitySet.add(userDepartEntity);
+            String userId = userDepartEntity.getUserId();
+            Optional<TSUser> user = userRepository.findById(userId);
+            TSUser userInfo = user.get();
+//            userInfo.setUserDepartDetailSet(userDepartEntitySet);
+            userList.add(userInfo);
+        }
+        return userList;
     }
 
 //    public TSUser findByEmpNoStr(String empNo){
