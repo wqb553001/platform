@@ -28,7 +28,9 @@
 		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 		<activiti-dependencies.version>7.1.123</activiti-dependencies.version>
 		<druid.version>1.1.9</druid.version>
-		<!--<devtools.version>2.1.2.RELEASE</devtools.version>-->
+		<fastjson-lib.version>1.2.6</fastjson-lib.version>
+		<user-server.version>0.0.3-SNAPSHOT</user-server.version>
+		<common-server.version>0.0.1-SNAPSHOT</common-server.version>
 	</properties>
 
 	<!-- 设定主仓库，按设定顺序进行查找  -->
@@ -53,11 +55,6 @@
 			<id>jeecg-snapshots</id>
 			<name>jeecg-snapshots Repository</name>
 			<url>http://maven.jeecg.org/nexus/content/repositories/snapshots</url>
-		</repository>
-		<repository>
-			<id>com.github.jgraph</id>
-			<name>Mulesoft repository</name>
-			<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
 		</repository>
 	</repositories>
 
@@ -107,16 +104,22 @@
 					<version>2.3.1</version>
 				</dependency>
 
+				<dependency>
+					<groupId>com.alibaba</groupId>
+					<artifactId>fastjson</artifactId>
+					<version>${fastjson-lib.version}</version>
+				</dependency>
+
 				<!-- 子项目引用 -->
 				<dependency>
 					<groupId>com.doctor.assistant</groupId>
 					<artifactId>user-server</artifactId>
-					<version>0.0.1-SNAPSHOT</version>
+					<version>${user-server.version}</version>
 				</dependency>
 				<dependency>
 					<groupId>com.doctor.assistant</groupId>
 					<artifactId>common-server</artifactId>
-					<version>0.0.1-SNAPSHOT</version>
+					<version>${common-server.version}</version>
 				</dependency>
 
 <!--				<dependency>-->
