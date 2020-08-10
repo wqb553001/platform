@@ -56,11 +56,10 @@ public class DepartDetailEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name ="ACCOUNTBOOK_ID",nullable=true,length=36)
+	@Column(name ="accountbook_id",nullable=true,length=36)
 	public String getAccountbookId(){
 		return this.accountbookId;
 	}
-
 	public void setAccountbookId(String accountbookId){
 		this.accountbookId = accountbookId;
 	}

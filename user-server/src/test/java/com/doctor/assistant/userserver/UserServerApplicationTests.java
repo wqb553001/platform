@@ -43,7 +43,7 @@ public class UserServerApplicationTests {
 //		departDetail();
 //		baseUser();
 //		roleUser();
-		userDepartDetailByAccountbookIdAndDepartDetail_Id();
+//		userDepartDetailByAccountbookIdAndDepartDetail_Id();
 //		departDetailByAccountbookId();
 	}
 	
@@ -86,7 +86,7 @@ public class UserServerApplicationTests {
 		this.print(userDepartEntities);
 	}
 
-	@Test
+//	@Test
 	public void userByAccountbookIdAndDepartDetailId(){
 		List<TSUser> userList = new ArrayList<>();
 		String accountbookId = "2c91e3ec6ad89cfb016ae46578cc0337"; // 120000乐从

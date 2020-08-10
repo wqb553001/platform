@@ -48,9 +48,7 @@ public class UserService {
         if(StringUtils.isBlank(accountbookId)){
             accountbookId = "2c91e3ec6ad89cfb016ae4657a010362";
         }
-//        List<DepartDetailEntity> detailEntityList = departDetailRepository.findByAccountbookId(accountbookId);
         List<DepartDetailEntity> detailEntityList = departDetailRepository.findByAccountbookId(accountbookId);
-//        return JsonUtils.objectToJson(detailEntityList);
         return detailEntityList;
     }
 

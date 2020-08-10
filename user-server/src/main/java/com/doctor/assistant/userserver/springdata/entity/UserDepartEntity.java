@@ -55,8 +55,8 @@ public class UserDepartEntity implements java.io.Serializable {
 	 *@return: java.lang.String  主键
 	 */
 	@Id
-	@GeneratedValue(generator = "paymentableGenerator")
-	@GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@Column(name ="ID",nullable=false,length=36)
 	public String getId(){
 		return this.id;

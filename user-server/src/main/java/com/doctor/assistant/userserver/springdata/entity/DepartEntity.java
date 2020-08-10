@@ -51,8 +51,8 @@ public class DepartEntity implements java.io.Serializable {
 	private Short deleteFlag;
 
 	@Id
-	@GeneratedValue(generator = "paymentableGenerator")
-	@GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@Column(name = "ID", nullable = false, length = 36)
 	public String getId() {
 		return this.id;
@@ -70,7 +70,6 @@ public class DepartEntity implements java.io.Serializable {
 	public void setDepartCode(String departCode) {
 		this.departCode = departCode;
 	}
-
 
 	@Column(name = "DEPART_NAME", nullable = true, length = 100)
 	public String getDepartName() {
