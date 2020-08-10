@@ -26,10 +26,9 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
-		<activiti-dependencies.version>7.1.123</activiti-dependencies.version>
 		<druid.version>1.1.9</druid.version>
 		<fastjson-lib.version>1.2.6</fastjson-lib.version>
-		<user-server.version>0.0.3-SNAPSHOT</user-server.version>
+		<user-server.version>0.0.4-SNAPSHOT</user-server.version>
 		<common-server.version>0.0.1-SNAPSHOT</common-server.version>
 	</properties>
 
@@ -71,13 +70,6 @@
 					<groupId>org.springframework.cloud</groupId>
 					<artifactId>spring-cloud-dependencies</artifactId>
 					<version>${spring-cloud.version}</version>
-					<type>pom</type>
-					<scope>import</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.activiti.dependencies</groupId>
-					<artifactId>activiti-dependencies</artifactId>
-					<version>${activiti-dependencies.version}</version>
 					<scope>import</scope>
 					<type>pom</type>
 				</dependency>

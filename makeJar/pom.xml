@@ -8,8 +8,12 @@
         <groupId>com.doctor.assistant</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <packaging>war</packaging>
+    <groupId>com.doctor.assistant</groupId>
     <artifactId>makeJar</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>makeJar</name>
+    <description>将jar包打包进入本地仓库，便于maven进行引用（用于只有jar包，没有原码的情况）</description>
+    <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,6 +21,21 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <!--排除这个slf4j-log4j12-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
         <!--引入springboot 内嵌tomcat对jsp的解析包-->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
@@ -80,7 +99,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.46</version>
         </dependency>
 
 
