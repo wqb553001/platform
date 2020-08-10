@@ -6,7 +6,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-//@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 @SpringBootApplication  // (scanBasePackages = "com.activitiserver.*")
 @EnableWebMvc
 @EnableDiscoveryClient

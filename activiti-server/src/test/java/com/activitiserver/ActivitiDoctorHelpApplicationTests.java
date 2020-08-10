@@ -20,9 +20,11 @@ public class ActivitiDoctorHelpApplicationTests {
 	UserActivitiFromService userActivitiFromService;
 	@Autowired
 	UserBridgeService userBridgeService;
-	String result = null;
-//	@Test
+	@Test
 	public void contextLoads() {
+	}
+
+	public void queryAccountbook(){
 		String empNo = "U00148"; // U00020
 		String roleName = "预算专员"; // U00020
 //		result = userService.findByEmpNo(empNo);
@@ -37,7 +39,7 @@ public class ActivitiDoctorHelpApplicationTests {
 		json.put("accountbookCode", accountbookCode);
 		json.put("accountbookName", accountbookName);
 		condition = json.toJSONString();
-		result = userActivitiFromService.accountbookByCodeOrName(condition);
+		String result = userActivitiFromService.accountbookByCodeOrName(condition);
 
 
 		System.out.println("请求结束，结果为：" + result);
@@ -50,12 +52,12 @@ public class ActivitiDoctorHelpApplicationTests {
 //        System.out.println("部署名称："+deployment.getName());
 	}
 
-//	@Test
+	@Test
 	public void testUserByAccountbookIdAndDepartDetailId(){
 		String accountbookId = "2c91e3ec6ad89cfb016ae46578cc0337"; 	// 120000乐从
 		accountbookId = "2c91e3ec6ad89cfb016ae4657a010362"; 		// 110100掌上纵横
 		String departDetailId = "2c91e3ec6ad89cfb016ae4657a0c0368";
-		result = userActivitiFromService.userByDepartDetailIdAndAccountbookId(accountbookId, departDetailId);
+		String result = userActivitiFromService.userByDepartDetailIdAndAccountbookId(accountbookId, departDetailId);
 		System.out.println(result);
 	}
 

@@ -1,11 +1,11 @@
 package com.activitiserver.controller;
 
-import com.activitiserver.server.UserBridgeService;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.activitiserver.core.SecurityUtil;
+import org.activiti.api.task.model.builders.TaskPayloadBuilder;
+import org.activiti.api.task.runtime.TaskRuntime;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
-import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.apache.commons.lang3.StringUtils;
@@ -19,14 +19,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-@RequestMapping("/activiti")
+@RequestMapping("/activiti/task")
 @RestController
-public class ActivitiController {
+public class ActivitiTaskController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActivitiController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ActivitiTaskController.class);
+
+    @Autowired
+    private SecurityUtil securityUtil;
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -34,35 +40,25 @@ public class ActivitiController {
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
-    UserBridgeService userBridgeService;
+    private TaskService taskService;
+    @Autowired
+    private TaskRuntime taskRuntime;
 
     private static final String accountbookId = "2c91e3ec6ad89cfb016ae4657a010362"; 		// 110100掌上纵横
     private static final String departDetailId = "2c91e3ec6ad89cfb016ae4657a0c0368";
 
-    @RequestMapping(value="/deployment", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    public String deployment(){
-        Deployment deployment = repositoryService.createDeployment()//创建一个部署对象
-                .name("请假流程")
-                .addClasspathResource("static/diagrams/bill-approve-ge.bpmn")
-                .addClasspathResource("static/diagrams/bill-approve-ge.png")
-                .deploy();
-        System.out.println("部署ID："+deployment.getId());
-        System.out.println("部署名称："+deployment.getName());
-        logger.info("Deployment: Id-"+deployment.getId()
-                + ", Key-" + deployment.getKey()
-                + ", Name-" + deployment.getName()
-                + ", Category-" + deployment.getCategory()
-                + ", TenantId-" + deployment.getTenantId());
-        Map map = new HashMap();
-        map.put("deployment-key", "deployment-value");
-        map.put("Id", deployment.getId());
-        map.put("Key", deployment.getKey());
-        map.put("Name", deployment.getName());
-        map.put("Category", deployment.getCategory());
-        map.put("TenantId", deployment.getTenantId());
-        JSON json = new JSONObject(map);
-
-        return json.toJSONString();
+    @RequestMapping(value="/openTask", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    public String openTask(){
+        String empNo = "U00224@王飞"; // U00116@李岩    120200酷娱-06-网游一般员工一般员工
+        securityUtil.logInAs(empNo);
+        logger.info("> create a Group Task for '120200酷娱-06-网游一般员工一般员工'");
+        taskRuntime.create(TaskPayloadBuilder.create()
+                .withName("请假流程")
+                .withDescription("这是一个请假流程 test")
+                .withCandidateGroup("120200酷娱-06-网游一般员工一般员工-Team")
+                .withPriority(10)
+                .build());
+        return null;
     }
 
     //    @RequestMapping(value = {"/queryDeployment"}, method = RequestMethod.GET)
@@ -115,7 +111,7 @@ public class ActivitiController {
     }
 
     private Set<String> deploymentParamHandle(String[] deploymentIds){
-        return java.util.Arrays.stream(deploymentIds).collect(Collectors.toSet());
+        return Arrays.stream(deploymentIds).collect(Collectors.toSet());
     }
 
     @RequestMapping(value = "/processInstance/{idOrkey}", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
@@ -150,15 +146,10 @@ public class ActivitiController {
         return result;
     }
 
-    @RequestMapping(value = "/initData", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    public String testInitDataToAssumed(){
-        userBridgeService.initAssumed();
-        return "initData is Complete!";
-    }
+    public String reployTask(){
 
-    @RequestMapping(value = "/dataClear", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    public String testClearUserToAssumed(){
-        userBridgeService.clearUsers();
-        return "dataClear is Complete!";
+
+
+        return null;
     }
 }
