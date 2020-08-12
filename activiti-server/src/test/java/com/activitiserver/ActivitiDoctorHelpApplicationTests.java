@@ -20,7 +20,7 @@ public class ActivitiDoctorHelpApplicationTests {
 	UserActivitiFromService userActivitiFromService;
 	@Autowired
 	UserBridgeService userBridgeService;
-	@Test
+//	@Test
 	public void contextLoads() {
 	}
 
@@ -70,6 +70,7 @@ public class ActivitiDoctorHelpApplicationTests {
 
 	@Test
 	public void testClearUserToAssumed(){
-		userBridgeService.clearUsers();
+		userBridgeService.clearUsers(true);
 	}
+
 }

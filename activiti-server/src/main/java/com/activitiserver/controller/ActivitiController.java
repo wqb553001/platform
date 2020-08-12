@@ -13,12 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -153,12 +151,13 @@ public class ActivitiController {
     @RequestMapping(value = "/initData", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     public String testInitDataToAssumed(){
         userBridgeService.initAssumed();
-        return "initData is Complete!";
+        return "initData is Complete!  " + Instant.now();
     }
 
     @RequestMapping(value = "/dataClear", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    public String testClearUserToAssumed(){
-        userBridgeService.clearUsers();
-        return "dataClear is Complete!";
+    public String testClearUserToAssumed(@RequestParam(required = false, defaultValue = "false") boolean isTruncate){
+        System.out.println("isTruncate : " + isTruncate);
+        userBridgeService.clearUsers(isTruncate);
+        return "dataClear is Complete!  " + Instant.now();
     }
 }

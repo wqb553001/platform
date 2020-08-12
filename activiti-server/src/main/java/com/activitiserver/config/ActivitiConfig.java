@@ -37,7 +37,7 @@ public class ActivitiConfig extends AbstractProcessEngineAutoConfiguration {
         StandaloneProcessEngineConfiguration standaloneProcessEngineConfiguration = new StandaloneProcessEngineConfiguration();
         standaloneProcessEngineConfiguration.setDataSource(activitiDataSource);
         //自动更新表结构，数据库表不存在时会自动创建表
-        standaloneProcessEngineConfiguration.setDatabaseSchemaUpdate(StandaloneProcessEngineConfiguration.DB_SCHEMA_UPDATE_DROP_CREATE);
+        standaloneProcessEngineConfiguration.setDatabaseSchemaUpdate(StandaloneProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
         //保存历史数据级别设置为full最高级别，便于历史数据的追溯
         standaloneProcessEngineConfiguration.setHistoryLevel(HistoryLevel.FULL);
         //关闭activiti自动部署（使用流程设计器部署，不使用具体文件访问方式）

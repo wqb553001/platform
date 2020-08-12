@@ -2,11 +2,12 @@ package com.activitiserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@SpringBootApplication  // (scanBasePackages = "com.activitiserver.*")
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })  // (scanBasePackages = "com.activitiserver.*")
 @EnableWebMvc
 @EnableDiscoveryClient
 @EnableFeignClients

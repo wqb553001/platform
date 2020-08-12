@@ -16,7 +16,7 @@ import java.util.List;
  * @version 1.0
  */
 public class ActivitiUtils {
-	
+	public static final String Connector = "_";
 
 	/**
 	 * <p>获取流程走过的线</p>

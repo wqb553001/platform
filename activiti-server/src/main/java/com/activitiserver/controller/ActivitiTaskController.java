@@ -1,6 +1,10 @@
 package com.activitiserver.controller;
 
 import com.activitiserver.core.SecurityUtil;
+import com.activitiserver.utils.ActivitiUtils;
+import org.activiti.api.runtime.shared.query.Page;
+import org.activiti.api.runtime.shared.query.Pageable;
+import org.activiti.api.task.model.Task;
 import org.activiti.api.task.model.builders.TaskPayloadBuilder;
 import org.activiti.api.task.runtime.TaskRuntime;
 import org.activiti.engine.RepositoryService;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -49,16 +54,48 @@ public class ActivitiTaskController {
 
     @RequestMapping(value="/openTask", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     public String openTask(){
-        String empNo = "U00224@王飞"; // U00116@李岩    120200酷娱-06-网游一般员工一般员工
-        securityUtil.logInAs(empNo);
-        logger.info("> create a Group Task for '120200酷娱-06-网游一般员工一般员工'");
-        taskRuntime.create(TaskPayloadBuilder.create()
-                .withName("请假流程")
-                .withDescription("这是一个请假流程 test")
-                .withCandidateGroup("120200酷娱-06-网游一般员工一般员工-Team")
-                .withPriority(10)
-                .build());
-        return null;
+        try {
+            // 27	U00224_王飞	ROLE_ACTIVITI_ADMIN
+            // 14	U00116_李岩	GROUP_120100网乐_06-网游
+            String empNoAndUsername = "U00224"+ ActivitiUtils.Connector +"王飞";
+            String group = "120100网乐_06-网游";
+            securityUtil.logInAs(empNoAndUsername);
+            logger.info("> create a Group Task for '"+group+"'");
+            taskRuntime.create(TaskPayloadBuilder.create()
+                    .withName("请假流程")
+                    .withDescription("这是一个请假流程 test")
+//                    .withCandidateGroup("110100掌上纵横_06-网游")
+                    .withCandidateGroup(group)
+                    .withPriority(10)
+                    .build());
+
+            empNoAndUsername = "U00058"+ ActivitiUtils.Connector +"郝为";
+            securityUtil.logInAs(empNoAndUsername);
+            Page<Task> tasks = taskRuntime.tasks(Pageable.of(0, 10));
+            logger.info("User " + empNoAndUsername + " has task number is :" + tasks.getTotalItems());
+
+            empNoAndUsername = "U00116"+ ActivitiUtils.Connector +"李岩";
+            securityUtil.logInAs(empNoAndUsername);
+            tasks = taskRuntime.tasks(Pageable.of(0, 10));
+            logger.info("User " + empNoAndUsername + " has task number is :" + tasks.getTotalItems());
+
+            String availableTaskId = tasks.getContent().get(0).getId();
+            logger.info("> Claiming the task for User " + empNoAndUsername);
+            taskRuntime.claim(TaskPayloadBuilder.claim().withTaskId(availableTaskId).build());
+
+            logger.info("> Complete the task for User " + empNoAndUsername);
+            taskRuntime.complete(TaskPayloadBuilder.complete().withTaskId(availableTaskId).build());
+
+            empNoAndUsername = "U00302"+ ActivitiUtils.Connector +"杨毅";
+            empNoAndUsername = "U00116"+ ActivitiUtils.Connector +"李岩";
+            securityUtil.logInAs(empNoAndUsername);
+            tasks = taskRuntime.tasks(Pageable.of(0, 10));
+            logger.info("User " + empNoAndUsername + " has not complete's task number is :" + tasks.getTotalItems());
+        }catch (Exception e){
+            e.printStackTrace();
+            return "Fail for  "+ Instant.now();
+        }
+        return "SUCCESS for  "+ Instant.now();
     }
 
     //    @RequestMapping(value = {"/queryDeployment"}, method = RequestMethod.GET)
