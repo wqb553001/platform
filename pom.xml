@@ -8,7 +8,9 @@
         <module>activiti-server</module>
         <module>user-server</module>
         <module>config-server</module>
+		<module>eureka-server</module>
         <module>common-server</module>
+		<module>schedule-server</module>
     </modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
@@ -19,7 +21,7 @@
 	<groupId>com.doctor.assistant</groupId>
 	<artifactId>PlatFormRoot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>pom</packaging><!--maven分模块管理，父级项目打包方式-->
 	<name>PlatFormRoot</name>
 	<description>医助平台</description>
 
@@ -30,32 +32,9 @@
 		<fastjson-lib.version>1.2.6</fastjson-lib.version>
 		<user-server.version>0.0.4-SNAPSHOT</user-server.version>
 		<common-server.version>0.0.1-SNAPSHOT</common-server.version>
+		<springfox-swagger2.version>2.7.0</springfox-swagger2.version>
+		<springfox-swagger-ui.version>2.7.0</springfox-swagger-ui.version>
 	</properties>
-
-	<!-- 设定主仓库，按设定顺序进行查找  -->
-	<repositories>
-		<repository>
-			<id>aliyun</id>
-			<name>aliyun Repository</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>alfresco</id>
-			<name>Activiti Releases</name>
-			<url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-		<repository>
-			<id>jeecg-snapshots</id>
-			<name>jeecg-snapshots Repository</name>
-			<url>http://maven.jeecg.org/nexus/content/repositories/snapshots</url>
-		</repository>
-	</repositories>
 
 	<!--
 	· dependencies即使在子项目中不写该依赖项，那么子项目仍然会从父项目中继承该依赖项（全部继承）
@@ -95,11 +74,21 @@
 					<artifactId>javax.servlet.jsp-api</artifactId>
 					<version>2.3.1</version>
 				</dependency>
-
 				<dependency>
 					<groupId>com.alibaba</groupId>
 					<artifactId>fastjson</artifactId>
 					<version>${fastjson-lib.version}</version>
+				</dependency>
+
+				<dependency>
+					<groupId>io.springfox</groupId>
+					<artifactId>springfox-swagger2</artifactId>
+					<version>${springfox-swagger2.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>io.springfox</groupId>
+					<artifactId>springfox-swagger-ui</artifactId>
+					<version>${springfox-swagger-ui.version}</version>
 				</dependency>
 
 				<!-- 子项目引用 -->
@@ -148,6 +137,36 @@
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
+
+	<!-- 设定主仓库，按设定顺序进行查找  -->
+	<repositories>
+		<repository>
+			<id>aliyun</id>
+			<name>aliyun Repository</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>alfresco</id>
+			<name>Activiti Releases</name>
+			<url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>jeecg-snapshots</id>
+			<name>jeecg-snapshots Repository</name>
+			<url>http://maven.jeecg.org/nexus/content/repositories/snapshots</url>
+		</repository>
+		<repository>
+			<id>Mulesoft</id>
+			<name>Mulesoft Repository</name>
+			<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>

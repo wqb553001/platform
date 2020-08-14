@@ -12,8 +12,8 @@
 	<artifactId>image-recognition</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Image-Recognition</name>
-	<description>Demo project for Spring Boot</description>
+	<name>image-recognition</name>
+	<description>ocr 票据识别</description>
 
 	<properties>
 		<java.version>1.8</java.version>
