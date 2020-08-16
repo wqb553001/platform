@@ -1,3 +1,4 @@
 # FlatForm
-Because you look like its name, it's a flat form.
-(As you look that like it's name that this is a flat form.)
+1. 所以的帮助文档，都归入了根目录下的 z-help 文件夹中；在里面能找到很多的帮助和支持。
+
+a.包括项目简介、常用的命令 等

@@ -1,0 +1,1 @@
+package com.doctor.assistant.scheduleserver.manager;import com.doctor.assistant.scheduleserver.server.RedisService;public class ThreadA extends Thread {    private RedisService redisService;    public ThreadA(RedisService redisService) {        this.redisService = redisService;    }    @Override    public void run() {        redisService.seckill();    }}
