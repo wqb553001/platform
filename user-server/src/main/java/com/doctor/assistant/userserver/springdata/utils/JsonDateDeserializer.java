@@ -32,7 +32,7 @@ public class JsonDateDeserializer extends JsonDeserializer<Date> {
 				} else if (text.indexOf(":") > 0 && text.length() == 19) {
 					return this.datetimeFormat.parse(text);
 				} else if(org.apache.commons.lang.StringUtils.isNumeric(text)) {
-					return null;
+					return new Date(new Long(text));
 				} else {
 					System.out.println("确实出错：" + text);
 					throw new IllegalArgumentException("Could not parse date, date format is error ");

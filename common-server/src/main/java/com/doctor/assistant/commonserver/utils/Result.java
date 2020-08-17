@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class Results<T> implements Serializable {
+public class Result<T> implements Serializable {
     public static String SUCCESS = "SUCCESS";
     public static String ERROR = "ERROR";
     private boolean isOK = true;
@@ -14,8 +14,8 @@ public class Results<T> implements Serializable {
     private T result = null;
     private List<T> results = null;
 
-    public static Results getInstance(){
-        return new Results<>();
+    public static Result getInstance(){
+        return new Result<>();
     }
 
 

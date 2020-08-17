@@ -1,7 +1,7 @@
 package com.doctor.assistant.userserver.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.doctor.assistant.commonserver.utils.JsonUtils;
+import com.doctor.assistant.commonserver.utils.JsonUtil;
 import com.doctor.assistant.userserver.springdata.entity.*;
 import com.doctor.assistant.userserver.springdata.repository.*;
 import com.doctor.assistant.userserver.springdata.service.UserRoleService;
@@ -47,7 +47,7 @@ public class UserController {
         String result = null;
         if(StringUtils.isNotBlank(empNo)){
             TSUser user = userRepository.findByEmpNo(empNo);
-            result = JsonUtils.objectToJson(user);
+            result = JsonUtil.objectToJson(user);
         }
         return result;
     }
@@ -62,7 +62,7 @@ public class UserController {
         String result = null;
         if(StringUtils.isNotBlank(roleName)){
             List<TSUser> userList = userRepository.findByRoleName(roleName);
-            result = JsonUtils.objectToJson(userList);
+            result = JsonUtil.objectToJson(userList);
         }
         return result;
     }
@@ -75,7 +75,7 @@ public class UserController {
     public String roleAll(){
         String result = null;
         List<TSRole> roleList = roleRepository.findAll();
-        result = JsonUtils.objectToJson(roleList);
+        result = JsonUtil.objectToJson(roleList);
         return result;
     }
 
@@ -87,7 +87,7 @@ public class UserController {
     public String departDetailAll(){
         String result = null;
         List<DepartDetailEntity> departDetailEntities = departDetailRepository.findAll();
-        result = JsonUtils.objectToJson(departDetailEntities);
+        result = JsonUtil.objectToJson(departDetailEntities);
         return result;
     }
 
@@ -99,7 +99,7 @@ public class UserController {
     public String departDetailByAccountbookId(@PathVariable(required = true)String accountbookId){
         String result = null;
         List<DepartDetailEntity> departDetailEntities = departDetailRepository.findByAccountbookId(accountbookId);
-        result = JsonUtils.objectToJson(departDetailEntities);
+        result = JsonUtil.objectToJson(departDetailEntities);
         return result;
     }
 
@@ -111,7 +111,7 @@ public class UserController {
     public String accountbookAll(){
         String result = null;
         List<AccountbookEntity> accountbookEntities = accountbookRepository.findAll();
-        result = JsonUtils.objectToJson(accountbookEntities);
+        result = JsonUtil.objectToJson(accountbookEntities);
         return result;
     }
 
@@ -143,7 +143,7 @@ public class UserController {
         conditionKey = conditionKey.toUpperCase();
         if(StringUtils.isBlank(conditionKey)){
             accountbook = accountbookRepository.findFirstByAccountbookCodeOrAccountbookName(accountbookCode, accountbookName);
-            return JsonUtils.objectToJson(accountbook);
+            return JsonUtil.objectToJson(accountbook);
         }
 
         switch (conditionKey){
@@ -157,7 +157,7 @@ public class UserController {
                 accountbook = accountbookRepository.findFirstByAccountbookCodeOrAccountbookName(accountbookCode, accountbookName);
         }
 
-        result = JsonUtils.objectToJson(accountbook);
+        result = JsonUtil.objectToJson(accountbook);
         return result;
     }
 
@@ -175,7 +175,7 @@ public class UserController {
     public String userDepartByDepartDetailIdAndAccountbookId(@PathVariable(required = true)String accountbookId, @PathVariable(required = true)String departDetailId){
         String result = null;
         List<UserDepartEntity> departEntities = userDepartRepository.findUserDepartEntitiesByAccountbookIdAndDepartDetail_Id(accountbookId, departDetailId);
-        result = JsonUtils.objectToJson(departEntities);
+        result = JsonUtil.objectToJson(departEntities);
         return result;
     }
 
@@ -187,7 +187,7 @@ public class UserController {
     public String userByDepartDetailIdAndAccountbookId(@PathVariable(required = true)String accountbookId, @PathVariable(required = true)String departDetailId){
         String result = null;
         List<TSUser> userList = userService.findUserByAccountbookIdAndDepartDetailId(accountbookId, departDetailId);
-        result = JsonUtils.objectToJson(userList);
+        result = JsonUtil.objectToJson(userList);
         return result;
     }
 

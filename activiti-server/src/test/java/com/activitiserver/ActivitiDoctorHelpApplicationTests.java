@@ -3,6 +3,8 @@ package com.activitiserver;
 import com.activitiserver.feignclient.UserActivitiFromService;
 import com.activitiserver.server.UserBridgeService;
 import com.alibaba.fastjson.JSONObject;
+import com.doctor.assistant.commonserver.utils.JsonUtil;
+import com.doctor.assistant.userserver.springdata.entity.TSUser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,14 @@ public class ActivitiDoctorHelpApplicationTests {
 //	@Test
 	public void contextLoads() {
 	}
-
+	@Test
 	public void queryAccountbook(){
+		String result = null;
 		String empNo = "U00148"; // U00020
 		String roleName = "预算专员"; // U00020
-//		result = userService.findByEmpNo(empNo);
-//		result = userService.findByRoleName(roleName);
+		result = userActivitiFromService.userByEmpNo(empNo);
+//		result = userActivitiFromService.userByRoleName(roleName);
+		TSUser us = JsonUtil.jsonToPojo(result, TSUser.class);
 		String accountbookCode = null;
 		String accountbookName = null;
 		accountbookCode = "AC003";
@@ -39,7 +43,7 @@ public class ActivitiDoctorHelpApplicationTests {
 		json.put("accountbookCode", accountbookCode);
 		json.put("accountbookName", accountbookName);
 		condition = json.toJSONString();
-		String result = userActivitiFromService.accountbookByCodeOrName(condition);
+//		result = userActivitiFromService.accountbookByCodeOrName(condition);
 
 
 		System.out.println("请求结束，结果为：" + result);

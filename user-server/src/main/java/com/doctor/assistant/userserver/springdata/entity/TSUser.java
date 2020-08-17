@@ -70,11 +70,11 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 	private String updateName;
 	/** 入职时间 */
 	// @Excel(name="入职时间",format = "yyyy-MM-dd")
-	@JsonDeserialize(using = JsonDateDeserializer.class)
+//	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date enterDate;
 	/** 离职时间 */
 	// @Excel(name="离职时间",format = "yyyy-MM-dd")
-	@JsonDeserialize(using = JsonDateDeserializer.class)
+//	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date leaveDate;
 	/** 收款账户 */
 	// @Excel(name = "收款账户",width = 25)
@@ -277,24 +277,22 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 
 	@Nullable
 	@Column(name = "enter_date")
-	@JsonDeserialize(using = JsonDateDeserializer.class)
+//	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public Date getEnterDate() {
 		return enterDate;
 	}
 
-	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public void setEnterDate(Date enterDate) {
 		this.enterDate = enterDate;
 	}
 
 	@Nullable
 	@Column(name = "leave_date")
-	@JsonDeserialize(using = JsonDateDeserializer.class)
+//	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public Date getLeaveDate() {
 		return leaveDate;
 	}
 
-	@JsonDeserialize(using = JsonDateDeserializer.class)
 	public void setLeaveDate(Date leaveDate) {
 		this.leaveDate = leaveDate;
 	}

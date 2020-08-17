@@ -1,6 +1,6 @@
 package com.doctor.assistant.userserver;
 
-import com.doctor.assistant.commonserver.utils.JsonUtils;
+import com.doctor.assistant.commonserver.utils.JsonUtil;
 import com.doctor.assistant.userserver.springdata.entity.AccountbookEntity;
 import com.doctor.assistant.userserver.springdata.entity.DepartDetailEntity;
 import com.doctor.assistant.userserver.springdata.entity.TSUser;
@@ -48,7 +48,7 @@ public class UserServerApplicationTests {
 	}
 	
 	private void print(Object obj){
-		String objectToJson = JsonUtils.objectToJson(obj);
+		String objectToJson = JsonUtil.objectToJson(obj);
 		System.out.println(objectToJson);
 	}
 

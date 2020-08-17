@@ -1,6 +1,5 @@
-package com.activitiserver.core;
+package com.doctor.assistant.scheduleserver.core;
 
-import com.doctor.assistant.commonserver.core.JdbcLocalUserDetailsManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -8,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -19,12 +19,12 @@ public class SecurityUtil {
     private Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
     // @Qualifier(value = "beanName") and @Autowired 两个配合，等价于 @Resource(name="beanName")
-    @Resource(name = "jdbcLocalUserDetailsManager")
-    private JdbcLocalUserDetailsManager jdbcLocalUserDetailsManager;
+    @Resource(name = "inMemoryUserDetailsService")
+    private UserDetailsService inMemoryUserDetailsService;
 
     public void logInAs(String epmNoAndUsername) {
 
-        UserDetails user = jdbcLocalUserDetailsManager.loadUserByUsername(epmNoAndUsername);
+        UserDetails user = inMemoryUserDetailsService.loadUserByUsername(epmNoAndUsername);
         if (user == null) {
             throw new IllegalStateException("User " + epmNoAndUsername + " doesn't exist, please provide a valid user");
         }
@@ -65,6 +65,5 @@ public class SecurityUtil {
                 return user.getUsername();
             }
         }));
-        org.activiti.engine.impl.identity.Authentication.setAuthenticatedUserId(epmNoAndUsername);
     }
 }

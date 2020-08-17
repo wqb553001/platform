@@ -1,6 +1,6 @@
 package com.doctor.assistant.userserver.springdata.service;
 
-import com.doctor.assistant.commonserver.utils.JsonUtils;
+import com.doctor.assistant.commonserver.utils.JsonUtil;
 import com.doctor.assistant.userserver.springdata.entity.DepartDetailEntity;
 import com.doctor.assistant.userserver.springdata.entity.TSUser;
 import com.doctor.assistant.userserver.springdata.repository.*;
@@ -46,7 +46,7 @@ public class UserRoleService {
             accountbookId = "2c91e3ec6ad89cfb016ae4657a010362";
         }
         List<DepartDetailEntity> detailEntityList = departDetailRepository.findByAccountbookId(accountbookId);
-        return JsonUtils.objectToJson(detailEntityList);
+        return JsonUtil.objectToJson(detailEntityList);
     }
 
 //    public TSUser findByEmpNoStr(String empNo){
