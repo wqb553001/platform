@@ -38,6 +38,17 @@ public class UserController {
     private AccountbookRepository accountbookRepository;
 
     /**
+     * 查询所有员工信息
+     * @return
+     */
+    @RequestMapping(value = "/list/{limitNum}", method = RequestMethod.GET)
+    public String userByLimit(@PathVariable(required = false) int limitNum){
+        String result = null;
+        List<TSUser> users = userRepository.findByLimit(limitNum);
+        result = JsonUtil.objectToJson(users);
+        return result;
+    }
+    /**
      * 根据 员工号 查询员工信息
      * @param empNo
      * @return

@@ -12,14 +12,14 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<TSUser, String>{
 
-    @EntityGraph(value = "base_user.Graph",type = EntityGraph.EntityGraphType.FETCH)
-    List<TSUser> findAll();
+    @Query(nativeQuery=true, value = "SELECT u.*,bu.* FROM t_s_user u LEFT JOIN t_s_base_user bu ON u.id = bu.id LIMIT ?")
+    List<TSUser> findByLimit(int limitNum);
 
     List<TSUser> findByUserName(String userName);
 
     TSUser findByEmpNo(String empNo);
 
     // 根据角色，查询用户
-    @Query("SELECT u from TSUser u inner join TSRoleUser ru ON u.id = ru.TSUser.id left join TSRole r ON ru.TSRole.id = r.id where r.roleName = ?1")
+    @Query("SELECT u FROM TSUser u INNER JOIN TSRoleUser ru ON u.id = ru.TSUser.id LEFT JOIN TSRole r ON ru.TSRole.id = r.id WHERE r.roleName = ?1")
     List<TSUser> findByRoleName(@Param("roleName")String roleName);
 }

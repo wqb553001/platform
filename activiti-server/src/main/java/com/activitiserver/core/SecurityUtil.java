@@ -1,6 +1,5 @@
 package com.activitiserver.core;
 
-import com.doctor.assistant.commonserver.core.JdbcLocalUserDetailsManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
