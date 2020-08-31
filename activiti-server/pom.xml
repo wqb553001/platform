@@ -16,52 +16,42 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<activiti-dependencies.version>7.1.0.M6</activiti-dependencies.version>
+		<!--<activiti-dependencies.version>7.1.0.M6</activiti-dependencies.version>--><!--org.springframework version:5.1.13-->
 		<!--<activiti-dependencies.version>7.1.123</activiti-dependencies.version>-->
 		<!--<activiti-image-generator.version>7.1.134</activiti-image-generator.version>-->
 		<!--<activiti-dependencies.version>7.1.134</activiti-dependencies.version>-->
 		<!--<activiti-dependencies.version>7.1.123</activiti-dependencies.version>-->
 		<!--<activiti-dependencies.version>7.0.0.SR1</activiti-dependencies.version>-->
-		<!--<activiti-dependencies.version>7.1.0.M5</activiti-dependencies.version>-->
+		<!--<activiti-dependencies.version>7.1.0.M5</activiti-dependencies.version>--><!--org.springframework version:5.1.11-->
+		<!--<activiti-dependencies.version>7.1.0.M4</activiti-dependencies.version>--><!--org.springframework version:5.1.8-->
 		<!--<activiti-dependencies.version>7.1.7</activiti-dependencies.version>-->
 		<!--<activiti-dependencies.version>7.1.24</activiti-dependencies.version>-->
 		<slf4j.version>1.7.16</slf4j.version>
 		<log4j.version>1.2.12</log4j.version>
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.activiti.dependencies</groupId>
-				<artifactId>activiti-dependencies</artifactId>
-				<version>${activiti-dependencies.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
+	<!-- 关于org.springframework version:5.1.11 替换为 org.springframework version:5.1.13 完整方式是：
+	 1. 将 PlatFormRoot 的pom.xml中dependencyManagement内的org.activiti.dependencies注释掉；
+	 2. 将 activiti-server（也就是本文件）的pom.xml 中的 <version>${activiti-dependencies.version}</version> 取消注释
+	 替换回去，逆操作。
+	  -->
 	<dependencies>
+		<!-- 在本模块直接指定版本号，而不在maven-root的dependencyManagement中去引入，
+		则org.springframework version:5.1.11，否则org.springframework version:5.1.13 -->
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-spring-boot-starter</artifactId>
+			<version>${activiti-dependencies.version}</version>
 		</dependency>
 		<!-- Activiti生成流程图 -->
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-image-generator</artifactId>
+			<version>${activiti-dependencies.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<!--排除这个slf4j-log4j12-->
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -101,7 +91,7 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
-		<groupId>org.springframework.security</groupId>
+			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -121,7 +111,6 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-pool2</artifactId>
-<!--			<version>2.6.2</version>-->
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -131,7 +120,11 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
-			<!--<scope>runtime</scope>-->
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
