@@ -65,10 +65,8 @@
 		<!-- druid连接池  -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
-			<!--<scope>runtime</scope>-->
+			<artifactId>druid-spring-boot-starter</artifactId>
 		</dependency>
-
 		<!-- hibernate-jpa的依赖jar包 -->
 		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
 		<!--<dependency>-->
