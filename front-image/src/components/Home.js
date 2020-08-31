@@ -1,0 +1,1 @@
+import React, { Component } from 'react';import {Redirect} from "react-router-dom";class Home extends Component {    render() {        return (            <h1>ª∂”≠£¨’‚¿Ô « Home</h1>        );    }}export default Home;

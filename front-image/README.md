@@ -66,3 +66,9 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+前端：  
+1. 解析后端发来的数据并渲染【异步、数据绑定（可能双向）】
+2. 组装数据提交给后端
+3. 通过选取导航，跳转到相应的页面【包括 身份验证、状态保持】
