@@ -6,7 +6,7 @@ spring:
         name: activiti-server
     #Activiti property configuration
     activiti:
-        database-schema-update: true
+        database-schema-update: drop-create
         check-process-definitions: false
         history-level: full
         db-history-used: true
@@ -110,7 +110,7 @@ eureka:
         hostname: localhost
     client:
         service-url:
-            defaultZone: http://192.168.1.106:8761/eureka/
+            defaultZone: http://localhost:8761/eureka/
 
 ---
 
