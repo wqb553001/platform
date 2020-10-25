@@ -4,13 +4,18 @@ server:
 spring:
     application:
         name: activiti-server
-    #Activiti property configuration
+
+---
+#Activiti property configuration
+spring:
     activiti:
         database-schema-update: drop-create
         check-process-definitions: false
         history-level: full
         db-history-used: true
 
+---
+spring:
     datasource:
         assumed:
             username: root
@@ -121,6 +126,7 @@ feign:
                 connectTimeout: 50000
                 readTimeout: 50000
                 loggerLevel: full
+    httpclient.enabled: true
 #                errorDecoder: com.example.SimpleErrorDecoder
 #                retryer: com.example.SimpleRetryer
 #                requestInterceptors:

@@ -10,6 +10,7 @@
         <module>config-server</module>
 		<module>eureka-server</module>
         <module>common-server</module>
+        <module>tools-server</module>
 		<module>schedule-server</module>
     </modules>
     <parent>
@@ -27,14 +28,18 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<skipTests>true</skipTests>
 		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+		<user-server.version>0.0.4-SNAPSHOT</user-server.version>
+		<common-server.version>0.0.1-SNAPSHOT</common-server.version>
+		<tools-server.version>0.0.1-SNAPSHOT</tools-server.version>
 		<activiti-dependencies.version>7.1.0.M6</activiti-dependencies.version>
 		<alibaba-druid.version>1.1.10</alibaba-druid.version>
 		<redisson.version>2.5.1</redisson.version>
 		<alibaba-fastjson.version>1.2.31</alibaba-fastjson.version>
 		<httpclient.version>4.5.3</httpclient.version>
-		<user-server.version>0.0.4-SNAPSHOT</user-server.version>
-		<common-server.version>0.0.1-SNAPSHOT</common-server.version>
+		<hutool.version>5.4.2</hutool.version>
+		<commons-lang3.version>3.9</commons-lang3.version>
 		<javax.servlet.jsp-api.version>2.3.1</javax.servlet.jsp-api.version>
 		<springfox-swagger2.version>2.7.0</springfox-swagger2.version>
 		<springfox-swagger-ui.version>2.7.0</springfox-swagger-ui.version>
@@ -103,7 +108,18 @@
 				<artifactId>httpclient</artifactId>
 				<version>${httpclient.version}</version>
 			</dependency>
-
+			<!--工具包-->
+			<dependency>
+				<groupId>cn.hutool</groupId>
+				<artifactId>hutool-all</artifactId>
+				<version>${hutool.version}</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>io.springfox</groupId>
 				<artifactId>springfox-swagger2</artifactId>
@@ -125,6 +141,11 @@
 				<groupId>com.doctor.assistant</groupId>
 				<artifactId>common-server</artifactId>
 				<version>${common-server.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.doctor.assistant</groupId>
+				<artifactId>tools-server</artifactId>
+				<version>${tools-server.version}</version>
 			</dependency>
 
 <!--				<dependency>-->

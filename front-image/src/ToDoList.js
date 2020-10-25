@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ToDoItem from './ToDoItem';  //µ¼ÈëToDoItemÄ£¿é
+import ToDoItem from './ToDoItem';  //å¯¼å…¥ToDoItemæ¨¡å—
 class ToDoList extends React.Component{
     render(){
         let todos=this.props.data;
@@ -12,10 +12,10 @@ class ToDoList extends React.Component{
             <table className="table table-striped">
                 <thead>
                 <tr>
-                    <th>ÄÚÈİ</th>
-                    <th>Ê±¼ä</th>
-                    <th>×´Ì¬</th>
-                    <th>²Ù×÷</th>
+                    <th>å†…å®¹</th>
+                    <th>æ—¶é—´</th>
+                    <th>çŠ¶æ€</th>
+                    <th>æ“ä½œ</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,4 +26,4 @@ class ToDoList extends React.Component{
     }
 }
 
-export default ToDoList;  //µ¼³öToDoListÄ£¿é
+export default ToDoList;  //å¯¼å‡ºToDoListæ¨¡å—

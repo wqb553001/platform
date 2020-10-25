@@ -1,6 +1,6 @@
 package com.activitiserver.controller;
 
-import com.activitiserver.utils.ActivitiUtils;
+import com.activitiserver.core.ActivitiHandler;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
@@ -15,7 +15,6 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.image.ProcessDiagramGenerator;
-import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +35,8 @@ import java.util.stream.Collectors;
 public class ActivitiImageController {
 
     private static final Logger logger = LoggerFactory.getLogger(ActivitiImageController.class);
+    private static final String MANAGER_OPINION = "managerOpinion";
+    private static final String HIGHERLEVEL_OPINION = "higherLevelOpinion";
 
     /** 流程定义和部署相关的存储服务 */
     @Autowired
@@ -58,7 +58,8 @@ public class ActivitiImageController {
     @Autowired
     private HistoryService historyService;
 
-
+    @Autowired
+    private ActivitiHandler activitiHandler;
 
     /**
      * <p>跳转到测试主页面</p>
@@ -72,8 +73,6 @@ public class ActivitiImageController {
         return "/index";
     }
 
-
-
     /**
      * <p>跳转到上级审核页面</p>
      * @return String 上级审核页面
@@ -85,8 +84,6 @@ public class ActivitiImageController {
     public String employeeLeave() {
         return "/employeeLeave";
     }
-
-
 
     /**
      * <p>启动请假流程（流程key即xml中定义的ID为leaveProcess）</p>
@@ -103,8 +100,6 @@ public class ActivitiImageController {
          */
         String instanceKey = "leaveProcess";
         logger.info("开启请假流程...");
-
-
         /*
          *  设置流程参数，开启流程
          */
@@ -117,7 +112,6 @@ public class ActivitiImageController {
         logger.info("流程实例ID:{}", instance.getId());
         logger.info("流程定义ID:{}", instance.getProcessDefinitionId());
 
-
         /*
          * 验证是否启动成功
          */
@@ -127,14 +121,11 @@ public class ActivitiImageController {
         List<ProcessInstance> runningList = processInstanceQuery.processInstanceId(instance.getProcessInstanceId()).list();
         logger.info("根据流程ID查询条数:{}", runningList.size());
 
-
         /*
          *  返回流程ID
          */
         return instance.getId();
     }
-
-
 
     /**
      * <p>查看当前流程图</p>
@@ -144,15 +135,14 @@ public class ActivitiImageController {
      * @time 2018年12月10日上午11:14:12
      * @version 1.0
      */
-    @ResponseBody
     @RequestMapping(value="/showImg")
+    @ResponseBody
     public void showImg(String instanceId, HttpServletResponse response) {
         /*
          * 参数校验
          */
         logger.info("查看完整流程图！流程实例ID:{}", instanceId);
         if(StringUtils.isBlank(instanceId)) return;
-
 
         /*
          *  获取流程实例
@@ -165,7 +155,6 @@ public class ActivitiImageController {
 
         // 根据流程对象获取流程对象模型
         BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
-
 
         /*
          *  查看已执行的节点集合
@@ -188,16 +177,13 @@ public class ActivitiImageController {
          */
         // 获取流程定义
         ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(processInstance.getProcessDefinitionId());
-        List<String> flowIds = ActivitiUtils.getHighLightedFlows(bpmnModel, processDefinition, historicActivityInstanceList);
-
+        List<String> flowIds = activitiHandler.getHighLightedFlows(bpmnModel, processDefinition, historicActivityInstanceList);
 
         /*
          * 输出图像，并设置高亮
          */
         outputImg(response, bpmnModel, flowIds, executedActivityIdList);
     }
-
-
 
     /**
      * <p>员工提交申请</p>
@@ -246,7 +232,6 @@ public class ActivitiImageController {
         return "success";
     }
 
-
     /**
      * <p>跳转到上级审核页面</p>
      * @return String 页面
@@ -281,8 +266,6 @@ public class ActivitiImageController {
         request.setAttribute("paramMap", paramMap);
         return "higherAudit";
     }
-
-
 
     /**
      * <p>跳转到部门经理审核页面</p>
@@ -321,8 +304,6 @@ public class ActivitiImageController {
         return "manageAudit";
     }
 
-
-
     /**
      * <p>上级审核</p>
      * @param request 请求
@@ -334,37 +315,8 @@ public class ActivitiImageController {
     @ResponseBody
     @RequestMapping(value="/higherLevelAudit")
     public String higherLevelAudit(HttpServletRequest request) {
-        /*
-         * 获取请求参数
-         */
-        String taskId = request.getParameter("taskId");
-        String higherLevelOpinion = request.getParameter("sug");
-        String auditStr = request.getParameter("audit");
-        logger.info("上级审核任务ID:{}", taskId);
-        if(StringUtils.isBlank(taskId)) return "fail";
-
-
-        /*
-         * 查找任务
-         */
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        if(task == null) {
-            logger.info("审核任务ID:{}查询到任务为空！", taskId);
-            return "fail";
-        }
-
-
-        /*
-         * 设置局部变量参数，完成任务
-         */
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("audit", "1".equals(auditStr) ? false : true);
-        map.put("higherLevelOpinion", higherLevelOpinion);
-        taskService.complete(taskId, map);
-        return "success";
+        return this.auditOption(request, HIGHERLEVEL_OPINION);
     }
-
-
 
     /**
      * <p>部门经理审核</p>
@@ -377,15 +329,24 @@ public class ActivitiImageController {
     @ResponseBody
     @RequestMapping(value="/divisionManagerAudit")
     public String divisionManagerAudit(HttpServletRequest request) {
+        return this.auditOption(request, MANAGER_OPINION);
+    }
+
+    /**
+     * 审核
+     * @param request
+     * @param opinion   审核类型（上级审核 OR 部门经理审核）
+     * @return
+     */
+    private String auditOption(HttpServletRequest request, String opinion){
         /*
          * 获取请求参数
          */
         String taskId = request.getParameter("taskId");
-        String opinion = request.getParameter("sug");
+        String higherLevelOpinion = request.getParameter("sug");
         String auditStr = request.getParameter("audit");
         logger.info("上级审核任务ID:{}", taskId);
         if(StringUtils.isBlank(taskId)) return "fail";
-
 
         /*
          * 查找任务
@@ -396,17 +357,15 @@ public class ActivitiImageController {
             return "fail";
         }
 
-
         /*
          * 设置局部变量参数，完成任务
          */
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("audit", "1".equals(auditStr) ? false : true);
-        map.put("managerOpinion", opinion);
+        map.put("higherLevelOpinion", higherLevelOpinion);
         taskService.complete(taskId, map);
         return "success";
     }
-
 
     /**
      * <p>查看任务</p>
@@ -427,7 +386,6 @@ public class ActivitiImageController {
             return "/task";
         }
 
-
         /*
          * 查询所有任务，并封装
          */
@@ -444,7 +402,6 @@ public class ActivitiImageController {
             resultList.add(map);
         }
 
-
         /*
          * 返回结果
          */
@@ -452,8 +409,6 @@ public class ActivitiImageController {
         request.setAttribute("resultList", resultList);
         return "/task";
     }
-
-
 
     /**
      * <p>输出图像</p>
@@ -484,8 +439,6 @@ public class ActivitiImageController {
         }
     }
 
-
-
     /**
      * <p>判断流程是否完成</p>
      * @param processInstanceId 流程实例ID
@@ -498,60 +451,4 @@ public class ActivitiImageController {
         return historyService.createHistoricProcessInstanceQuery().finished().processInstanceId(processInstanceId).count() > 0;
     }
 
-    /**
-     * 根据流程实例Id,获取实时流程图片
-     *
-     * @param processInstanceId
-     * @param outputStream
-     * @return
-     */
-    public void getFlowImgByInstanceId(String processInstanceId, OutputStream outputStream) {
-        try {
-            if (StringUtils.isEmpty(processInstanceId)) {
-                logger.error("processInstanceId is null");
-                return;
-            }
-            // 获取历史流程实例
-            HistoricProcessInstance historicProcessInstance = historyService
-                    .createHistoricProcessInstanceQuery()
-                    .processInstanceId(processInstanceId).singleResult();
-            // 获取流程中已经执行的节点，按照执行先后顺序排序
-            List<HistoricActivityInstance> historicActivityInstances = historyService
-                    .createHistoricActivityInstanceQuery()
-                    .processInstanceId(processInstanceId)
-                    .orderByHistoricActivityInstanceId()
-                    .asc().list();
-            // 高亮已经执行流程节点ID集合
-            List<String> highLightedActivitiIds = new ArrayList<>();
-            int index = 1;
-            for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
-
-                // 用默认颜色
-                highLightedActivitiIds.add(historicActivityInstance.getActivityId());
-                index++;
-            }
-            ProcessDiagramGenerator processDiagramGenerator = null;
-            // 使用默认的程序图片生成器
-            processDiagramGenerator = new DefaultProcessDiagramGenerator();
-            String processDefinitionId = historicProcessInstance.getProcessDefinitionId();
-            BpmnModel bpmnModel = repositoryService
-                    .getBpmnModel(processDefinitionId);
-            ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(processDefinitionId);
-            // 高亮流程已发生流转的线id集合
-            List<String> highLightedFlowIds = ActivitiUtils.getHighLightedFlows(bpmnModel, processDefinition, historicActivityInstances);
-            // 使用默认配置获得流程图表生成器，并生成追踪图片字符流
-            InputStream imageStream = processDiagramGenerator.generateDiagram(bpmnModel,
-                    highLightedActivitiIds, highLightedFlowIds, "宋体",
-                    "微软雅黑", "黑体");
-            // 输出图片内容
-            Integer byteSize = 1024;
-            byte[] b = new byte[byteSize];
-            int len;
-            while ((len = imageStream.read(b, 0, byteSize)) != -1) {
-                outputStream.write(b, 0, len);
-            }
-        } catch (Exception e) {
-            logger.error("processInstanceId" + processInstanceId + "生成流程图失败，原因：" + e.getMessage(), e);
-        }
-    }
 }

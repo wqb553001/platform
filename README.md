@@ -5,8 +5,11 @@ a.包括项目简介、常用的命令 等
 
 ### 技术栈列举：前后端分离 ###
 ##### 【后端】 ##### 
-1. springCloud生态
-    配置中心config(配置外部化，同git等进行关联)、服务治理Eureka、负载均衡Ribbon、服务调用Feign
+1. springCloud生态  
+    (1)配置中心config(配置外部化，同git等进行关联)  
+    (2)服务治理 Eureka  
+    (3)负载均衡 Ribbon  
+    (4)服务调用 Open Feign
 2. activiti工作流
 3. schedule调度中心(配置化)
 4. 

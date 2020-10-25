@@ -20,14 +20,14 @@ class ToDoForm extends React.Component{
             <form className="form-horizontal" onSubmit={this.tijiao.bind(this)}>
                 <div className="form-group">
                     <div className="col-sm-10">
-                        <input ref="txt"  type="text" className="form-control" onKeyUp={this.add.bind(this)} id="exampleInputName2" placeholder="«Î ‰»Îƒ⁄»›"/>
+                        <input ref="txt"  type="text" className="form-control" onKeyUp={this.add.bind(this)} id="exampleInputName2" placeholder="ËØ∑ËæìÂÖ•ÂÜÖÂÆπ"/>
                     </div>
                     <div className="col-sm-2">
-                        <button type="button" className="btn btn-primary" onClick={this.add.bind(this)}>ÃÌº”</button>
+                        <button type="button" className="btn btn-primary" onClick={this.add.bind(this)}>Ê∑ªÂä†</button>
                     </div>
                 </div>
             </form>
         );
     }
 }
-export default ToDoForm;  //µº≥ˆToDoFormƒ£øÈ
+export default ToDoForm;  //ÂØºÂá∫ToDoFormÊ®°Âùó

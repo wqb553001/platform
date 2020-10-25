@@ -1,1 +1,44 @@
-import React, { Component } from 'react';import {Redirect} from "react-router-dom";class Login extends Component {    constructor(props) {        super(props);        this.state = {            loginFlag:false        };    }    doLogin=(e)=>{        e.preventDefault();//·ÀÖ¹Ìø×ª        let username=this.refs.username.value;        let password=this.refs.password.value;        console.log(username,password)        if(username=='admin' && password=='123456'){            //µÇÂ¼³É¹¦   Ìø×ªµ½Ê×Ò³            this.setState({                loginFlag:true            })        }else{            alert('µÇÂ¼Ê§°Ü')        }    }    render() {        if(this.state.loginFlag){            // return <Redirect to={{ pathname: "/" }} />;            return <Redirect to='/' />;        }        return (            <div>                <br /> <br /> <br />                <form onSubmit={this.doLogin}>                    <input type="text"  ref="username" />  <br /> <br />                    <input type="password"  ref="password" /> <br /> <br />                    <input type="submit"  value="Ö´ĞĞµÇÂ¼"/>                </form>            </div>        );    }}export default Login;
+import React, { Component } from 'react';
+import {Redirect} from "react-router-dom";
+
+class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loginFlag:false
+        };
+    }
+
+    doLogin=(e)=>{
+        e.preventDefault();//é˜²æ­¢è·³è½¬
+        let username=this.refs.username.value;
+        let password=this.refs.password.value;
+        console.log(username,password)
+        if(username=='admin' && password=='123456'){
+            //ç™»å½•æˆåŠŸ   è·³è½¬åˆ°é¦–é¡µ
+            this.setState({
+                loginFlag:true
+            })
+        }else{
+            alert('ç™»å½•å¤±è´¥')
+        }
+    }
+
+    render() {
+        if(this.state.loginFlag){
+            // return <Redirect to={{ pathname: "/" }} />;
+            return <Redirect to='/' />;
+        }
+        return (
+            <div>
+                <br /> <br /> <br />
+                <form onSubmit={this.doLogin}>
+                    <input type="text"  ref="username" />  <br /> <br />
+                    <input type="password"  ref="password" /> <br /> <br />
+                    <input type="submit"  value="æ‰§è¡Œç™»å½•"/>
+                </form>
+            </div>
+        );
+    }
+}
+export default Login;

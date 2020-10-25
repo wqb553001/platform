@@ -17,11 +17,16 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class ActivitiServerApplication implements CommandLineRunner {
 
 	private UserBridgeService userBridgeService;
+//	private ProcessRuntime processRuntime;;
 
 	@Autowired // 方法 即可用是 public 也可以是 private
 	private void setUserBridgeService(UserBridgeService userBridgeService){
 		this.userBridgeService = userBridgeService;
 	}
+//	@Autowired
+//	public void setProcessRuntime(ProcessRuntime processRuntime) {
+//		this.processRuntime = processRuntime;
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ActivitiServerApplication.class, args);

@@ -1,1 +1,12 @@
-import React, { Component } from 'react';import {Redirect} from "react-router-dom";class Home extends Component {    render() {        return (            <h1>»¶Ó­£¬ÕâÀïÊÇ Home</h1>        );    }}export default Home;
+import React, { Component } from 'react';
+import {Redirect} from "react-router-dom";
+
+class Home extends Component {
+
+    render() {
+        return (
+            <h1>æ¬¢è¿Žï¼Œè¿™é‡Œæ˜¯ Home</h1>
+        );
+    }
+}
+export default Home;

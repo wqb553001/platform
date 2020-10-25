@@ -11,12 +11,14 @@
 List<TSUser> findByLimit(int limitNum);
 
 
-#### 2. Browserslist: caniuse-lite is outdated. Please run next command `npm update`   Failed to compile.  
+#### 3. Browserslist: caniuse-lite is outdated. Please run next command `npm update`   Failed to compile.  
   cnpm i caniuse-lite@latest  
   cnpm i caniuse-lite browserslist@latest
 
-#### 2. 在idea中maven项目 jar包下载不完整解决办法
+#### 4. 在idea中maven项目 jar包下载不完整解决办法
 较暴力的办法 ———— 进入到.m2，执行命令:  
     find ./ -cmin -30 -print -exec rm -rf {} \;  
 原理:将最近30分钟新下载的包全部删除,然后再重新下载就好喽
+
+#### 5. 在idea中maven项目 jar包下载不完整解决办法
 

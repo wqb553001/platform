@@ -1,7 +1,7 @@
-import React from 'react';  //导入React模块
+import React from 'react';  //瀵煎叆React妯″潡
 
-import ToDoList from './ToDoList';  //导入ToDoList模块
-import ToDoForm from './ToDoForm'; //导入ToDoForm模块
+import ToDoList from './ToDoList';  //瀵煎叆ToDoList妯″潡
+import ToDoForm from './ToDoForm'; //瀵煎叆ToDoForm妯″潡
 
 class ToDoapp extends React.Component{
     constructor(props){
@@ -57,7 +57,7 @@ class ToDoapp extends React.Component{
                 <br/>
                 <div className="panel panel-default">
                     <div className="panel-headingbg-danger">
-                        <h1 className="text-center ">ToDo<small>你要做什么？</small></h1>
+                        <h1 className="text-center ">ToDo<small>浣犺鍋氫粈涔堬紵</small></h1>
                         <hr/>
                     </div>
                     <div className="panel-body">
@@ -70,4 +70,4 @@ class ToDoapp extends React.Component{
     }
 }
 
-export default ToDoapp;  //导出ToDoapp模块
+export default ToDoapp;  //瀵煎嚭ToDoapp妯″潡

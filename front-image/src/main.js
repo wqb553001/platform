@@ -50,12 +50,12 @@ global.menus = [
 		icon: <MessageOutlined/>,
 		key: '/page/TreeDemo',
 	},
-	// {
-	// 	title: '其它',
-	// 	icon: 'bulb',
-	// 	key: '/page/Other',
+	{
+		title: '流程图',
+		icon: <MessageOutlined/>,
+		key: '/page/WorkFlow'
 	// 	subs: [
 	// 		{key: '/page/AlertDemo', title: '弹出框', icon: ''},
 	// 	]
-	// },
+	},
 ]

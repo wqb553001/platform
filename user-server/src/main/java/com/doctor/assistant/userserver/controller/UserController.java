@@ -1,6 +1,7 @@
 package com.doctor.assistant.userserver.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.doctor.assistant.commonserver.annotation.ResponseResult;
 import com.doctor.assistant.commonserver.utils.JsonUtil;
 import com.doctor.assistant.userserver.springdata.entity.*;
 import com.doctor.assistant.userserver.springdata.repository.*;
@@ -9,13 +10,12 @@ import com.doctor.assistant.userserver.springdata.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@ResponseResult
 @RequestMapping("/user")
 @RestController
 public class UserController {
@@ -41,12 +41,14 @@ public class UserController {
      * 查询所有员工信息
      * @return
      */
+    @ResponseStatus(HttpStatus.FOUND)
     @RequestMapping(value = "/list/{limitNum}", method = RequestMethod.GET)
-    public String userByLimit(@PathVariable(required = false) int limitNum){
-        String result = null;
+    public List<TSUser> userByLimit(@PathVariable(required = false) int limitNum){
+//        String result = null;
         List<TSUser> users = userRepository.findByLimit(limitNum);
-        result = JsonUtil.objectToJson(users);
-        return result;
+//        result = JsonUtil.objectToJson(users);
+//        return result;
+        return users;
     }
     /**
      * 根据 员工号 查询员工信息

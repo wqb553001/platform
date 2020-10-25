@@ -15,12 +15,12 @@ class ToDoItem extends React.Component{
             <tr>
                 <td>{text}</td>
                 <td>{time}</td>
-                <td>{done==0?"Î´Íê³É":"Íê³É"}</td>
+                <td>{done==0?"æœªå®Œæˆ":"å®Œæˆ"}</td>
                 <td>
-                    <a className="btn btn-primary" onClick={this.delete.bind(this)}>É¾³ı</a>
+                    <a className="btn btn-primary" onClick={this.delete.bind(this)}>åˆ é™¤</a>
                     <a className="btn btn-success" onClick={this.complete.bind(this)}>
                         <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                        Íê³É
+                        å®Œæˆ
                     </a>
                 </td>
             </tr>
@@ -28,4 +28,4 @@ class ToDoItem extends React.Component{
     }
 }
 
-export default ToDoItem;  //µ¼³öToDoItemÄ£¿é
+export default ToDoItem;  //å¯¼å‡ºToDoItemæ¨¡å—

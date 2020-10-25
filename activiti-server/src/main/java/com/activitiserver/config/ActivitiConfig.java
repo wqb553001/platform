@@ -97,29 +97,8 @@ public class ActivitiConfig extends AbstractProcessEngineAutoConfiguration {
 //    }
 
 
-
     /**
-     * RuntimeService
-     * @param processEngine
-     * @return
-     */
-    @Bean
-    public RuntimeService runtimeService(ProcessEngine processEngine){
-        return processEngine.getRuntimeService();
-    }
-
-    /**
-     * TaskService
-     * @param processEngine
-     * @return
-     */
-    @Bean
-    public TaskService taskService(ProcessEngine processEngine){
-        return processEngine.getTaskService();
-    }
-
-    /**
-     * RepositoryService
+     * RepositoryService 管理流程定义
      * @param processEngine
      * @return
      */
@@ -129,7 +108,28 @@ public class ActivitiConfig extends AbstractProcessEngineAutoConfiguration {
     }
 
     /**
-     * HistoryService
+     * RuntimeService 执行管理，包括启动、推进、删除流程实例等操作
+     * @param processEngine
+     * @return
+     */
+    @Bean
+    public RuntimeService runtimeService(ProcessEngine processEngine){
+        return processEngine.getRuntimeService();
+    }
+
+    /**
+     * TaskService 任务管理
+     * @param processEngine
+     * @return
+     */
+    @Bean
+    public TaskService taskService(ProcessEngine processEngine){
+        return processEngine.getTaskService();
+    }
+
+
+    /**
+     * HistoryService 历史管理(执行完的数据的管理)
      * @param processEngine
      * @return
      */
@@ -139,7 +139,7 @@ public class ActivitiConfig extends AbstractProcessEngineAutoConfiguration {
     }
 
     /**
-     * processDiagramGenerator
+     * processDiagramGenerator 流程图管理
      * @return
      */
     @Bean

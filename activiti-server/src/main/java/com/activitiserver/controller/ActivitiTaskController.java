@@ -1,7 +1,7 @@
 package com.activitiserver.controller;
 
 import com.activitiserver.core.SecurityUtil;
-import com.activitiserver.utils.ActivitiUtils;
+import com.activitiserver.core.ActivitiHandler;
 import org.activiti.api.runtime.shared.query.Page;
 import org.activiti.api.runtime.shared.query.Pageable;
 import org.activiti.api.task.model.Task;
@@ -57,7 +57,7 @@ public class ActivitiTaskController {
         try {
             // 27	U00224_王飞	ROLE_ACTIVITI_ADMIN
             // 14	U00116_李岩	GROUP_120100网乐_06-网游
-            String empNoAndUsername = "U00224"+ ActivitiUtils.Connector +"王飞";
+            String empNoAndUsername = "U00224"+ ActivitiHandler.Connector +"王飞";
             String group = "120100网乐_06-网游";
             securityUtil.logInAs(empNoAndUsername);
             logger.info("> create a Group Task for '"+group+"'");
@@ -69,12 +69,12 @@ public class ActivitiTaskController {
                     .withPriority(10)
                     .build());
 
-            empNoAndUsername = "U00058"+ ActivitiUtils.Connector +"郝为";
+            empNoAndUsername = "U00058"+ ActivitiHandler.Connector +"郝为";
             securityUtil.logInAs(empNoAndUsername);
             Page<Task> tasks = taskRuntime.tasks(Pageable.of(0, 10));
             logger.info("User " + empNoAndUsername + " has task number is :" + tasks.getTotalItems());
 
-            empNoAndUsername = "U00116"+ ActivitiUtils.Connector +"李岩";
+            empNoAndUsername = "U00116"+ ActivitiHandler.Connector +"李岩";
             securityUtil.logInAs(empNoAndUsername);
             tasks = taskRuntime.tasks(Pageable.of(0, 10));
             logger.info("User " + empNoAndUsername + " has task number is :" + tasks.getTotalItems());
@@ -86,8 +86,8 @@ public class ActivitiTaskController {
             logger.info("> Complete the task for User " + empNoAndUsername);
             taskRuntime.complete(TaskPayloadBuilder.complete().withTaskId(availableTaskId).build());
 
-            empNoAndUsername = "U00302"+ ActivitiUtils.Connector +"杨毅";
-            empNoAndUsername = "U00116"+ ActivitiUtils.Connector +"李岩";
+            empNoAndUsername = "U00302"+ ActivitiHandler.Connector +"杨毅";
+            empNoAndUsername = "U00116"+ ActivitiHandler.Connector +"李岩";
             securityUtil.logInAs(empNoAndUsername);
             tasks = taskRuntime.tasks(Pageable.of(0, 10));
             logger.info("User " + empNoAndUsername + " has not complete's task number is :" + tasks.getTotalItems());
