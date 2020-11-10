@@ -1,0 +1,1 @@
+package com.doctor.assistant.calculatecell.server;import org.springframework.stereotype.Service;@Servicepublic interface ICalculateService {}

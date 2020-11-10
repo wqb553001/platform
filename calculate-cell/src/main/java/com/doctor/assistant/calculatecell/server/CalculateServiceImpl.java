@@ -1,0 +1,1 @@
+package com.doctor.assistant.calculatecell.server;public class CalculateServiceImpl implements ICalculateService {}

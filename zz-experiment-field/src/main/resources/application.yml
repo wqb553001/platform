@@ -1,14 +1,14 @@
 
 server:
-    port: 8020
+    port: 8186
 
 spring:
     application:
-        name: user-server
+        name: ZCY-SERVER
     datasource:
         username: root
         password: root
-        url: jdbc:mysql://localhost:3306/zszh?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
+        url: jdbc:mysql://localhost:3306/zcy?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
 
@@ -25,11 +25,6 @@ spring:
         testOnBorrow: false
         testOnReturn: false
         poolPreparedStatements: true
-        # filters: stat,wall,log4j
-        # maxPoolPreparedStatementPerConnectionSize: 20
-        # useGlobalDataSourceStat: true
-        # connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-        # 配置DruidStatFilter
         druid:
             web-stat-filter:
                 enabled: true
@@ -58,31 +53,6 @@ spring:
         hibernate:
             ddl-auto: validate
 
-#        properties:
-#            hibernate:
-#                enable_lazy_load_no_trans: true
-#                cache:
-#                    ## 开启二级缓存
-#                    use_second_level_cache: true
-#                    ## 查询缓存
-#                    use_query_cache: true
-#                    ## RedisRegionFactory
-#                    region:
-#                        factory_class: org.hibernate.cache.redis.hibernate52.SingletonRedisRegionFactory
-#                    ## 缓存标示前缀
-#                    region_prefix: hibernate
-#                    ## 结构化缓存实体
-#                    use_structured_entries: true
-#                    ## 配置文件路径
-#                    provider_configuration_file_resource_path: classpath:conf/hibernate-redis.properties
-#            redisson-config: classpath:conf/redisson.yaml
-#            redis:
-#                expiryInSeconds:
-#                    default: 120
-#                    hibernate:
-#                        common: 0
-#                        account: 1200
-
 
     mvc:
         view:
@@ -95,26 +65,37 @@ spring:
             charset: utf-8
             enabled: true
 
-
-#    mvc:
-#        # 静态资源路径
-#        static-path-pattern: /static/**
-#        servlet:
-#          path: /
-
-#management.security.enabled: false
+---
+spring:
+    redis:  ###### redis 配置
+        host: 127.0.0.1  # ip地址
+        port: 6379  # 端口号
+        password: # 无密码不填
+        timeout: 30000s   # 连接超时时间 （默认1天）
+        lettuce:
+            pool: # lettuce 连接池
+                max-active: 8 # 连接池最大连接数 默认 8（-1 ：表示没有限制）
+                max-wait: 60000ms # 连接池最大阻塞等待时间 默认-1ms （-1 :表示没有限制） 这里设置1分钟
+                max-idle: 8 # 最大空闲连接  默认 8
+                min-idle: 0 # 最小空闲连接  默认 0
 
 ---
+spring:
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: test
+        password: test2020
+        virtual-host: /
 
+---
 logging:
     level:
         com.ascendant: debug
-#    pattern:
-#        console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(-%5p)  %clr(${PID:- }){magenta} --- %clr([%15.15t]){faint} %highlight(%-80.80logger{300}){cyan} %clr(:) %m %n%wEx"
-
 eureka:
     instance:
         hostname: localhost
+#        prefer-ip-address: true
     client:
         service-url:
             defaultZone: http://localhost:8761/eureka/
@@ -129,11 +110,3 @@ spring:
 feign:
     httpclient:
         enabled: true
-
-
-#暴露全部的监控信息
-management:
-    endpoints:
-        web:
-            exposure:
-                include: '*'

@@ -1,0 +1,1 @@
+package com.doctor.assistant.experiment;//@Configurationpublic class ApplicationConfig {//    @Bean//    public Contract feignContract() {//        return new feign.Contract.Default();//        //使用feign自带契约//    }}

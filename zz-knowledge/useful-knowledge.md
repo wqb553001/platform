@@ -49,4 +49,23 @@ tools-server工程com.doctor.assistant.scheduleserver
 共用 schedule-server 的配置文件 
 
 
-#### 4. 下一个常识 —— 虚位
+#### 4. RabbitMQ 绑定（binding）详细介绍
+Exchange和Exchange、Queue之间的虚拟连接， Binding中可以包含Routing key或者参数  
+![binding](img/Binding.png)  
+default Exchange 不能进行Binding，也不需要进行绑定  
+
+除default Exchange之外，其他任何Exchange都需要和Queue进行Binding，否则无法进行消息路由（转发）  
+
+Binding的时候，可以设置一个或多个参数，其中参数要特别注意参数类型  
+
+Direct Exchange、Topic Exchange进行Binding的时候，需要指定Routing key  
+
+Fanout Exchange、Headers Exchange进行Binding的时候，不需要指定Routing key  
+
+作者：时之令 
+链接：https://www.jianshu.com/p/c176969ad0c1 
+来源：简书 
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+#### 5. 下一个常识 —— 虚位

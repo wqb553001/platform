@@ -1,0 +1,1 @@
+package com.doctor.assistant.experiment.czy.repository;import com.doctor.assistant.experiment.czy.entity.EvalKpi;import org.springframework.data.jpa.repository.JpaRepository;import org.springframework.stereotype.Repository;@Repositorypublic interface EvalKpiRepository extends JpaRepository<EvalKpi, Integer> {}
