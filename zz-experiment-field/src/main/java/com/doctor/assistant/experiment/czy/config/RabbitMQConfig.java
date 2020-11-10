@@ -12,27 +12,27 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitMQConfig {
-    public static final String newDataInput = "newDataInput";
-    public static final String calculate = "calculate";
-    public static final String schedule = "schedule";
+    public static final String dataInputQueue = "newDataInputQueue";
+    public static final String dispatchQueue = "calculateQueue";
+    public static final String scheduleQueue = "scheduleQueue";
     public static final String directRoutingKey = "topic.message";
     public static final String topicRoutingKey = "topic.#";
     public static final String directQueue = "directQueue";
     public static final String topicQueue = "topicQueue";
 
     @Bean
-    public Queue newDataInputQueue() {
-        return new Queue(newDataInput);
+    public Queue dataInputQueue() {
+        return new Queue(dataInputQueue);
     }
 
     @Bean
     public Queue calculateQueue() {
-        return new Queue(calculate);
+        return new Queue(dispatchQueue);
     }
 
     @Bean
     public Queue scheduleQueue() {
-        return new Queue(schedule);
+        return new Queue(scheduleQueue);
     }
 
     /**
@@ -41,7 +41,7 @@ public class RabbitMQConfig {
      */
     @Bean
     TopicExchange exchange(){
-        return new TopicExchange("exchage");
+        return new TopicExchange("exchange");
     }
     // Direct 交换机的绑定
     @Bean

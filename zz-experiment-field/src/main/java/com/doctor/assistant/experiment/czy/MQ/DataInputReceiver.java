@@ -23,7 +23,7 @@ import java.util.Objects;
  * 数据接入线程
  */
 @Component
-@RabbitListener(queues = RabbitMQConfig.newDataInput)
+@RabbitListener(queues = RabbitMQConfig.dataInputQueue)
 public class DataInputReceiver {
     private static final Logger logger = LoggerFactory.getLogger(DataInputReceiver.class);
     @Autowired
@@ -34,10 +34,10 @@ public class DataInputReceiver {
     EvalInputMessageRepository evalInputMessageRepository;
     @Autowired
     EvalInputMessageKpiRefRepository evalInputMessageKpiRefRepository;
-
+    private String block = "【数据接入】";
     @RabbitHandler
     public void process(String message) {
-        logger.info("数据接入线程：接收通知 === {}-Receiver:{}",RabbitMQConfig.newDataInput, message);
+        logger.info(block +"线程：接收通知 === {}-Receiver:{}",RabbitMQConfig.dataInputQueue, message);
         List<EvalInputMessage> evalInputMessages = evalInputMessageRepository.findByMessageName(message);
         if (!CollectionUtils.isEmpty(evalInputMessages)){
             for (EvalInputMessage eim : evalInputMessages) {
@@ -57,8 +57,8 @@ public class DataInputReceiver {
                     Integer kpiId = ref.getKpiId();
                     EvalKpi evalKpi = evalKpiRepository.findById(kpiId).get();
                     String evalKpiJson = JSONObject.toJSONString(evalKpi);
-                    logger.info("数据接入线程：经检查，数据有效，通知运算中心。kpiId:{}，完整数据内容：{}", kpiId, evalKpiJson);
-                    sender.send(RabbitMQConfig.calculate, evalKpiJson);
+                    logger.info(block +"线程：经检查，数据有效，通知运算中心。kpiId:{}，完整数据内容：{}", kpiId, evalKpiJson);
+                    sender.sendMessage(RabbitMQConfig.dispatchQueue, evalKpiJson);
                 }
             });
         }

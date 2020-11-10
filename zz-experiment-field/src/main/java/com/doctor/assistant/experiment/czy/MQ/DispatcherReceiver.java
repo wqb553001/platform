@@ -22,9 +22,9 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/dispatchCore")
-@RabbitListener(queues = RabbitMQConfig.calculate)
-public class DispatcherCoreReceiver {
-    private static final Logger logger = LoggerFactory.getLogger(DispatcherCoreReceiver.class);
+@RabbitListener(queues = RabbitMQConfig.dispatchQueue)
+public class DispatcherReceiver {
+    private static final Logger logger = LoggerFactory.getLogger(DispatcherReceiver.class);
     @Autowired
     Sender sender;
     @Autowired
@@ -37,17 +37,17 @@ public class DispatcherCoreReceiver {
     IFeignCalculateClient feignCalculateClient;
     @Autowired
     private RedisTemplate<String, String> template;
-
+    private String block = "【分发中心】 ";
     @RabbitHandler
     public void process(String message) throws URISyntaxException {
-        logger.info("分发中心：接收到通知 === {} -Receiver : {}", RabbitMQConfig.calculate, message);
+        logger.info(block + "：接收到通知 === {} -Receiver : {}", RabbitMQConfig.dispatchQueue, message);
         this.afterHandler(feignCalculate(JSONObject.parseObject(message, EvalKpi.class)));
     }
 
     private String feignCalculate(EvalKpi evalKpi) throws URISyntaxException{
         String calculateServiceUrl = evalKpi.getCalculateServiceUrl();
         String calculateInputJson = evalKpi.getCalculateInputJson();
-        logger.info("分发中心：匹配算子，calculateServiceUrl : {}，calculateInputJson ：{}", calculateServiceUrl, calculateInputJson);
+        logger.info(block + "：匹配算子，calculateServiceUrl : {}，calculateInputJson ：{}", calculateServiceUrl, calculateInputJson);
 //         方式（1）
 //        URI uri = new URI(calculateServiceUrl);
 //        return feignCalculateService.calculate(calculateServiceUrl, calculateInputJson);
@@ -63,18 +63,19 @@ public class DispatcherCoreReceiver {
         EvalKpiSimValue evalKpiSimValue = JSONObject.parseObject(calculateResult, EvalKpiSimValue.class);
         if(evalKpiSimValue != null){
             evalKpiSimValueRepository.save(evalKpiSimValue); // 以 kpiId 为id, 有记录则 update，无记录则 insert
+            sender.sendMessage(RabbitMQConfig.scheduleQueue, calculateResult);
         }
         Integer kpiId = evalKpiSimValue.getKpiId();
         EvalKpi evalKpi = evalKpiRepository.findById(kpiId).get();
         Integer parentId = evalKpi.getParentId();
         if(parentId != 0 && evalKpi.getLevel() != 0){
-            logger.info("分发中心：继续处理 父节点 parentId：{}", parentId);
+            logger.info(block + "：继续处理 父节点 parentId：{}", parentId);
             evalKpi = evalKpiRepository.findById(parentId).get();
             if(evalKpi != null) {
                 this.feignCalculate(evalKpi);
                 return;
             }
-            logger.error("分发中心：根据父节点id parentId ：{}，未找到相应的记录。kpiId : {}", parentId, kpiId);
+            logger.error(block + "：根据父节点id parentId ：{}，未找到相应的记录。kpiId : {}", parentId, kpiId);
         }
     }
 

@@ -25,7 +25,7 @@ public class Sender {
      * @param queue
      * @param message
      */
-    public void send(String queue, String message){
+    public void sendMessage(String queue, String message){
         logger.info("发送消息： sender: queue - {} ，message - {}", queue, message);
         this.amqpTemplate.convertAndSend(queue, message);
 //        this.amqpTemplate.convertAndSend("exchage","topic.message","topic_message");
